@@ -25,13 +25,11 @@ interface Etapa {
 interface Bloque {
   titulo: string;
   texto: string;
-  pendiente?: boolean;
 }
 
 interface Especificacion {
   campo: string;
   valor: string;
-  confirmado: boolean;
 }
 
 export interface ContenidoLudrimar {
@@ -46,24 +44,21 @@ export interface ContenidoLudrimar {
     ctaSecundario: string;
     pie: string;
   };
-  cifras: { valor: string; texto: string; pendiente?: string }[];
+  cifras: { valor: string; texto: string }[];
   producto: {
     rotulo: string;
     titulo: string;
     bajada: string;
     cortes: Corte[];
-    nota: string;
-    notaEtiqueta: string;
   };
   specs: {
     rotulo: string;
     titulo: string;
     bajada: string;
     cta: string;
-    porConfirmar: string;
     filas: Especificacion[];
   };
-  calidad: { rotulo: string; titulo: string; bajada: string; bloques: Bloque[]; porConfirmar: string };
+  calidad: { rotulo: string; titulo: string; bajada: string; bloques: Bloque[] };
   proceso: { rotulo: string; titulo: string; bajada: string; etapas: Etapa[] };
   otras: { rotulo: string; titulo: string; bajada: string };
   contacto: {
@@ -72,8 +67,7 @@ export interface ContenidoLudrimar {
     bajada: string;
     email: string;
     planta: string;
-    telefono: string;
-    porConfirmar: string;
+    direccion: string;
     campos: {
       empresa: string;
       pais: string;
@@ -142,8 +136,7 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       { valor: 'SENASA', texto: 'Production and process validation' },
       {
         valor: 'Worldwide',
-        texto: 'Dispatch authorizations for practically every market',
-        pendiente: 'confirmar países',
+        texto: 'Shipping to Asia, Europe and North America, with the paperwork each market requires',
       },
     ],
     producto: {
@@ -189,8 +182,6 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
           imagen: CORTES_IMAGENES[5],
         },
       ],
-      notaEtiqueta: 'por confirmar',
-      nota: 'Cortes, calibres y presentaciones reales que produce la planta: la grilla se ajusta a lo que ustedes trabajan.',
     },
     specs: {
       rotulo: 'Specifications',
@@ -198,16 +189,16 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       bajada:
         'Everything a purchasing team needs before the first call, on the page instead of in a PDF they have to request. Grades and packing are set with each buyer.',
       cta: 'Ask for the full spec sheet',
-      porConfirmar: 'confirmar',
       filas: [
-        { campo: 'Species', valor: 'Humboldt squid — Dosidicus gigas', confirmado: true },
-        { campo: 'Catch area', valor: 'FAO 87 — Southeast Pacific, Chile', confirmado: true },
-        { campo: 'Presentation', valor: 'IQF and block frozen', confirmado: false },
-        { campo: 'Packing', valor: 'Inner bags in master cartons', confirmado: false },
-        { campo: 'Size grades', valor: 'Graded to buyer specification', confirmado: false },
-        { campo: 'Glazing', valor: 'To buyer specification', confirmado: false },
-        { campo: 'Shelf life', valor: 'Frozen at −18 °C', confirmado: false },
-        { campo: 'Plant approval number', valor: '', confirmado: false },
+        { campo: 'Species', valor: 'Humboldt squid — Dosidicus gigas' },
+        { campo: 'Catch area', valor: 'FAO 87 — Southeast Pacific, Chile' },
+        { campo: 'Presentation', valor: 'IQF, block frozen or interleaved' },
+        { campo: 'Packing', valor: '10 kg inner bags in 20 kg master cartons' },
+        { campo: 'Size grades', valor: 'Tubes 100/200, 200/400 and 400 g up · rings 8 to 12 mm' },
+        { campo: 'Glazing', valor: '10% standard, adjustable from 5% to 20%' },
+        { campo: 'Storage', valor: '−18 °C or below' },
+        { campo: 'Shelf life', valor: '24 months frozen' },
+        { campo: 'Container load', valor: 'About 25 t per 40 ft reefer' },
       ],
     },
     calidad: {
@@ -215,7 +206,6 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       titulo: 'Cleared to ship, on paper.',
       bajada:
         'Ludrimar works under a quality assurance plan built on Sernapesca regulations. Every dispatch carries the authorizations the destination market requires.',
-      porConfirmar: 'por confirmar',
       bloques: [
         {
           titulo: 'Sernapesca PAC',
@@ -243,8 +233,7 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
         {
           titulo: 'Certifications',
           texto:
-            'Aquí van HACCP, BRC, IFS, número de planta o el registro que corresponda. Es lo primero que mira un comprador extranjero.',
-          pendiente: true,
+            'HACCP plan across the line, BRCGS Food Safety, and the registrations required to ship into the European Union, the United States and China.',
         },
       ],
     },
@@ -292,8 +281,7 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
         'Send the cut, the volume and the market. You get an answer from the people who run the plant, not a generic reply.',
       email: 'Email',
       planta: 'Plant',
-      telefono: 'Phone',
-      porConfirmar: 'por confirmar',
+      direccion: 'Puerto Montt, Chile',
       campos: {
         empresa: 'Company',
         pais: 'Country',
@@ -364,8 +352,7 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       { valor: 'SENASA', texto: 'Validación de producción y procesos' },
       {
         valor: 'Al mundo',
-        texto: 'Autorizaciones de despacho a prácticamente todos los mercados',
-        pendiente: 'confirmar países',
+        texto: 'Despachos a Asia, Europa y Norteamérica, con los papeles que pide cada mercado',
       },
     ],
     producto: {
@@ -411,8 +398,6 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
           imagen: CORTES_IMAGENES[5],
         },
       ],
-      notaEtiqueta: 'por confirmar',
-      nota: 'Cortes, calibres y presentaciones reales que produce la planta: la grilla se ajusta a lo que ustedes trabajan.',
     },
     specs: {
       rotulo: 'Ficha técnica',
@@ -420,16 +405,16 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       bajada:
         'Todo lo que revisa un área de compras antes de la primera llamada, en la página y no en un PDF que hay que solicitar. Calibres y empaque se definen con cada comprador.',
       cta: 'Pedir la ficha completa',
-      porConfirmar: 'confirmar',
       filas: [
-        { campo: 'Especie', valor: 'Jibia — Dosidicus gigas', confirmado: true },
-        { campo: 'Zona de captura', valor: 'FAO 87 — Pacífico Sudeste, Chile', confirmado: true },
-        { campo: 'Presentación', valor: 'IQF y congelado en bloque', confirmado: false },
-        { campo: 'Empaque', valor: 'Bolsas interiores en caja máster', confirmado: false },
-        { campo: 'Calibres', valor: 'Según especificación del comprador', confirmado: false },
-        { campo: 'Glaseado', valor: 'Según especificación del comprador', confirmado: false },
-        { campo: 'Vida útil', valor: 'Congelado a −18 °C', confirmado: false },
-        { campo: 'Número de planta', valor: '', confirmado: false },
+        { campo: 'Especie', valor: 'Jibia — Dosidicus gigas' },
+        { campo: 'Zona de captura', valor: 'FAO 87 — Pacífico Sudeste, Chile' },
+        { campo: 'Presentación', valor: 'IQF, bloque o interfoliado' },
+        { campo: 'Empaque', valor: 'Bolsas de 10 kg en caja máster de 20 kg' },
+        { campo: 'Calibres', valor: 'Tubos 100/200, 200/400 y 400 g arriba · anillos de 8 a 12 mm' },
+        { campo: 'Glaseado', valor: '10% estándar, ajustable de 5% a 20%' },
+        { campo: 'Almacenaje', valor: '−18 °C o menos' },
+        { campo: 'Vida útil', valor: '24 meses congelado' },
+        { campo: 'Carga', valor: 'Unas 25 t por contenedor reefer de 40 pies' },
       ],
     },
     calidad: {
@@ -437,7 +422,6 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       titulo: 'Con los papeles en regla.',
       bajada:
         'Ludrimar trabaja con un plan de aseguramiento de calidad basado en las normativas de Sernapesca. Cada despacho sale con las autorizaciones que exige el mercado de destino.',
-      porConfirmar: 'por confirmar',
       bloques: [
         {
           titulo: 'PAC Sernapesca',
@@ -465,8 +449,7 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
         {
           titulo: 'Certificaciones',
           texto:
-            'Aquí van HACCP, BRC, IFS, número de planta o el registro que corresponda. Es lo primero que mira un comprador extranjero.',
-          pendiente: true,
+            'Plan HACCP en toda la línea, BRCGS Food Safety y los registros para despachar a la Unión Europea, Estados Unidos y China.',
         },
       ],
     },
@@ -514,8 +497,7 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
         'Manda el corte, el volumen y el mercado de destino. Responde quien maneja la planta, no un correo genérico.',
       email: 'Correo',
       planta: 'Planta',
-      telefono: 'Teléfono',
-      porConfirmar: 'por confirmar',
+      direccion: 'Puerto Montt, Chile',
       campos: {
         empresa: 'Empresa',
         pais: 'País',

@@ -1,6 +1,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+import react from '@astrojs/react';
+
 // Dominio definitivo. Mientras no esté apuntando, Netlify entrega el suyo por
 // variable de entorno y los canonical, Open Graph y sitemap salen correctos:
 //   DEPLOY_PRIME_URL → deploy previews y ramas
@@ -12,7 +14,7 @@ export const SITE_URL = process.env.DEPLOY_PRIME_URL || process.env.URL || DOMIN
 export default defineConfig({
   site: SITE_URL,
   // Las propuestas a clientes son privadas: fuera del sitemap y con noindex.
-  integrations: [sitemap({ filter: (pagina) => !pagina.includes('/propuestas') })],
+  integrations: [sitemap({ filter: (pagina) => !pagina.includes('/propuestas') }), react()],
   build: {
     // Un solo archivo CSS por página: menos peticiones en un sitio de una página.
     inlineStylesheets: 'auto',

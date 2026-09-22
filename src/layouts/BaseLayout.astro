@@ -1,5 +1,6 @@
 ---
 import Seo from '../components/Seo.astro';
+import Animaciones from '../components/Animaciones.astro';
 // Fuentes servidas desde el propio dominio: Astro las versiona y Netlify las
 // cachea para siempre. Evita dos conexiones extra a Google en cada visita.
 import '@fontsource-variable/space-grotesk/wght.css';
@@ -128,6 +129,12 @@ const sitioJsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(sitioJsonLd)} />
     <slot name="head" />
 
+    <!-- Habilita los estados iniciales de las animaciones. Va antes del
+         primer pintado para que no haya parpadeo. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <!--
       Capa de analytics agnóstica: empuja eventos a window.dataLayer.
       Si mañana se conecta GTM o GA4, los eventos ya están emitidos y nombrados.
@@ -148,5 +155,6 @@ const sitioJsonLd = {
   </head>
   <body>
     <slot />
+    <Animaciones />
   </body>
 </html>

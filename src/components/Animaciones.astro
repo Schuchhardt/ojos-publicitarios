@@ -1,0 +1,91 @@
+---
+// Capa de movimiento del sitio: aparición al hacer scroll, escalonado dentro de
+// cada grilla y marcado de la sección activa en el menú. Sin librerías.
+---
+
+<script>
+  const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 1. Escalonado: cada hijo de un grupo entra un poco después que el anterior.
+  document.querySelectorAll<HTMLElement>('[data-reveal-grupo]').forEach((grupo) => {
+    const paso = Number(grupo.dataset.revealGrupo) || 80;
+    Array.from(grupo.children).forEach((hijo, i) => {
+      if (!(hijo instanceof HTMLElement)) return;
+      hijo.setAttribute('data-reveal', '');
+      hijo.style.setProperty('--reveal-delay', `${Math.min(i, 8) * paso}ms`);
+    });
+  });
+
+  const porRevelar = document.querySelectorAll<HTMLElement>('[data-reveal]');
+
+  if (quieto || !('IntersectionObserver' in window)) {
+    porRevelar.forEach((el) => el.classList.add('visible'));
+  } else {
+    const pendientes = new Set<Element>(porRevelar);
+
+    const revelar = (el: Element) => {
+      el.classList.add('visible');
+      pendientes.delete(el);
+      observador.unobserve(el);
+    };
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((entrada) => {
+          if (entrada.isIntersecting) revelar(entrada.target);
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+    );
+    pendientes.forEach((el) => observador.observe(el));
+
+    // Red de seguridad: si el scroll salta de golpe —arrastrando la barra o
+    // llegando por un ancla— el observer nunca ve esos elementos y quedarían
+    // invisibles para siempre. Acá se revelan los que quedaron arriba.
+    let tarea = 0;
+    const barrer = () => {
+      cancelAnimationFrame(tarea);
+      tarea = requestAnimationFrame(() => {
+        if (pendientes.size === 0) {
+          window.removeEventListener('scroll', barrer);
+          return;
+        }
+        Array.from(pendientes).forEach((el) => {
+          if (el.getBoundingClientRect().bottom < 0) revelar(el);
+        });
+      });
+    };
+    window.addEventListener('scroll', barrer, { passive: true });
+  }
+
+  // 2. Cabecera: se marca apenas el contenido pasa por debajo.
+  const cabecera = document.querySelector<HTMLElement>('.header');
+  if (cabecera) {
+    const marcar = () => cabecera.toggleAttribute('data-scrolled', window.scrollY > 8);
+    marcar();
+    window.addEventListener('scroll', marcar, { passive: true });
+  }
+
+  // 3. Menú: resalta la sección que se está mirando.
+  const enlaces = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.header a[href*="#"]')
+  ).filter((a) => a.hash.length > 1);
+
+  const secciones = enlaces
+    .map((a) => document.querySelector(a.hash))
+    .filter((s): s is Element => Boolean(s));
+
+  if (secciones.length > 0 && 'IntersectionObserver' in window) {
+    const activo = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((entrada) => {
+          if (!entrada.isIntersecting) return;
+          const id = `#${entrada.target.id}`;
+          enlaces.forEach((a) => a.toggleAttribute('data-activo', a.hash === id));
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    );
+    secciones.forEach((s) => activo.observe(s));
+  }
+</script>

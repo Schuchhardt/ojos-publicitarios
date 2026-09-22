@@ -12,14 +12,14 @@ const proyectos = await Promise.all(
 ---
 
 <section id="proyectos" class="seccion">
-  <div class="encabezado">
+  <div class="encabezado" data-reveal-grupo="90">
     <h2 class="titulo-seccion">Proyectos entregados.</h2>
     <p class="texto-apoyo">
       Sitios funcionando hoy y marcas que ya están en la calle. Puedes entrar y verlos.
     </p>
   </div>
 
-  <div class="rejilla">
+  <div class="rejilla" data-reveal-grupo="110">
     {
       proyectos.map((proyecto) => (
         <article class="tarjeta">
@@ -73,6 +73,15 @@ const proyectos = await Promise.all(
   .tarjeta {
     border: 1px solid var(--linea-media);
     background: var(--panel);
+    overflow: hidden;
+    transition:
+      transform 0.45s var(--curva),
+      border-color 0.4s ease;
+  }
+
+  .tarjeta:hover {
+    transform: translateY(-4px);
+    border-color: var(--acento-borde);
   }
 
   .tarjeta :global(img) {
@@ -81,6 +90,11 @@ const proyectos = await Promise.all(
     height: auto;
     aspect-ratio: 16 / 10;
     object-fit: cover;
+    transition: transform 0.7s var(--curva);
+  }
+
+  .tarjeta:hover :global(img) {
+    transform: scale(1.04);
   }
 
   .cuerpo {
@@ -115,6 +129,21 @@ const proyectos = await Promise.all(
     font-size: 14px;
     font-weight: 600;
     margin-top: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tarjeta,
+    .tarjeta :global(img) {
+      transition: none;
+    }
+
+    .tarjeta:hover {
+      transform: none;
+    }
+
+    .tarjeta:hover :global(img) {
+      transform: none;
+    }
   }
 
   .pendiente {

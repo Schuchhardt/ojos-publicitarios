@@ -43,7 +43,19 @@ import { NAV } from '../lib/config';
     padding: 16px var(--pad-x);
     background: rgba(6, 17, 26, 0.88);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--linea);
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 0.4s ease,
+      background 0.4s ease,
+      padding 0.4s var(--curva);
+  }
+
+  /* Al bajar, la cabecera se compacta y aparece su línea. */
+  .header[data-scrolled] {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-bottom-color: var(--linea);
+    background: rgba(6, 17, 26, 0.95);
   }
 
   .marca {
@@ -61,8 +73,34 @@ import { NAV } from '../lib/config';
     color: var(--texto-medio);
   }
 
-  .nav a:hover {
+  .nav a {
+    position: relative;
+    padding-bottom: 3px;
+  }
+
+  /* Subrayado que crece desde el centro. */
+  .nav a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    height: 1px;
+    background: var(--acento);
+    transition:
+      left 0.35s var(--curva),
+      right 0.35s var(--curva);
+  }
+
+  .nav a:hover,
+  .nav a[data-activo] {
     color: var(--acento);
+  }
+
+  .nav a:hover::after,
+  .nav a[data-activo]::after {
+    left: 0;
+    right: 0;
   }
 
   .acciones {
@@ -84,9 +122,16 @@ import { NAV } from '../lib/config';
     font-size: 14px;
   }
 
+  .cta {
+    transition:
+      background 0.3s ease,
+      transform 0.3s var(--curva);
+  }
+
   .cta:hover {
     background: var(--acento-claro);
     color: var(--bg);
+    transform: translateY(-1px);
   }
 
   /* Botón de menú: solo aparece cuando la navegación no cabe */

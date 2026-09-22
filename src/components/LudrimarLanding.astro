@@ -29,7 +29,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
   title={`Propuesta — Pesquera Ludrimar Ltda | Ojos Publicitarios`}
   description={c.meta.descripcion}
   cliente="Pesquera Ludrimar Ltda"
-  nota="Demo navegable · datos en ámbar por confirmar · fotos de referencia, se reemplazan por las reales"
+  nota="Demo navegable · contenido y fotos de referencia"
   lang={idioma}
 >
   <div class="ludrimar">
@@ -92,10 +92,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
         c.cifras.map((cifra) => (
           <div class="cifra">
             <div class="cifra-valor">{cifra.valor}</div>
-            <div class="cifra-texto">
-              {cifra.texto}
-              {cifra.pendiente && <span class="lud-pendiente">{cifra.pendiente}</span>}
-            </div>
+            <div class="cifra-texto">{cifra.texto}</div>
           </div>
         ))
       }
@@ -136,10 +133,6 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
           }
         </div>
 
-        <p class="nota-seccion">
-          <span class="lud-pendiente">{c.producto.notaEtiqueta}</span>
-          {c.producto.nota}
-        </p>
       </div>
     </section>
 
@@ -160,10 +153,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
             c.specs.filas.map((fila) => (
               <div class="fila">
                 <dt>{fila.campo}</dt>
-                <dd>
-                  {fila.valor}
-                  {!fila.confirmado && <span class="lud-pendiente">{c.specs.porConfirmar}</span>}
-                </dd>
+                <dd>{fila.valor}</dd>
               </div>
             ))
           }
@@ -186,12 +176,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
           {
             c.calidad.bloques.map((bloque) => (
               <article>
-                <h3>
-                  {bloque.titulo}
-                  {bloque.pendiente && (
-                    <span class="lud-pendiente">{c.calidad.porConfirmar}</span>
-                  )}
-                </h3>
+                <h3>{bloque.titulo}</h3>
                 <p>{bloque.texto}</p>
               </article>
             ))
@@ -271,11 +256,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
             </div>
             <div>
               <span class="dato-rotulo">{c.contacto.planta}</span>
-              <span class="lud-pendiente">dirección {c.contacto.porConfirmar}</span>
-            </div>
-            <div>
-              <span class="dato-rotulo">{c.contacto.telefono}</span>
-              <span class="lud-pendiente">teléfono {c.contacto.porConfirmar}</span>
+              <span>{c.contacto.direccion}</span>
             </div>
           </div>
         </div>
@@ -571,16 +552,6 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     font-size: 15.5px;
     line-height: 1.65;
     color: var(--texto);
-  }
-
-  .nota-seccion {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    margin-top: 28px;
-    font-size: 14.5px;
-    color: var(--texto-tenue);
   }
 
   /* Ficha técnica --------------------------------------------------- */

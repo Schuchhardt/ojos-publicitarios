@@ -9,31 +9,32 @@ const captura = await cargarImagen(destacado?.imagen);
 ---
 
 <section class="hero">
+  <div class="resplandor" aria-hidden="true"></div>
   <div class="texto">
-    <div class="epigrafe">
+    <div class="epigrafe" data-entrada style="--entrada-delay:0ms">
       <div class="linea" aria-hidden="true"></div>
       <div class="etiqueta">ESTUDIO CREATIVO &amp; DIGITAL</div>
     </div>
 
-    <h1>Tu negocio en su<br />mejor versión <span>digital.</span></h1>
+    <h1 data-entrada style="--entrada-delay:90ms">Tu negocio en su<br />mejor versión <span>digital.</span></h1>
 
-    <p>
+    <p data-entrada style="--entrada-delay:180ms">
       Creamos páginas web que se ven bien, comunican mejor y facilitan vender. Y nos encargamos
       de que sigan funcionando, sin que tengas que aprender nada nuevo.
     </p>
 
-    <div class="botones">
+    <div class="botones" data-entrada style="--entrada-delay:270ms">
       <a href="#contacto" class="boton boton-primario" data-track="cta_hero">
         Quiero mi nueva web <span aria-hidden="true">↗</span>
       </a>
       <a href="#automatizacion" class="boton boton-secundario">Ver qué incluye</a>
     </div>
 
-    <div class="nota">Diseño con intención. Sin suscripciones mensuales: todo queda tuyo.</div>
+    <div class="nota" data-entrada style="--entrada-delay:360ms">Diseño con intención. Sin suscripciones mensuales: todo queda tuyo.</div>
   </div>
 
-  <div class="visual">
-    <div class="ventana">
+  <div class="visual" data-entrada style="--entrada-delay:240ms">
+    <div class="ventana" data-flota>
       <div class="barra">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -62,6 +63,7 @@ const captura = await cargarImagen(destacado?.imagen);
 
 <style>
   .hero {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
     gap: clamp(32px, 5vw, 64px);
@@ -73,7 +75,43 @@ const captura = await cargarImagen(destacado?.imagen);
 
   .texto,
   .visual {
+    position: relative;
     min-width: 0;
+  }
+
+  /* Luz de fondo que respira, apenas perceptible. */
+  .resplandor {
+    position: absolute;
+    top: 8%;
+    left: -10%;
+    width: min(780px, 90%);
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(0, 200, 230, 0.14), transparent 62%);
+    filter: blur(28px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  :global(.js) .resplandor {
+    animation: respirar 14s ease-in-out infinite;
+  }
+
+  @keyframes respirar {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.85;
+    }
+    50% {
+      transform: translate3d(5%, 3%, 0) scale(1.12);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .resplandor {
+      animation: none;
+    }
   }
 
   .epigrafe {

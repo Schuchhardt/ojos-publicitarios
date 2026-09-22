@@ -4,7 +4,7 @@ import { AUTOMATIZACIONES } from '../data/contenido';
 
 <section id="automatizacion" class="automatizacion seccion-ancha">
   <div class="contenedor">
-    <div class="encabezado">
+    <div class="encabezado" data-reveal-grupo="90">
       <div>
         <div class="rotulo">LO QUE NO TIENES QUE APRENDER</div>
         <h2 class="titulo-seccion">Y que siga funcionando<br />cuando tú no estás.</h2>
@@ -15,7 +15,7 @@ import { AUTOMATIZACIONES } from '../data/contenido';
       </p>
     </div>
 
-    <div class="rejilla">
+    <div class="rejilla" data-reveal-grupo="70">
       {
         AUTOMATIZACIONES.map((item) => (
           <article class="tarjeta">
@@ -77,6 +77,26 @@ import { AUTOMATIZACIONES } from '../data/contenido';
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transition:
+      transform 0.4s var(--curva),
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+
+  .tarjeta:hover {
+    transform: translateY(-3px);
+    border-color: #9fc4d0;
+    box-shadow: 0 16px 34px -26px rgba(13, 127, 147, 0.7);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tarjeta {
+      transition: none;
+    }
+
+    .tarjeta:hover {
+      transform: none;
+    }
   }
 
   .numero {

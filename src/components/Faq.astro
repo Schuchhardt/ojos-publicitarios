@@ -18,10 +18,10 @@ const { preguntas, titulo = 'Preguntas frecuentes', rotulo, id } = Astro.props;
 {
   preguntas.length > 0 && (
     <section class="faq" id={id}>
-      {rotulo && <div class="rotulo">{rotulo}</div>}
-      <h2>{titulo}</h2>
+      {rotulo && <div class="rotulo" data-reveal>{rotulo}</div>}
+      <h2 data-reveal>{titulo}</h2>
 
-      <div class="lista">
+      <div class="lista" data-reveal-grupo="60">
         {preguntas.map((item) => (
           <details name="faq">
             <summary>

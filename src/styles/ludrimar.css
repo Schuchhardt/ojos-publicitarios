@@ -180,26 +180,3 @@
   background: var(--azul-medio);
 }
 
-/* Marcadores de dato por confirmar ------------------------------------- */
-.lud-pendiente {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--fuente-texto);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #8a6013;
-  background: #fbeed3;
-  border: 1px dashed #c99b3e;
-  border-radius: 3px;
-  padding: 3px 8px;
-  white-space: nowrap;
-}
-
-.lud-oscuro .lud-pendiente {
-  color: #f6d9a3;
-  background: rgba(246, 217, 163, 0.12);
-  border-color: rgba(246, 217, 163, 0.55);
-}
