@@ -33,6 +33,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
   cliente="Pesquera Ludrimar Ltda"
   nota="Demo navegable · contenido y fotos de referencia"
   lang={idioma}
+  detectarIdioma={idioma === 'en'}
 >
   <div class="ludrimar">
     <!-- Cabecera ------------------------------------------------------ -->
@@ -50,6 +51,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
               <a
                 href={item.ruta}
                 class:list={['idioma', { activo: item.codigo === idioma }]}
+                data-idioma={item.codigo}
                 hreflang={item.codigo}
                 aria-current={item.codigo === idioma ? 'true' : undefined}
               >
@@ -447,6 +449,9 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
   /* Portada -------------------------------------------------------- */
   .portada {
     position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(560px, 82vh, 820px);
     overflow: hidden;
     background: #0c2339;
     color: var(--blanco);
@@ -478,13 +483,40 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     }
   }
 
-  /* Velo azul: la foto es ambiente, el texto manda. */
+  /* Velo direccional: opaco donde va el texto, casi transparente a la derecha
+     para que se vean los rayos de luz. */
   .velo {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(100deg, rgba(8, 26, 43, 0.96) 0%, rgba(12, 35, 57, 0.86) 42%, rgba(21, 59, 95, 0.72) 100%),
-      linear-gradient(to bottom, rgba(12, 35, 57, 0.5), transparent 40%, rgba(12, 35, 57, 0.6));
+      linear-gradient(
+        95deg,
+        rgba(6, 19, 31, 0.94) 0%,
+        rgba(8, 28, 46, 0.84) 34%,
+        rgba(12, 35, 57, 0.46) 62%,
+        rgba(21, 59, 95, 0.22) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(6, 19, 31, 0.55),
+        transparent 30%,
+        transparent 70%,
+        rgba(6, 19, 31, 0.5)
+      );
+  }
+
+  /* En pantalla angosta el texto ocupa todo el ancho, así que el velo deja de
+     ser lateral y pasa a ser parejo: si no, el titular cae sobre los rayos de
+     luz y baja a 2.6:1. Medido, no supuesto. */
+  @media (max-width: 900px) {
+    .velo {
+      background: linear-gradient(
+        to bottom,
+        rgba(6, 19, 31, 0.84) 0%,
+        rgba(8, 28, 46, 0.76) 45%,
+        rgba(12, 35, 57, 0.82) 100%
+      );
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -498,14 +530,15 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     right: -6%;
     top: 50%;
     transform: translateY(-50%);
-    width: min(52%, 660px);
+    width: min(48%, 620px);
     height: auto;
-    opacity: 0.1;
+    opacity: 0.08;
     pointer-events: none;
   }
 
   .portada-texto {
     position: relative;
+    width: 100%;
     max-width: var(--ancho);
     margin: 0 auto;
   }
@@ -936,6 +969,15 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
 </style>
 
 <script>
+  // Elegir idioma a mano gana sobre la detección automática del navegador.
+  document.querySelectorAll<HTMLAnchorElement>('[data-idioma]').forEach((enlace) => {
+    enlace.addEventListener('click', () => {
+      try {
+        localStorage.setItem('lud-idioma', enlace.dataset.idioma ?? '');
+      } catch (e) {}
+    });
+  });
+
   // Demo: el formulario no envía a ninguna parte, solo muestra la confirmación.
   const form = document.getElementById('lud-form') as HTMLFormElement | null;
   const ok = document.getElementById('lud-ok');

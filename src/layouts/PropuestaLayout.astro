@@ -10,9 +10,32 @@ interface Props {
   nota?: string;
   /** Idioma del contenido de la propuesta. */
   lang?: string;
+  /**
+   * Manda a la versión en español a quien tenga el navegador en español. Solo
+   * en la versión por defecto, para no armar un ida y vuelta entre las dos.
+   */
+  detectarIdioma?: boolean;
 }
 
-const { title, description, cliente, nota, lang = 'es' } = Astro.props;
+const {
+  title,
+  description,
+  cliente,
+  nota,
+  lang = 'es',
+  detectarIdioma = false,
+} = Astro.props;
+
+// Ojo: dentro de un <script> de Astro el contenido es texto plano. Se inyecta
+// con set:html para que salga como código y no impreso tal cual.
+const scriptIdioma = `(function () {
+  try {
+    if (localStorage.getItem('lud-idioma')) return;
+    if ((navigator.language || '').toLowerCase().indexOf('es') === 0) {
+      location.replace('/propuestas/ludrimar/es/');
+    }
+  } catch (e) {}
+})();`;
 ---
 
 <!DOCTYPE html>
@@ -26,6 +49,8 @@ const { title, description, cliente, nota, lang = 'es' } = Astro.props;
     <!-- Propuesta privada: fuera de buscadores y de sus resúmenes. -->
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <slot name="head" />
+    {detectarIdioma && <script is:inline set:html={scriptIdioma} />}
     <style>
       html {
         scroll-behavior: smooth;
