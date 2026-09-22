@@ -25,10 +25,8 @@ export const CIFRAS: Cifra[] = [
   { valor: '$0', texto: 'En suscripciones mensuales: tu sitio y tus herramientas son tuyos' },
   { valor: '1', texto: 'Persona a cargo de tu proyecto, siempre la misma' },
   {
-    valor: '',
-    rotulo: 'DATO POR COMPLETAR',
-    texto: 'Agregar una métrica real (ej. en cuánto tiempo respondemos una consulta)',
-    pendiente: true,
+    valor: '< 12 h',
+    texto: 'Respondemos cualquier consulta, a cualquier hora y cualquier día',
   },
 ];
 
@@ -226,8 +224,12 @@ export interface Proyecto {
   rotulo: string;
   descripcion: string;
   url: string;
-  /** Nombre del archivo dentro de src/assets. Vacío = tarjeta pendiente. */
+  /** Texto del enlace. Por defecto, el dominio de `url`. */
+  enlaceTexto?: string;
+  /** Ruta del archivo dentro de src/assets. Vacío = tarjeta pendiente. */
   imagen?: string;
+  /** Desde dónde se recorta la imagen en la tarjeta. */
+  encuadre?: 'top' | 'center';
 }
 
 export const PROYECTOS: Proyecto[] = [
@@ -238,11 +240,39 @@ export const PROYECTOS: Proyecto[] = [
       'Plataforma para encontrar el camión correcto: catálogo con buscador por marca y año, fichas de vehículo y consultas que llegan ordenadas al vendedor.',
     url: 'https://chilecamiones.cl',
     imagen: 'chilecamiones.png',
+    encuadre: 'top',
+  },
+  {
+    nombre: 'Mercado Mersan',
+    rotulo: 'PUBLICIDAD EXTERIOR · 2022',
+    descripcion:
+      'Fotomontaje publicitario para las bodegas del Mercado Mersan, en la comuna de Lo Espejo.',
+    url: 'https://www.instagram.com/p/CgwvS3lOpKm/',
+    enlaceTexto: 'Ver en Instagram',
+    imagen: 'proyectos/mersan.jpg',
+  },
+  {
+    nombre: 'Energy',
+    rotulo: 'PACKAGING · 2022',
+    descripcion:
+      'Diseño de prototipo de envase para una barra de cereal, con fotografía de producto.',
+    url: 'https://www.instagram.com/p/Ck8SIgDORtn/',
+    enlaceTexto: 'Ver en Instagram',
+    imagen: 'proyectos/energy.jpg',
+  },
+  {
+    nombre: 'Consultora KO',
+    rotulo: 'IDENTIDAD DE MARCA · 2021',
+    descripcion:
+      'Logotipo para Consultora KO, asesoría en planificación y gestión comercial.',
+    url: 'https://www.instagram.com/p/CU72lmCrcb_/',
+    enlaceTexto: 'Ver en Instagram',
+    imagen: 'proyectos/consultora-ko.jpg',
   },
 ];
 
 /** Tarjetas vacías que quedan a la espera de un proyecto real. */
-export const PROYECTOS_PENDIENTES = 1;
+export const PROYECTOS_PENDIENTES = 0;
 
 // ---------------------------------------------------------------------------
 // Testimonios
@@ -278,4 +308,52 @@ export const TIPOS_DE_PROYECTO = [
   'Ecommerce',
   'Automatizaciones y atención',
   'Todavía no lo tengo claro',
+];
+
+// ---------------------------------------------------------------------------
+// Preguntas frecuentes de la home.
+// Cada respuesta se lee sola, fuera de contexto: así la citan los buscadores
+// con IA y así se ve en el resultado enriquecido de Google.
+// ---------------------------------------------------------------------------
+export interface Pregunta {
+  pregunta: string;
+  respuesta: string;
+}
+
+export const FAQ: Pregunta[] = [
+  {
+    pregunta: '¿Cuánto se demoran en responder una consulta?',
+    respuesta:
+      'Menos de 12 horas, cualquier día de la semana y a cualquier hora. Responde una persona del equipo, no un mensaje automático.',
+  },
+  {
+    pregunta: '¿Hay que pagar una suscripción mensual?',
+    respuesta:
+      'No. En Ojos Publicitarios el sitio y las herramientas quedan a nombre de tu negocio: no cobramos una mensualidad por dejarte usar lo que ya es tuyo.',
+  },
+  {
+    pregunta: '¿Qué tipo de sitio necesito para mi negocio?',
+    respuesta:
+      'Una landing page si tienes una sola oferta y quieres recibir consultas; un sitio corporativo si necesitas presentar varios servicios y generar confianza; un ecommerce si vendes productos y quieres cobrar en línea.',
+  },
+  {
+    pregunta: '¿Qué pasa si mi negocio no tiene nada, ni sitio ni redes?',
+    respuesta:
+      'Empezamos por ahí. Definimos qué formato conecta mejor tu marca con su próximo cliente y armamos lo mínimo que funciona, en vez de todo a la vez.',
+  },
+  {
+    pregunta: '¿La atención automática reemplaza a una persona?',
+    respuesta:
+      'No. Automatizamos lo que se repite y tiene una sola respuesta correcta: horarios, precios de lista, confirmaciones y agendamiento. Nada se publica ni se responde en tu nombre sin que una persona lo revise.',
+  },
+  {
+    pregunta: '¿Quién queda a cargo de mi proyecto?',
+    respuesta:
+      'Una sola persona, siempre la misma, de principio a fin. No hay tickets ni respuestas genéricas: sabes a quién escribirle y quién revisó tu sitio.',
+  },
+  {
+    pregunta: '¿Dónde trabajan?',
+    respuesta:
+      'Somos un estudio creativo y digital chileno y trabajamos con negocios de todo Chile, de forma remota y por WhatsApp.',
+  },
 ];

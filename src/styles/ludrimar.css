@@ -1,0 +1,206 @@
+/* ---------------------------------------------------------------------------
+   Paleta y tipografías de la propuesta para Ludrimar. Vive aparte del sitio de
+   Ojos Publicitarios: es la marca del cliente, no la nuestra.
+   El azul sale del logo entregado (#153b5f).
+--------------------------------------------------------------------------- */
+.ludrimar {
+  --azul: #153b5f;
+  --azul-hondo: #0c2339;
+  --azul-medio: #1e4d78;
+  --azul-claro: #e7eef4;
+  --marea: #0b9fc0;
+  --marea-clara: #7fd7e8;
+  --hielo: #f4f7f9;
+  --blanco: #ffffff;
+  --tinta: #0c2339;
+  --texto: #46606f;
+  --texto-tenue: #7d949f;
+  --linea: #dde5ea;
+  --linea-oscura: rgba(255, 255, 255, 0.14);
+  --fuente-titulo: 'Manrope Variable', system-ui, sans-serif;
+  --fuente-texto: 'Inter Variable', system-ui, sans-serif;
+  --pad-x: clamp(20px, 5vw, 72px);
+  --pad-y: clamp(64px, 8vw, 120px);
+  --ancho: 1280px;
+
+  background: var(--blanco);
+  color: var(--tinta);
+  font-family: var(--fuente-texto);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.ludrimar h1,
+.ludrimar h2,
+.ludrimar h3,
+.ludrimar h4 {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.ludrimar p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.ludrimar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ludrimar img {
+  max-width: 100%;
+}
+
+.ludrimar [hidden] {
+  display: none !important;
+}
+
+.ludrimar ::selection {
+  background: var(--marea);
+  color: var(--blanco);
+}
+
+.ludrimar :focus-visible {
+  outline: 2px solid var(--marea);
+  outline-offset: 3px;
+}
+
+/* Bloques -------------------------------------------------------------- */
+.lud-seccion {
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.lud-ancho {
+  max-width: var(--ancho);
+  margin: 0 auto;
+}
+
+.lud-oscuro {
+  background: var(--azul-hondo);
+  color: var(--blanco);
+}
+
+.lud-hielo {
+  background: var(--hielo);
+}
+
+.lud-rotulo {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--marea);
+  margin-bottom: 20px;
+}
+
+.lud-oscuro .lud-rotulo {
+  color: var(--marea-clara);
+}
+
+.lud-h2 {
+  font-size: clamp(30px, 3.6vw, 48px);
+  margin-bottom: 20px;
+}
+
+.lud-bajada {
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.7;
+  color: var(--texto);
+  max-width: 62ch;
+}
+
+.lud-oscuro .lud-bajada {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Botones -------------------------------------------------------------- */
+.lud-boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  border-radius: 4px;
+  font-family: var(--fuente-titulo);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.lud-boton-primario {
+  background: var(--marea);
+  color: var(--blanco);
+}
+
+.lud-boton-primario:hover {
+  background: #0b8ba8;
+}
+
+.lud-boton-secundario {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--blanco);
+}
+
+.lud-boton-secundario:hover {
+  border-color: var(--marea-clara);
+  background: rgba(11, 159, 192, 0.12);
+}
+
+.lud-boton-azul {
+  background: var(--azul);
+  color: var(--blanco);
+}
+
+.lud-boton-azul:hover {
+  background: var(--azul-medio);
+}
+
+/* Marcadores de dato por confirmar ------------------------------------- */
+.lud-pendiente {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--fuente-texto);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a9761f;
+  background: #fdf3e0;
+  border: 1px dashed #e0be84;
+  border-radius: 3px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.lud-oscuro .lud-pendiente {
+  color: #f0c988;
+  background: rgba(240, 201, 136, 0.1);
+  border-color: rgba(240, 201, 136, 0.45);
+}
+
+.lud-marco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 24px;
+  background: repeating-linear-gradient(
+    135deg,
+    #e9eff3 0 10px,
+    #e2eaef 10px 20px
+  );
+  color: var(--texto-tenue);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}

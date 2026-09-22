@@ -1,0 +1,117 @@
+---
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/inter';
+import '../styles/ludrimar.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Texto de la barra de propuesta. Vacío = sin barra (índice de propuestas). */
+  cliente?: string;
+  nota?: string;
+}
+
+const { title, description, cliente, nota } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0c2339" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- Propuesta privada: fuera de buscadores y de sus resúmenes. -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: #0c2339;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {
+      cliente && (
+        <div class="barra">
+          <div class="barra-izq">
+            <span class="punto" aria-hidden="true" />
+            <strong>Propuesta de sitio</strong>
+            <span class="barra-sep" aria-hidden="true">·</span>
+            <span>{cliente}</span>
+          </div>
+          {nota && <div class="barra-nota">{nota}</div>}
+          <a href="/propuestas/" class="barra-link">Todas las propuestas ↗</a>
+        </div>
+      )
+    }
+    <slot />
+
+    <style>
+      .barra {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px 24px;
+        padding: 12px clamp(20px, 5vw, 72px);
+        background: #06111a;
+        color: #b8c9d2;
+        font-family: 'Inter Variable', system-ui, sans-serif;
+        font-size: 12.5px;
+        line-height: 1.5;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .barra-izq {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .barra strong {
+        color: #e8f1f4;
+        font-weight: 600;
+      }
+
+      .punto {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #00c8e6;
+        flex: none;
+      }
+
+      .barra-sep {
+        opacity: 0.5;
+      }
+
+      .barra-nota {
+        color: #7e97a5;
+      }
+
+      .barra-link {
+        color: #00c8e6;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .barra-link:hover {
+        color: #7ce7f7;
+      }
+    </style>
+  </body>
+</html>

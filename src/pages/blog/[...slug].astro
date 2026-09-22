@@ -1,0 +1,310 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Faq from '../../components/Faq.astro';
+import { fechaISO, fechaLarga, minutosDeLectura } from '../../lib/fechas';
+import { articuloJsonLd, faqJsonLd, migasJsonLd } from '../../lib/jsonld';
+import { MARCA, TIENE_WHATSAPP, whatsappUrl } from '../../lib/config';
+
+export async function getStaticPaths() {
+  const notas = await getCollection('blog');
+  return notas.map((nota) => ({ params: { slug: nota.id }, props: { nota } }));
+}
+
+interface Props {
+  nota: CollectionEntry<'blog'>;
+}
+
+const { nota } = Astro.props;
+const { Content } = await render(nota);
+
+// El título del artículo ya es largo: sumarle la marca solo hace que Google
+// lo corte. La marca se agrega únicamente cuando cabe.
+const tituloSeo =
+  nota.data.titulo.length > 45 ? nota.data.titulo : `${nota.data.titulo} | ${MARCA}`;
+
+const ruta = `/blog/${nota.id}/`;
+const url = new URL(ruta, Astro.site).href;
+
+const articulo = articuloJsonLd({
+  titulo: nota.data.titulo,
+  descripcion: nota.data.descripcion,
+  url,
+  imagen: new URL('/og-image.jpg', Astro.site).href,
+  fecha: nota.data.fecha,
+  actualizado: nota.data.actualizado,
+  autor: nota.data.autor,
+  site: Astro.site,
+});
+
+const migas = migasJsonLd([
+  { nombre: 'Inicio', url: new URL('/', Astro.site).href },
+  { nombre: 'Blog', url: new URL('/blog/', Astro.site).href },
+  { nombre: nota.data.titulo, url },
+]);
+---
+
+<BaseLayout
+  title={tituloSeo}
+  description={nota.data.descripcion}
+  path={ruta}
+  type="article"
+  publicado={nota.data.fecha}
+  actualizado={nota.data.actualizado}
+  autor={nota.data.autor}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(articulo)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(migas)} />
+  {
+    nota.data.faq.length > 0 && (
+      <script
+        type="application/ld+json"
+        slot="head"
+        set:html={JSON.stringify(faqJsonLd(nota.data.faq))}
+      />
+    )
+  }
+
+  <Header />
+  <main>
+    <article class="seccion">
+      <nav class="migas" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a> <span aria-hidden="true">/</span>
+        <a href="/blog/">Blog</a> <span aria-hidden="true">/</span>
+        <span>{nota.data.titulo}</span>
+      </nav>
+
+      <div class="meta">
+        <time datetime={fechaISO(nota.data.fecha)}>{fechaLarga(nota.data.fecha)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{minutosDeLectura(nota.body ?? '')} min de lectura</span>
+        {
+          nota.data.tags.map((tag) => (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{tag}</span>
+            </>
+          ))
+        }
+      </div>
+
+      <h1>{nota.data.titulo}</h1>
+
+      <!-- Respuesta directa arriba de todo: es lo que cita un buscador con IA. -->
+      <aside class="corto">
+        <div class="corto-rotulo">EN CORTO</div>
+        <p>{nota.data.respuestaCorta}</p>
+      </aside>
+
+      <div class="prosa">
+        <Content />
+      </div>
+
+      {
+        nota.data.faq.length > 0 && (
+          <div class="faq-nota">
+            <Faq preguntas={nota.data.faq} titulo="Preguntas frecuentes" />
+          </div>
+        )
+      }
+
+      <aside class="cierre">
+        <h2>¿Te quedan dudas con tu caso?</h2>
+        <p>
+          Cuéntanos qué necesitas y te respondemos con un plan concreto: qué incluye, de qué nos
+          encargamos nosotros y cuánto cuesta.
+        </p>
+        <div class="acciones">
+          <a href="/#solicitud" class="boton boton-primario" data-track="cta_blog">
+            Preparar mi solicitud <span aria-hidden="true">↗</span>
+          </a>
+          {
+            TIENE_WHATSAPP && (
+              <a
+                href={whatsappUrl()}
+                target="_blank"
+                rel="noopener"
+                class="boton boton-secundario"
+                data-track="whatsapp_blog"
+              >
+                Escribir por WhatsApp
+              </a>
+            )
+          }
+        </div>
+      </aside>
+
+      <a class="volver" href="/blog/">← Todas las notas</a>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .seccion {
+    max-width: 820px;
+  }
+
+  .migas {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  .migas a {
+    color: var(--texto-debil);
+  }
+
+  .migas a:hover {
+    color: var(--acento);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: var(--fuente-titulo);
+    font-weight: 600;
+    font-size: clamp(30px, 3.8vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+
+  .corto {
+    border-left: 2px solid var(--acento);
+    background: var(--panel);
+    padding: 24px 28px;
+    margin: 0 0 44px;
+  }
+
+  .corto-rotulo {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--acento);
+    margin-bottom: 12px;
+  }
+
+  .corto p {
+    margin: 0;
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.65;
+    color: var(--texto-suave);
+    text-wrap: pretty;
+  }
+
+  /* Contenido en markdown: los estilos tienen que cruzar el scope. */
+  .prosa :global(h2) {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 48px 0 16px;
+    text-wrap: pretty;
+  }
+
+  .prosa :global(h3) {
+    font-family: var(--fuente-titulo);
+    font-size: 19px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+  }
+
+  .prosa :global(p) {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--texto-apagado);
+    margin: 0 0 20px;
+    text-wrap: pretty;
+  }
+
+  .prosa :global(ul),
+  .prosa :global(ol) {
+    margin: 0 0 24px;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prosa :global(li) {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--texto-apagado);
+  }
+
+  .prosa :global(li)::marker {
+    color: var(--acento);
+  }
+
+  .prosa :global(strong) {
+    color: var(--texto);
+    font-weight: 600;
+  }
+
+  .prosa :global(a) {
+    border-bottom: 1px solid var(--acento-borde);
+  }
+
+  .faq-nota {
+    margin-top: 56px;
+  }
+
+  .cierre {
+    margin-top: 56px;
+    background: var(--panel-destacado);
+    border: 1px solid var(--acento-borde-suave);
+    padding: clamp(24px, 3vw, 40px);
+  }
+
+  .cierre h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(21px, 2.2vw, 26px);
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+
+  .cierre p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--texto-apagado);
+    margin: 0 0 24px;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .volver {
+    display: inline-block;
+    margin-top: 40px;
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+  }
+
+  .volver:hover {
+    color: var(--acento);
+  }
+</style>

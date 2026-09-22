@@ -11,12 +11,17 @@ export const ANIO = new Date().getFullYear();
 // ---------------------------------------------------------------------------
 export const MOSTRAR_POLITICA_IA = true;
 export const MOSTRAR_EQUIPO = false;
-export const MOSTRAR_WHATSAPP = true;
+/** Bloque de preguntas frecuentes de la home. */
+export const MOSTRAR_FAQ = true;
+
 /**
- * Modal "Preparar mi solicitud": formulario que envía la consulta por Formspree.
- * En false, el botón principal del bloque de contacto lleva a WhatsApp.
+ * Bloque de testimonios. En false mientras no haya citas reales de clientes:
+ * es preferible no mostrarlo antes que publicar "Nombre del cliente".
  */
-export const MOSTRAR_FORMULARIO_SOLICITUD = true;
+export const MOSTRAR_TESTIMONIOS = false;
+
+/** Botón e ícono de WhatsApp, en paralelo al formulario. */
+export const MOSTRAR_WHATSAPP = true;
 
 // ---------------------------------------------------------------------------
 // Contacto directo
@@ -31,10 +36,13 @@ export const WHATSAPP_MENSAJE = 'Hola, vengo del sitio web y me gustaría conver
 export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xnpndzjw';
 
 /**
- * Correo de contacto. Mientras esté vacío no se muestra ningún enlace de correo
- * en el sitio: las consultas entran por el formulario y por WhatsApp.
+ * Correo de contacto. Vacío = no se publica ninguna casilla. Las consultas
+ * entran por el formulario de Formspree; esto es solo una vía más.
  */
-export const CONTACTO_EMAIL: string = ''; // TODO: correo real
+export const CONTACTO_EMAIL: string = 'ojospublicitarios@gmail.com';
+
+/** Promesa de respuesta: se repite en varias secciones, así que vive acá. */
+export const RESPUESTA_PROMESA = 'Te respondemos en menos de 12 horas, cualquier día.';
 
 export const TIENE_WHATSAPP = MOSTRAR_WHATSAPP && WHATSAPP_NUMERO !== '';
 export const TIENE_EMAIL = CONTACTO_EMAIL !== '';
@@ -43,17 +51,6 @@ export function whatsappUrl(mensaje: string = WHATSAPP_MENSAJE): string {
   return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
 }
 
-export function mailtoUrl(asunto = 'Quiero conversar sobre mi proyecto', cuerpo = ''): string {
-  const params = new URLSearchParams({ subject: asunto });
-  if (cuerpo) params.set('body', cuerpo);
-  return `mailto:${CONTACTO_EMAIL}?${params.toString()}`;
-}
-
-/** Destino del botón principal cuando el formulario está apagado. */
-export function contactoDirectoUrl(): string {
-  if (TIENE_WHATSAPP) return whatsappUrl();
-  return TIENE_EMAIL ? mailtoUrl() : '#contacto';
-}
 
 // ---------------------------------------------------------------------------
 // Redes — se muestran en contacto y footer. Dejar la url vacía oculta el ícono.
@@ -82,4 +79,5 @@ export const NAV = [
   { texto: 'Qué incluye', href: '/#automatizacion' },
   ...(MOSTRAR_POLITICA_IA ? [{ texto: 'Cómo trabajamos', href: '/#criterio' }] : []),
   ...(MOSTRAR_EQUIPO ? [{ texto: 'Equipo', href: '/#equipo' }] : []),
+  { texto: 'Blog', href: '/blog/' },
 ];

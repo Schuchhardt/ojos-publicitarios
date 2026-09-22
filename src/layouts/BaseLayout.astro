@@ -5,6 +5,7 @@ import Seo from '../components/Seo.astro';
 import '@fontsource-variable/space-grotesk/wght.css';
 import '@fontsource-variable/archivo/standard.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
+import { SERVICIOS } from '../data/contenido';
 import {
   CONTACTO_EMAIL,
   MARCA,
@@ -23,25 +24,81 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  publicado?: Date;
+  actualizado?: Date;
+  autor?: string;
 }
 
-const { title, description, path, image, type, noindex } = Astro.props;
+const { title, description, path, image, type, noindex, publicado, actualizado, autor } =
+  Astro.props;
+
+const contacto: Record<string, unknown>[] = [];
+if (TIENE_WHATSAPP) {
+  contacto.push({
+    '@type': 'ContactPoint',
+    contactType: 'ventas',
+    telephone: WHATSAPP_DISPLAY,
+    availableLanguage: ['es'],
+  });
+}
+if (TIENE_EMAIL) {
+  contacto.push({ '@type': 'ContactPoint', contactType: 'ventas', email: CONTACTO_EMAIL });
+}
 
 const perfiles = REDES.filter((red) => red.icono !== 'whatsapp').map((red) => red.url);
+const logo = new URL('/logo-ojos-publicitarios.png', Astro.site).toString();
 
+// Ficha del negocio con @id estable: los artículos del blog la referencian como
+// autor y editor en vez de repetir los datos.
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  '@id': new URL('/#negocio', Astro.site).href,
   name: MARCA,
   slogan: TAGLINE,
   description:
-    'Estudio creativo y digital: diseño de páginas web, tiendas online y automatización de la atención para negocios en Chile.',
+    'Estudio creativo y digital chileno: diseño de páginas web, tiendas online, identidad de marca y automatización de la atención a clientes.',
   url: Astro.site?.toString(),
-  logo: new URL('/logo-ojos.png', Astro.site).toString(),
+  logo,
+  image: new URL('/og-image.jpg', Astro.site).toString(),
   ...(TIENE_EMAIL ? { email: CONTACTO_EMAIL } : {}),
   ...(TIENE_WHATSAPP ? { telephone: WHATSAPP_DISPLAY } : {}),
-  areaServed: 'CL',
+  areaServed: { '@type': 'Country', name: 'Chile' },
+  availableLanguage: { '@type': 'Language', name: 'Español' },
+  knowsAbout: [
+    'Diseño de páginas web',
+    'Landing pages',
+    'Sitios corporativos',
+    'Tiendas online',
+    'Automatización de la atención por WhatsApp',
+    'Identidad de marca',
+    'Publicidad exterior',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios',
+    itemListElement: SERVICIOS.map((servicio) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: servicio.titulo,
+        description: servicio.descripcion,
+        areaServed: { '@type': 'Country', name: 'Chile' },
+      },
+    })),
+  },
+  ...(contacto.length > 0 ? { contactPoint: contacto } : {}),
   ...(perfiles.length > 0 ? { sameAs: perfiles } : {}),
+};
+
+const sitioJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': new URL('/#sitio', Astro.site).href,
+  name: MARCA,
+  url: Astro.site?.toString(),
+  inLanguage: 'es-CL',
+  publisher: { '@id': new URL('/#negocio', Astro.site).href },
 };
 ---
 
@@ -52,7 +109,6 @@ const organizationJsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#06111a" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
@@ -63,9 +119,13 @@ const organizationJsonLd = {
       image={image}
       type={type}
       noindex={noindex}
+      publicado={publicado}
+      actualizado={actualizado}
+      autor={autor}
     />
 
     <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(sitioJsonLd)} />
     <slot name="head" />
 
     <!--

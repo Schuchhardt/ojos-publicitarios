@@ -1,0 +1,139 @@
+---
+interface Pregunta {
+  pregunta: string;
+  respuesta: string;
+}
+
+interface Props {
+  preguntas: Pregunta[];
+  titulo?: string;
+  rotulo?: string;
+  /** El bloque de la home lleva id para el menú; el del blog no. */
+  id?: string;
+}
+
+const { preguntas, titulo = 'Preguntas frecuentes', rotulo, id } = Astro.props;
+---
+
+{
+  preguntas.length > 0 && (
+    <section class="faq" id={id}>
+      {rotulo && <div class="rotulo">{rotulo}</div>}
+      <h2>{titulo}</h2>
+
+      <div class="lista">
+        {preguntas.map((item) => (
+          <details name="faq">
+            <summary>
+              <h3>{item.pregunta}</h3>
+              <span class="mas" aria-hidden="true" />
+            </summary>
+            <p>{item.respuesta}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .faq {
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 600;
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    margin: 0 0 36px;
+  }
+
+  .lista {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--linea-media);
+  }
+
+  details {
+    border-bottom: 1px solid var(--linea-media);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  h3 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(17px, 1.6vw, 20px);
+    font-weight: 600;
+    margin: 0;
+    color: var(--texto);
+  }
+
+  summary:hover h3 {
+    color: var(--acento);
+  }
+
+  .mas {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+
+  .mas::before,
+  .mas::after {
+    content: '';
+    position: absolute;
+    background: var(--acento);
+    transition: transform 0.2s ease;
+  }
+
+  .mas::before {
+    top: 6px;
+    left: 0;
+    width: 14px;
+    height: 2px;
+  }
+
+  .mas::after {
+    top: 0;
+    left: 6px;
+    width: 2px;
+    height: 14px;
+  }
+
+  details[open] .mas::after {
+    transform: rotate(90deg);
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 40px 24px 0;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--texto-apagado);
+    max-width: 75ch;
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mas::before,
+    .mas::after {
+      transition: none;
+    }
+  }
+</style>

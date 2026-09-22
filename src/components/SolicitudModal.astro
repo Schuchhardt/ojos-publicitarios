@@ -1,11 +1,6 @@
 ---
 import { TIPOS_DE_PROYECTO } from '../data/contenido';
-import {
-  FORMSPREE_ENDPOINT,
-  TIENE_WHATSAPP,
-  WHATSAPP_DISPLAY,
-  whatsappUrl,
-} from '../lib/config';
+import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
 ---
 
 <dialog class="solicitud" id="solicitud" aria-labelledby="solicitud-titulo">
@@ -19,20 +14,13 @@ import {
   </p>
 
   <div class="error" id="solicitud-error" role="alert" hidden>
-    <p>
-      No pudimos enviar tu solicitud. Vuelve a intentarlo
-      {TIENE_WHATSAPP && (
-        <>
-          {' '}o escríbenos por <a href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a>
-        </>
-      )}.
-    </p>
+    <p>No pudimos enviar tu solicitud. Vuelve a intentarlo en unos segundos.</p>
   </div>
 
   <div class="exito" id="solicitud-exito" hidden>
     <div class="exito-marca" aria-hidden="true">✓</div>
     <h3>Recibimos tu solicitud.</h3>
-    <p>Te responde una persona del equipo el mismo día hábil.</p>
+    <p>{RESPUESTA_PROMESA}</p>
   </div>
 
   <form id="solicitud-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate>
@@ -113,19 +101,9 @@ import {
       Enviar solicitud <span aria-hidden="true">↗</span>
     </button>
 
-    <p class="aviso">Responde una persona del equipo, el mismo día hábil.</p>
+    <p class="aviso">{RESPUESTA_PROMESA}</p>
   </form>
 
-  {
-    TIENE_WHATSAPP && (
-      <p class="alternativa" id="solicitud-alternativa">
-        ¿Prefieres escribirnos directo?{' '}
-        <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_modal">
-          WhatsApp {WHATSAPP_DISPLAY}
-        </a>
-      </p>
-    )
-  }
 </dialog>
 
 <style>
@@ -316,14 +294,6 @@ import {
     margin: 0;
   }
 
-  .alternativa {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--texto-apagado);
-    margin: 22px 0 0;
-    padding-top: 18px;
-    border-top: 1px solid var(--linea-media);
-  }
 </style>
 
 <script>
@@ -339,21 +309,51 @@ import {
     const error = document.getElementById('solicitud-error');
     const exito = document.getElementById('solicitud-exito');
     const bajada = document.getElementById('solicitud-bajada');
-    const alternativa = document.getElementById('solicitud-alternativa');
     const textoBoton = enviar?.innerHTML ?? '';
 
+    const abrir = () => {
+      if (dialogo.open) return;
+      dialogo.showModal();
+      nombre?.focus();
+    };
+
     document.querySelectorAll<HTMLElement>('[data-abrir-solicitud]').forEach((boton) => {
-      boton.addEventListener('click', () => {
-        dialogo.showModal();
-        nombre?.focus();
-      });
+      boton.addEventListener('click', abrir);
     });
 
-    dialogo.querySelector('[data-cerrar]')?.addEventListener('click', () => dialogo.close());
+    // Llegar desde otra página con /#solicitud abre el formulario directo.
+    if (location.hash === '#solicitud') abrir();
+    window.addEventListener('hashchange', () => {
+      if (location.hash === '#solicitud') abrir();
+    });
+
+    const cerrar = () => {
+      dialogo.close();
+      // Si se llegó por /#solicitud, limpiar el hash para que recargar no lo
+      // vuelva a abrir.
+      if (location.hash === '#solicitud') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    };
+
+    dialogo.querySelector('[data-cerrar]')?.addEventListener('click', cerrar);
+    dialogo.addEventListener('close', () => {
+      if (location.hash === '#solicitud') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    });
+
+    // Escape: el <dialog> ya lo hace solo, pero no en todos los contextos.
+    dialogo.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape') {
+        evento.preventDefault();
+        cerrar();
+      }
+    });
 
     // Clic fuera del contenido = cerrar.
     dialogo.addEventListener('click', (evento) => {
-      if (evento.target === dialogo) dialogo.close();
+      if (evento.target === dialogo) cerrar();
     });
 
     formulario.addEventListener('submit', async (evento) => {
@@ -389,7 +389,6 @@ import {
         if (respuesta.ok) {
           formulario.hidden = true;
           bajada?.setAttribute('hidden', '');
-          alternativa?.setAttribute('hidden', '');
           exito?.removeAttribute('hidden');
           window.track?.('solicitud_enviada', { label: 'formspree' });
         } else {

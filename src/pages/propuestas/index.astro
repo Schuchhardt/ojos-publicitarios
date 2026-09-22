@@ -1,0 +1,203 @@
+---
+import PropuestaLayout from '../../layouts/PropuestaLayout.astro';
+
+const PROPUESTAS = [
+  {
+    cliente: 'Pesquera Ludrimar Ltda',
+    rubro: 'Exportación de jibia y productos del mar',
+    objetivo: 'Landing internacional para captar compradores extranjeros',
+    ruta: '/propuestas/ludrimar/',
+    fecha: '22 de septiembre de 2026',
+    estado: 'Para revisión',
+  },
+];
+---
+
+<PropuestaLayout
+  title="Propuestas — Ojos Publicitarios"
+  description="Propuestas de sitio en curso. Página privada, sin indexar."
+>
+  <main class="panel">
+    <div class="marco">
+      <header>
+        <div class="rotulo">OJOS PUBLICITARIOS · INTERNO</div>
+        <h1>Propuestas en curso</h1>
+        <p>
+          Demos navegables para mostrar a cada cliente. Son páginas privadas: llevan
+          <code>noindex</code>, quedan fuera del sitemap y están bloqueadas en robots.txt, así que
+          no aparecen en buscadores ni en asistentes con IA. Se comparten por link.
+        </p>
+      </header>
+
+      <ul class="lista">
+        {
+          PROPUESTAS.map((propuesta) => (
+            <li>
+              <a href={propuesta.ruta}>
+                <div class="fila-principal">
+                  <h2>{propuesta.cliente}</h2>
+                  <span class="estado">{propuesta.estado}</span>
+                </div>
+                <div class="rubro">{propuesta.rubro}</div>
+                <p class="objetivo">{propuesta.objetivo}</p>
+                <div class="pie-fila">
+                  <span>{propuesta.fecha}</span>
+                  <span class="ver">Ver la propuesta ↗</span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <footer>
+        <a href="/">← Volver al sitio</a>
+      </footer>
+    </div>
+  </main>
+</PropuestaLayout>
+
+<style>
+  .panel {
+    min-height: 100vh;
+    background: #06111a;
+    color: #e8f1f4;
+    font-family: 'Inter Variable', system-ui, sans-serif;
+    padding: clamp(40px, 8vw, 96px) clamp(20px, 5vw, 72px);
+  }
+
+  .marco {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .rotulo {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #00c8e6;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: 'Manrope Variable', system-ui, sans-serif;
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin: 0 0 18px;
+  }
+
+  header p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #a9bec9;
+    margin: 0 0 48px;
+    max-width: 68ch;
+  }
+
+  code {
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 3px;
+    padding: 1px 5px;
+  }
+
+  .lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .lista a {
+    display: block;
+    padding: 26px 28px;
+    background: #0b1a24;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .lista a:hover {
+    border-color: #00c8e6;
+    background: #0d222d;
+  }
+
+  .fila-principal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  h2 {
+    font-family: 'Manrope Variable', system-ui, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .estado {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #00c8e6;
+    border: 1px solid rgba(0, 200, 230, 0.5);
+    border-radius: 999px;
+    padding: 4px 11px;
+  }
+
+  .rubro {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6c8391;
+    margin-top: 8px;
+  }
+
+  .objetivo {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #a9bec9;
+    margin: 12px 0 0;
+  }
+
+  .pie-fila {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 13px;
+    color: #6c8391;
+  }
+
+  .ver {
+    color: #00c8e6;
+    font-weight: 600;
+  }
+
+  footer {
+    margin-top: 48px;
+    font-size: 14px;
+  }
+
+  footer a {
+    color: #6c8391;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    color: #00c8e6;
+  }
+</style>

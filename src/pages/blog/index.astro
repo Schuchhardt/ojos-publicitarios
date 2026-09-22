@@ -1,0 +1,176 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { fechaISO, fechaLarga, minutosDeLectura } from '../../lib/fechas';
+import { migasJsonLd } from '../../lib/jsonld';
+import { MARCA } from '../../lib/config';
+
+const notas = (await getCollection('blog')).sort(
+  (a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf()
+);
+
+const migas = migasJsonLd([
+  { nombre: 'Inicio', url: new URL('/', Astro.site).href },
+  { nombre: 'Blog', url: new URL('/blog/', Astro.site).href },
+]);
+
+const listado = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: `Blog de ${MARCA}`,
+  description:
+    'Guías claras sobre páginas web, tiendas online y atención automatizada para negocios en Chile.',
+  url: new URL('/blog/', Astro.site).href,
+  inLanguage: 'es-CL',
+  blogPost: notas.map((nota) => ({
+    '@type': 'BlogPosting',
+    headline: nota.data.titulo,
+    description: nota.data.descripcion,
+    datePublished: nota.data.fecha.toISOString(),
+    url: new URL(`/blog/${nota.id}/`, Astro.site).href,
+  })),
+};
+---
+
+<BaseLayout
+  title="Blog — Guías de diseño web y automatización | Ojos Publicitarios"
+  description="Guías claras para decidir qué sitio web necesita tu negocio y qué conviene automatizar en la atención a clientes. Escritas para pymes y emprendedores en Chile."
+  path="/blog/"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(migas)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(listado)} />
+
+  <Header />
+  <main>
+    <section class="seccion">
+      <nav class="migas" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a> <span aria-hidden="true">/</span> <span>Blog</span>
+      </nav>
+
+      <div class="rotulo">NOTAS DEL ESTUDIO</div>
+      <h1>Lo que nos preguntan,<br />respondido en largo.</h1>
+      <p class="bajada">
+        Guías para decidir qué necesita tu negocio antes de encargar una web o automatizar la
+        atención. Sin tecnicismos y sin vender humo.
+      </p>
+
+      <div class="lista">
+        {
+          notas.map((nota) => (
+            <article class="nota">
+              <div class="meta">
+                <time datetime={fechaISO(nota.data.fecha)}>{fechaLarga(nota.data.fecha)}</time>
+                <span aria-hidden="true">·</span>
+                <span>{minutosDeLectura(nota.body ?? '')} min de lectura</span>
+              </div>
+              <h2>
+                <a href={`/blog/${nota.id}/`}>{nota.data.titulo}</a>
+              </h2>
+              <p>{nota.data.descripcion}</p>
+              <a class="seguir" href={`/blog/${nota.id}/`}>
+                Leer la nota <span aria-hidden="true">↗</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .migas {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+
+  .migas a {
+    color: var(--texto-debil);
+  }
+
+  .migas a:hover {
+    color: var(--acento);
+  }
+
+  h1 {
+    font-family: var(--fuente-titulo);
+    font-weight: 600;
+    font-size: clamp(32px, 4.2vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+  }
+
+  .bajada {
+    font-size: clamp(16px, 1.3vw, 19px);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0 0 56px;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  .lista {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--linea-media);
+  }
+
+  .nota {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--linea-media);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 78ch;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+    text-transform: uppercase;
+  }
+
+  .nota h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(22px, 2.4vw, 30px);
+    font-weight: 600;
+    line-height: 1.16;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+
+  .nota h2 a {
+    color: var(--texto);
+  }
+
+  .nota h2 a:hover {
+    color: var(--acento);
+  }
+
+  .nota p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--texto-apagado);
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .seguir {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+</style>

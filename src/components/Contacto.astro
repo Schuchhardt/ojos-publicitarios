@@ -1,11 +1,6 @@
 ---
 import Redes from './Redes.astro';
-import {
-  MOSTRAR_FORMULARIO_SOLICITUD,
-  TIENE_WHATSAPP,
-  contactoDirectoUrl,
-  whatsappUrl,
-} from '../lib/config';
+import { CONTACTO_EMAIL, RESPUESTA_PROMESA, TIENE_EMAIL, TIENE_WHATSAPP, whatsappUrl } from '../lib/config';
 ---
 
 <section id="contacto" class="seccion">
@@ -20,17 +15,9 @@ import {
     </div>
 
     <div class="acciones">
-      {
-        MOSTRAR_FORMULARIO_SOLICITUD ? (
-          <button type="button" class="accion principal" data-abrir-solicitud data-track="cta_contacto">
-            Preparar mi solicitud <span aria-hidden="true">↗</span>
-          </button>
-        ) : (
-          <a href={contactoDirectoUrl()} class="accion principal" data-track="cta_contacto">
-            Preparar mi solicitud <span aria-hidden="true">↗</span>
-          </a>
-        )
-      }
+      <button type="button" class="accion principal" data-abrir-solicitud data-track="cta_contacto">
+        Preparar mi solicitud <span aria-hidden="true">↗</span>
+      </button>
 
       {
         TIENE_WHATSAPP && (
@@ -46,7 +33,15 @@ import {
         )
       }
 
-      <div class="nota">Responde una persona del equipo, el mismo día hábil.</div>
+      <div class="nota">
+        {RESPUESTA_PROMESA}
+        {TIENE_EMAIL && (
+          <>
+            <br />
+            <a href={`mailto:${CONTACTO_EMAIL}`} data-track="correo">{CONTACTO_EMAIL}</a>
+          </>
+        )}
+      </div>
 
       <Redes />
     </div>

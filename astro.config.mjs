@@ -11,7 +11,8 @@ export const SITE_URL = process.env.DEPLOY_PRIME_URL || process.env.URL || DOMIN
 
 export default defineConfig({
   site: SITE_URL,
-  integrations: [sitemap()],
+  // Las propuestas a clientes son privadas: fuera del sitemap y con noindex.
+  integrations: [sitemap({ filter: (pagina) => !pagina.includes('/propuestas') })],
   build: {
     // Un solo archivo CSS por página: menos peticiones en un sitio de una página.
     inlineStylesheets: 'auto',

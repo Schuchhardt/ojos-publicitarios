@@ -14,7 +14,9 @@ const proyectos = await Promise.all(
 <section id="proyectos" class="seccion">
   <div class="encabezado">
     <h2 class="titulo-seccion">Proyectos entregados.</h2>
-    <p class="texto-apoyo">Negocios reales funcionando hoy. Puedes entrar y probarlos.</p>
+    <p class="texto-apoyo">
+      Sitios funcionando hoy y marcas que ya están en la calle. Puedes entrar y verlos.
+    </p>
   </div>
 
   <div class="rejilla">
@@ -24,10 +26,11 @@ const proyectos = await Promise.all(
           {proyecto.imagen && (
             <Image
               src={proyecto.imagen}
-              alt={`Sitio ${proyecto.nombre}`}
-              widths={[420, 760, 1126]}
+              alt={`Proyecto ${proyecto.nombre}`}
+              widths={[420, 760, 1080]}
               sizes="(max-width: 900px) 100vw, 45vw"
               loading="lazy"
+              style={`object-position: ${proyecto.encuadre === 'top' ? 'top center' : 'center'};`}
             />
           )}
           <div class="cuerpo">
@@ -41,7 +44,7 @@ const proyectos = await Promise.all(
               data-track="proyecto"
               data-track-label={proyecto.nombre}
             >
-              {proyecto.url.replace('https://', '')} ↗
+              {proyecto.enlaceTexto ?? proyecto.url.replace('https://', '')} ↗
             </a>
           </div>
         </article>
@@ -78,7 +81,6 @@ const proyectos = await Promise.all(
     height: auto;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    object-position: top center;
   }
 
   .cuerpo {

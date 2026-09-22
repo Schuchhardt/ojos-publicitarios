@@ -1,0 +1,937 @@
+---
+import { Image } from 'astro:assets';
+import PropuestaLayout from '../../layouts/PropuestaLayout.astro';
+// Lockup horizontal armado con la gráfica del propio logo: en una barra fija,
+// la versión apilada obliga a una cabecera de 110 px.
+import lockupBlanco from '../../assets/ludrimar/ludrimar-lockup-blanco.png';
+import lockupColor from '../../assets/ludrimar/ludrimar-lockup.png';
+import marcaBlanca from '../../assets/ludrimar/ludrimar-marca-blanco.png';
+
+const NAV = [
+  { texto: 'Squid', href: '#squid' },
+  { texto: 'Specifications', href: '#specs' },
+  { texto: 'Quality', href: '#quality' },
+  { texto: 'Process', href: '#process' },
+  { texto: 'Contact', href: '#contact' },
+];
+
+const CORTES = [
+  {
+    nombre: 'Tubes',
+    latin: 'Cleaned mantle',
+    texto: 'Skin-on or skin-off, graded by weight. The base cut for rings and strips.',
+  },
+  {
+    nombre: 'Tentacles',
+    latin: 'Whole or cut',
+    texto: 'Cleaned and graded, ready for the fryer or the retail tray.',
+  },
+  {
+    nombre: 'Wings',
+    latin: 'Fins',
+    texto: 'Trimmed and graded. Firm texture, strong yield for value-added lines.',
+  },
+  {
+    nombre: 'Rings',
+    latin: 'Cut to width',
+    texto: 'Cut to the width your line needs, IQF so they separate in the bag.',
+  },
+  {
+    nombre: 'Strips',
+    latin: 'Cut to length',
+    texto: 'Uniform strips for breaded, marinated and ready-meal producers.',
+  },
+  {
+    nombre: 'Steaks',
+    latin: 'Tenderized',
+    texto: 'Portioned and tenderized to spec, for foodservice and retail.',
+  },
+];
+
+const ESPECIFICACIONES = [
+  { campo: 'Species', valor: 'Humboldt squid — Dosidicus gigas', confirmado: true },
+  { campo: 'Catch area', valor: 'FAO 87 — Southeast Pacific, Chile', confirmado: true },
+  { campo: 'Presentation', valor: 'IQF and block frozen', confirmado: false },
+  { campo: 'Packing', valor: 'Inner bags in master cartons', confirmado: false },
+  { campo: 'Size grades', valor: 'Graded to buyer specification', confirmado: false },
+  { campo: 'Glazing', valor: 'To buyer specification', confirmado: false },
+  { campo: 'Shelf life', valor: 'Frozen at −18 °C', confirmado: false },
+  { campo: 'Plant approval number', valor: '', confirmado: false },
+];
+
+const PROCESO = [
+  {
+    paso: '01',
+    titulo: 'Reception',
+    texto:
+      'Raw material is received, checked and chilled on arrival. Every lot is recorded from the moment it enters the plant.',
+  },
+  {
+    paso: '02',
+    titulo: 'Processing',
+    texto:
+      'Cleaning, cutting and grading to the specification agreed with the buyer, by a trained workforce.',
+  },
+  {
+    paso: '03',
+    titulo: 'Freezing and storage',
+    texto: 'Frozen and held in our own cold storage until the container is booked.',
+  },
+  {
+    paso: '04',
+    titulo: 'Documentation and dispatch',
+    texto:
+      'Health certificates and export paperwork issued under the Sernapesca programme, then loaded for shipment.',
+  },
+];
+---
+
+<PropuestaLayout
+  title="Propuesta — Pesquera Ludrimar Ltda | Ojos Publicitarios"
+  description="Propuesta de landing page internacional para Pesquera Ludrimar Ltda, exportadores de jibia desde Chile."
+  cliente="Pesquera Ludrimar Ltda"
+  nota="Demo navegable · los datos marcados en ámbar están por confirmar"
+>
+  <div class="ludrimar">
+    <!-- Cabecera ------------------------------------------------------ -->
+    <header class="cabecera">
+      <a href="#top" class="marca" aria-label="Pesquera Ludrimar Ltda">
+        <Image src={lockupBlanco} alt="" width={178} height={42} densities={[1, 2]} loading="eager" />
+      </a>
+      <nav class="nav" aria-label="Sections">
+        {NAV.map((item) => <a href={item.href}>{item.texto}</a>)}
+      </nav>
+      <a href="#contact" class="lud-boton lud-boton-primario cta-cabecera">Request a quote</a>
+    </header>
+
+    <!-- Portada ------------------------------------------------------- -->
+    <section class="portada" id="top">
+      <Image src={marcaBlanca} alt="" class="marca-agua" width={720} densities={[1, 2]} />
+      <div class="portada-texto">
+        <div class="lud-rotulo">Humboldt squid · Dosidicus gigas · Chile</div>
+        <h1>Chilean squid,<br />cut to your spec,<br />shipped worldwide.</h1>
+        <p class="lud-bajada">
+          Fifteen years handling, processing and cold-storing seafood for the white fish and salmon
+          industry. Today that plant works for one species: Humboldt squid, processed to the
+          specification your line runs on.
+        </p>
+        <div class="portada-botones">
+          <a href="#contact" class="lud-boton lud-boton-primario">
+            Request a quote <span aria-hidden="true">↗</span>
+          </a>
+          <a href="#specs" class="lud-boton lud-boton-secundario">See specifications</a>
+        </div>
+        <div class="portada-pie">
+          Sernapesca PAC · SENASA validated production and processes · Export authorizations in
+          place
+        </div>
+      </div>
+    </section>
+
+    <!-- Cifras -------------------------------------------------------- -->
+    <section class="cifras">
+      <div class="cifra">
+        <div class="cifra-valor">15+</div>
+        <div class="cifra-texto">Years processing and cold-storing seafood in Chile</div>
+      </div>
+      <div class="cifra">
+        <div class="cifra-valor">PAC</div>
+        <div class="cifra-texto">
+          Quality Assurance Programme under Sernapesca, the Chilean fisheries authority
+        </div>
+      </div>
+      <div class="cifra">
+        <div class="cifra-valor">SENASA</div>
+        <div class="cifra-texto">Production and process validation</div>
+      </div>
+      <div class="cifra">
+        <div class="cifra-valor">Worldwide</div>
+        <div class="cifra-texto">
+          Dispatch authorizations for practically every market
+          <span class="lud-pendiente">confirmar países</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Producto ------------------------------------------------------ -->
+    <section class="lud-seccion" id="squid">
+      <div class="lud-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="lud-rotulo">The product</div>
+            <h2 class="lud-h2">One species. Every cut your line needs.</h2>
+          </div>
+          <p class="lud-bajada">
+            Humboldt squid is abundant, consistent and firm enough to travel. We clean, cut and
+            grade it in our own plant, so what lands in your factory is already the format you
+            work with.
+          </p>
+        </div>
+
+        <div class="cortes">
+          {
+            CORTES.map((corte) => (
+              <article class="corte">
+                <div class="lud-marco corte-foto">
+                  <div>[ product photo ]</div>
+                  <div class="marco-nota">{corte.nombre.toLowerCase()} · 1200×900</div>
+                </div>
+                <div class="corte-texto">
+                  <h3>{corte.nombre}</h3>
+                  <div class="corte-latin">{corte.latin}</div>
+                  <p>{corte.texto}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="nota-seccion">
+          <span class="lud-pendiente">por confirmar</span>
+          Cortes, calibres y presentaciones reales que produce la planta: la grilla se ajusta a lo
+          que ustedes trabajan.
+        </p>
+      </div>
+    </section>
+
+    <!-- Especificaciones ---------------------------------------------- -->
+    <section class="lud-seccion lud-hielo" id="specs">
+      <div class="lud-ancho especificaciones">
+        <div>
+          <div class="lud-rotulo">Specifications</div>
+          <h2 class="lud-h2">The sheet your buyer asks for.</h2>
+          <p class="lud-bajada">
+            Everything a purchasing team needs before the first call, on the page instead of in a
+            PDF they have to request. Grades and packing are set with each buyer.
+          </p>
+          <a href="#contact" class="lud-boton lud-boton-azul ficha-cta">
+            Ask for the full spec sheet <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <dl class="tabla">
+          {
+            ESPECIFICACIONES.map((fila) => (
+              <div class="fila">
+                <dt>{fila.campo}</dt>
+                <dd>
+                  {fila.valor}
+                  {!fila.confirmado && <span class="lud-pendiente">confirmar</span>}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Calidad ------------------------------------------------------- -->
+    <section class="lud-seccion lud-oscuro" id="quality">
+      <div class="lud-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="lud-rotulo">Quality and compliance</div>
+            <h2 class="lud-h2">Cleared to ship, on paper.</h2>
+          </div>
+          <p class="lud-bajada">
+            Ludrimar works under a quality assurance plan built on Sernapesca regulations. Every
+            dispatch carries the authorizations the destination market requires.
+          </p>
+        </div>
+
+        <div class="calidad">
+          <article>
+            <h3>Sernapesca PAC</h3>
+            <p>
+              Quality Assurance Programme of Chile's National Fisheries and Aquaculture Service,
+              the authority that certifies seafood exports.
+            </p>
+          </article>
+          <article>
+            <h3>SENASA validation</h3>
+            <p>Production and processes validated for export.</p>
+          </article>
+          <article>
+            <h3>Cold chain</h3>
+            <p>
+              Own cold storage: the product stays under our control from reception to the container
+              door.
+            </p>
+          </article>
+          <article>
+            <h3>Traceability</h3>
+            <p>Every lot recorded from reception to dispatch, with documentation per shipment.</p>
+          </article>
+          <article>
+            <h3>Trained workforce</h3>
+            <p>
+              A large specialised workforce, hired and trained locally. Handling quality is a people
+              problem before it is a machine problem.
+            </p>
+          </article>
+          <article class="calidad-pendiente">
+            <h3>
+              Certifications <span class="lud-pendiente">por confirmar</span>
+            </h3>
+            <p>
+              Aquí van HACCP, BRC, IFS, número de planta o el registro que corresponda. Es lo
+              primero que mira un comprador extranjero.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proceso ------------------------------------------------------- -->
+    <section class="lud-seccion" id="process">
+      <div class="lud-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="lud-rotulo">How it works</div>
+            <h2 class="lud-h2">From reception to container.</h2>
+          </div>
+          <p class="lud-bajada">
+            One plant, one team and one chain of custody. No intermediaries between the raw
+            material and the paperwork your customs broker receives.
+          </p>
+        </div>
+
+        <div class="proceso">
+          {
+            PROCESO.map((etapa) => (
+              <div class="etapa">
+                <div class="etapa-numero">{etapa.paso}</div>
+                <h3>{etapa.titulo}</h3>
+                <p>{etapa.texto}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Otras especies ------------------------------------------------ -->
+    <section class="lud-seccion lud-hielo">
+      <div class="lud-ancho otras">
+        <div>
+          <div class="lud-rotulo">Also available</div>
+          <h2 class="lud-h2">White fish and salmon.</h2>
+          <p class="lud-bajada">
+            The company was built handling, processing and storing white fish and salmon, and that
+            capacity is still here. Squid is where we specialise; it is not all we can run.
+          </p>
+        </div>
+        <div class="lud-marco otras-foto">
+          <div>[ plant photo ]</div>
+          <div class="marco-nota">línea de proceso o cámara de frío · 1600×1000</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto ------------------------------------------------------ -->
+    <section class="lud-seccion lud-oscuro" id="contact">
+      <div class="lud-ancho contacto">
+        <div>
+          <div class="lud-rotulo">Talk to us</div>
+          <h2 class="lud-h2">Tell us what you buy.<br />We'll tell you what we can ship.</h2>
+          <p class="lud-bajada">
+            Send the cut, the volume and the market. You get an answer from the people who run the
+            plant, not a generic reply.
+          </p>
+          <div class="contacto-datos">
+            <div>
+              <span class="dato-rotulo">Email</span>
+              <a href="mailto:info@ludrimar.cl">info@ludrimar.cl</a>
+            </div>
+            <div>
+              <span class="dato-rotulo">Plant</span>
+              <span class="lud-pendiente">dirección por confirmar</span>
+            </div>
+            <div>
+              <span class="dato-rotulo">Phone</span>
+              <span class="lud-pendiente">teléfono por confirmar</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="columna-formulario">
+        <form class="formulario" id="lud-form" novalidate>
+          <div class="campo-doble">
+            <label>
+              Company
+              <input type="text" name="company" placeholder="Your company" required />
+            </label>
+            <label>
+              Country
+              <input type="text" name="country" placeholder="Destination market" required />
+            </label>
+          </div>
+          <div class="campo-doble">
+            <label>
+              Contact name
+              <input type="text" name="name" placeholder="Who we should reply to" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" placeholder="name@company.com" required />
+            </label>
+          </div>
+          <div class="campo-doble">
+            <label>
+              Product
+              <select name="product">
+                <option>Squid tubes</option>
+                <option>Squid tentacles</option>
+                <option>Squid wings</option>
+                <option>Rings or strips</option>
+                <option>White fish</option>
+                <option>Salmon</option>
+                <option>Not sure yet</option>
+              </select>
+            </label>
+            <label>
+              Volume per month
+              <input type="text" name="volume" placeholder="e.g. 2 containers" />
+            </label>
+          </div>
+          <label>
+            Message
+            <textarea name="message" rows="3" placeholder="Specification, incoterm, target price…"
+            ></textarea>
+          </label>
+          <button type="submit" class="lud-boton lud-boton-primario">
+            Send enquiry <span aria-hidden="true">↗</span>
+          </button>
+          <p class="formulario-nota">
+            Demo: en el sitio publicado esta consulta llega al correo de Ludrimar.
+          </p>
+        </form>
+
+        <div class="formulario-ok" id="lud-ok" hidden>
+          <div class="ok-marca" aria-hidden="true">✓</div>
+          <h3>Thank you — we have your enquiry.</h3>
+          <p>Someone from the plant will get back to you.</p>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pie ----------------------------------------------------------- -->
+    <footer class="pie">
+      <div class="lud-ancho pie-grid">
+        <div>
+          <Image
+            src={lockupColor}
+            alt="Pesquera Ludrimar Ltda"
+            width={195}
+            height={46}
+            densities={[1, 2]}
+          />
+        </div>
+        <div class="pie-texto">
+          <p>Pesquera Ludrimar Ltda — handling, processing and cold storage of seafood. Chile.</p>
+          <p><a href="mailto:info@ludrimar.cl">info@ludrimar.cl</a></p>
+        </div>
+        <div class="pie-legal">© 2026 Pesquera Ludrimar Ltda</div>
+      </div>
+    </footer>
+  </div>
+</PropuestaLayout>
+
+<style>
+  /* Cabecera ------------------------------------------------------- */
+  .cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px var(--pad-x);
+    background: rgba(12, 35, 57, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+
+  .marca :global(img) {
+    display: block;
+    height: auto;
+  }
+
+  .nav {
+    display: flex;
+    gap: clamp(16px, 2.2vw, 34px);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .nav a {
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .nav a:hover {
+    color: var(--marea-clara);
+  }
+
+  .cta-cabecera {
+    padding: 12px 20px;
+    font-size: 14px;
+    flex: none;
+  }
+
+  /* Portada -------------------------------------------------------- */
+  .portada {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(165deg, #0c2339 0%, #10314e 55%, #153b5f 100%);
+    color: var(--blanco);
+    padding: clamp(72px, 10vw, 148px) var(--pad-x) clamp(64px, 8vw, 120px);
+  }
+
+  .marca-agua {
+    position: absolute;
+    right: -6%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(56%, 720px);
+    height: auto;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  .portada-texto {
+    position: relative;
+    max-width: var(--ancho);
+    margin: 0 auto;
+  }
+
+  .portada h1 {
+    font-size: clamp(38px, 5.4vw, 76px);
+    line-height: 1.02;
+    margin-bottom: 28px;
+    max-width: 16ch;
+  }
+
+  .portada-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 36px 0 28px;
+  }
+
+  .portada-pie {
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* Cifras --------------------------------------------------------- */
+  .cifras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    background: var(--azul);
+    color: var(--blanco);
+  }
+
+  .cifra {
+    padding: 32px clamp(20px, 3vw, 44px);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .cifra:last-child {
+    border-right: none;
+  }
+
+  .cifra-valor {
+    font-family: var(--fuente-titulo);
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--marea-clara);
+  }
+
+  .cifra-texto {
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  /* Encabezado de sección ------------------------------------------ */
+  .encabezado {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: clamp(24px, 4vw, 64px);
+    align-items: end;
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+
+  /* Cortes --------------------------------------------------------- */
+  .cortes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: clamp(18px, 2vw, 28px);
+  }
+
+  .corte {
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--blanco);
+  }
+
+  .corte-foto {
+    aspect-ratio: 4 / 3;
+  }
+
+  .marco-nota {
+    font-size: 11px;
+    opacity: 0.75;
+  }
+
+  .corte-texto {
+    padding: 22px 24px 26px;
+  }
+
+  .corte h3 {
+    font-size: 21px;
+    margin-bottom: 4px;
+  }
+
+  .corte-latin {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--marea);
+    margin-bottom: 12px;
+  }
+
+  .corte p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto);
+  }
+
+  .nota-seccion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--texto-tenue);
+  }
+
+  /* Especificaciones ----------------------------------------------- */
+  .especificaciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .ficha-cta {
+    margin-top: 28px;
+  }
+
+  .tabla {
+    margin: 0;
+    border-top: 1px solid var(--linea);
+  }
+
+  .fila {
+    display: grid;
+    grid-template-columns: minmax(140px, 0.7fr) 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .fila dt {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--texto-tenue);
+  }
+
+  .fila dd {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--tinta);
+  }
+
+  /* Calidad -------------------------------------------------------- */
+  .calidad {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1px;
+    background: var(--linea-oscura);
+    border: 1px solid var(--linea-oscura);
+  }
+
+  .calidad article {
+    background: var(--azul-hondo);
+    padding: clamp(24px, 2.6vw, 34px);
+  }
+
+  .calidad h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .calidad p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Proceso -------------------------------------------------------- */
+  .proceso {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  .etapa {
+    padding-top: 22px;
+    border-top: 2px solid var(--azul);
+  }
+
+  .etapa-numero {
+    font-family: var(--fuente-titulo);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--marea);
+    margin-bottom: 12px;
+  }
+
+  .etapa h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .etapa p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--texto);
+  }
+
+  /* Otras especies -------------------------------------------------- */
+  .otras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+  }
+
+  .otras-foto {
+    aspect-ratio: 16 / 10;
+    border-radius: 6px;
+  }
+
+  /* Contacto ------------------------------------------------------- */
+  .contacto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .contacto-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--linea-oscura);
+  }
+
+  .contacto-datos > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+  }
+
+  .dato-rotulo {
+    min-width: 66px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .contacto-datos a {
+    color: var(--marea-clara);
+  }
+
+  .columna-formulario {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--linea-oscura);
+    border-radius: 6px;
+    padding: clamp(24px, 3vw, 36px);
+  }
+
+  .campo-doble {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+    gap: 16px;
+  }
+
+  .formulario label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .formulario input,
+  .formulario select,
+  .formulario textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(12, 35, 57, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    color: var(--blanco);
+    font-family: var(--fuente-texto);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  .formulario textarea {
+    resize: vertical;
+  }
+
+  .formulario input::placeholder,
+  .formulario textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .formulario input:focus,
+  .formulario select:focus,
+  .formulario textarea:focus {
+    outline: none;
+    border-color: var(--marea);
+  }
+
+  .formulario button {
+    justify-content: center;
+  }
+
+  .formulario-nota {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .formulario-ok {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(11, 159, 192, 0.5);
+    border-radius: 6px;
+    padding: clamp(24px, 3vw, 36px);
+    justify-content: center;
+  }
+
+  .ok-marca {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--marea);
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .formulario-ok p {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Pie ------------------------------------------------------------ */
+  .pie {
+    background: var(--blanco);
+    border-top: 1px solid var(--linea);
+    padding: 40px var(--pad-x);
+  }
+
+  .pie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 24px;
+    align-items: center;
+  }
+
+  .pie-texto {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--texto);
+  }
+
+  .pie-texto a {
+    color: var(--azul);
+    font-weight: 600;
+  }
+
+  .pie-legal {
+    font-size: 13px;
+    color: var(--texto-tenue);
+    text-align: right;
+  }
+
+  @media (max-width: 900px) {
+    .nav {
+      display: none;
+    }
+
+    .pie-legal {
+      text-align: left;
+    }
+  }
+</style>
+
+<script>
+  // Demo: el formulario no envía a ninguna parte, solo muestra la confirmación.
+  const form = document.getElementById('lud-form') as HTMLFormElement | null;
+  const ok = document.getElementById('lud-ok');
+
+  form?.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+    const obligatorios = form.querySelectorAll<HTMLInputElement>('[required]');
+    for (const campo of obligatorios) {
+      if (!campo.value.trim()) {
+        campo.focus();
+        campo.reportValidity();
+        return;
+      }
+    }
+    form.hidden = true;
+    ok?.removeAttribute('hidden');
+  });
+</script>
