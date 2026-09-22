@@ -5,7 +5,15 @@ import Seo from '../components/Seo.astro';
 import '@fontsource-variable/space-grotesk/wght.css';
 import '@fontsource-variable/archivo/standard.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
-import { CONTACTO_EMAIL, MARCA, REDES, TAGLINE } from '../lib/config';
+import {
+  CONTACTO_EMAIL,
+  MARCA,
+  REDES,
+  TAGLINE,
+  TIENE_EMAIL,
+  TIENE_WHATSAPP,
+  WHATSAPP_DISPLAY,
+} from '../lib/config';
 import '../styles/global.css';
 
 interface Props {
@@ -19,6 +27,8 @@ interface Props {
 
 const { title, description, path, image, type, noindex } = Astro.props;
 
+const perfiles = REDES.filter((red) => red.icono !== 'whatsapp').map((red) => red.url);
+
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
@@ -28,9 +38,10 @@ const organizationJsonLd = {
     'Estudio creativo y digital: diseño de páginas web, tiendas online y automatización de la atención para negocios en Chile.',
   url: Astro.site?.toString(),
   logo: new URL('/logo-ojos.png', Astro.site).toString(),
-  email: CONTACTO_EMAIL,
+  ...(TIENE_EMAIL ? { email: CONTACTO_EMAIL } : {}),
+  ...(TIENE_WHATSAPP ? { telephone: WHATSAPP_DISPLAY } : {}),
   areaServed: 'CL',
-  sameAs: REDES.filter((red) => red.icono !== 'whatsapp').map((red) => red.url),
+  ...(perfiles.length > 0 ? { sameAs: perfiles } : {}),
 };
 ---
 
@@ -41,8 +52,9 @@ const organizationJsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#06111a" />
 
-    <link rel="icon" type="image/png" href="/logo-ojos.png" />
-    <link rel="apple-touch-icon" href="/logo-ojos.png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <Seo
       title={title}

@@ -59,6 +59,11 @@
   box-sizing: border-box;
 }
 
+/* El atributo hidden manda por sobre cualquier display de componente. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;

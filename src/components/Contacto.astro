@@ -3,7 +3,7 @@ import Redes from './Redes.astro';
 import {
   MOSTRAR_FORMULARIO_SOLICITUD,
   TIENE_WHATSAPP,
-  mailtoUrl,
+  contactoDirectoUrl,
   whatsappUrl,
 } from '../lib/config';
 ---
@@ -26,7 +26,7 @@ import {
             Preparar mi solicitud <span aria-hidden="true">↗</span>
           </button>
         ) : (
-          <a href={mailtoUrl()} class="accion principal" data-track="cta_contacto">
+          <a href={contactoDirectoUrl()} class="accion principal" data-track="cta_contacto">
             Preparar mi solicitud <span aria-hidden="true">↗</span>
           </a>
         )

@@ -54,9 +54,20 @@ no hay que tocar código.
 - `robots.txt` generado en el build con el sitemap del dominio que corresponda,
   y página 404 propia que Netlify sirve sola.
 
-Si más adelante hace falta que el formulario envíe de verdad, Netlify Forms lo
-resuelve sin backend: se agrega `data-netlify="true"` al formulario del modal y
-las respuestas llegan al panel de Netlify y por correo.
+## Formulario de contacto
+
+El modal "Preparar mi solicitud" envía por **Formspree**
+(`FORMSPREE_ENDPOINT` en `src/lib/config.ts`), igual que en patio-riquelme: no
+hay backend ni funciones de Netlify de por medio.
+
+- Campos: nombre y correo obligatorios; teléfono, empresa, tipo de proyecto e
+  idea opcionales.
+- Valida antes de enviar y no toca la red si falta algo.
+- Trampa anti-spam (`_gotcha`) que Formspree descarta sola.
+- Si el envío falla, muestra el error y ofrece WhatsApp, sin perder lo escrito.
+
+El primer envío real puede pedir confirmar el formulario desde el panel de
+Formspree; conviene mandar una prueba después del primer deploy.
 
 ## Dónde se edita cada cosa
 
@@ -89,18 +100,22 @@ el correo del visitante. No envía nada por su cuenta: no hay servidor detrás.
 
 ## Pendientes antes de publicar
 
-1. **Datos reales de contacto** en `src/lib/config.ts`: `WHATSAPP_NUMERO`,
-   `CONTACTO_EMAIL` y las URL de Instagram, TikTok y Facebook.
-2. **Dominio** en `astro.config.mjs` (constante `DOMINIO`), para cuando el sitio
+1. **Perfiles de redes** en `src/lib/config.ts` (`REDES`): Instagram, TikTok y
+   Facebook están vacíos, así que esos íconos no se muestran. Al pegar la URL
+   aparecen solos en contacto y footer.
+2. **`CONTACTO_EMAIL`** está vacío a propósito: mientras no haya una casilla
+   real, el sitio no muestra ningún correo y todo entra por el formulario y por
+   WhatsApp.
+3. **Dominio** en `astro.config.mjs` (constante `DOMINIO`), para cuando el sitio
    deje de servirse desde la URL de Netlify.
-3. **Marcadores del diseño**, que hoy se ven como tales a propósito:
+4. **Marcadores del diseño**, que hoy se ven como tales a propósito:
    - la cuarta cifra del hero (`CIFRAS`, entrada con `pendiente: true`),
    - el segundo proyecto (`PROYECTOS` + captura en `src/assets/`),
    - el tercer testimonio (`TESTIMONIOS`),
    - el equipo (`EQUIPO`), si más adelante se enciende la sección.
    Los contadores `PROYECTOS_PENDIENTES` y `TESTIMONIOS_PENDIENTES` controlan
    cuántas tarjetas vacías quedan a la vista: al completar el contenido, bajarlos.
-4. **`public/og-image.jpg`** es un provisorio generado con la paleta de la marca,
+5. **`public/og-image.jpg`** es un provisorio generado con la paleta de la marca,
    pero con tipografía del sistema. Reemplazarlo por uno hecho en Space Grotesk.
 
 ## Estructura

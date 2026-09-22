@@ -1,71 +1,137 @@
 ---
 import { TIPOS_DE_PROYECTO } from '../data/contenido';
-import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
+import {
+  FORMSPREE_ENDPOINT,
+  TIENE_WHATSAPP,
+  WHATSAPP_DISPLAY,
+  whatsappUrl,
+} from '../lib/config';
 ---
 
-<dialog
-  class="solicitud"
-  id="solicitud"
-  aria-labelledby="solicitud-titulo"
-  data-whatsapp={TIENE_WHATSAPP ? WHATSAPP_NUMERO : ''}
-  data-email={CONTACTO_EMAIL}
->
-  <form method="dialog" class="cerrar-form">
-    <button class="cerrar" aria-label="Cerrar">×</button>
-  </form>
+<dialog class="solicitud" id="solicitud" aria-labelledby="solicitud-titulo">
+  <button type="button" class="cerrar" aria-label="Cerrar" data-cerrar>×</button>
 
   <div class="rotulo">CONVERSEMOS SOBRE TU IDEA</div>
   <h2 id="solicitud-titulo">Tu proyecto,<br />en pocas palabras.</h2>
-  <p class="bajada">
-    Prepara tu solicitud y la envías por el canal que prefieras. Nada se envía desde esta página.
+  <p class="bajada" id="solicitud-bajada">
+    Cuéntanos qué necesitas. Te respondemos con un plan concreto: qué incluye, de qué nos
+    encargamos nosotros y cuánto cuesta.
   </p>
 
-  <form class="campos" novalidate>
-    <label>
+  <div class="error" id="solicitud-error" role="alert" hidden>
+    <p>
+      No pudimos enviar tu solicitud. Vuelve a intentarlo
+      {TIENE_WHATSAPP && (
+        <>
+          {' '}o escríbenos por <a href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a>
+        </>
+      )}.
+    </p>
+  </div>
+
+  <div class="exito" id="solicitud-exito" hidden>
+    <div class="exito-marca" aria-hidden="true">✓</div>
+    <h3>Recibimos tu solicitud.</h3>
+    <p>Te responde una persona del equipo el mismo día hábil.</p>
+  </div>
+
+  <form id="solicitud-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate>
+    <input type="hidden" name="_subject" value="Nueva solicitud — Ojos Publicitarios" />
+    <!-- Honeypot anti-spam: Formspree descarta el envío si viene relleno. -->
+    <input
+      type="text"
+      name="_gotcha"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="trampa"
+    />
+
+    <label for="solicitud-nombre">
       Tu nombre
-      <input type="text" name="nombre" placeholder="¿Cómo te llamas?" autocomplete="name" required />
+      <input
+        type="text"
+        id="solicitud-nombre"
+        name="nombre"
+        placeholder="¿Cómo te llamas?"
+        autocomplete="name"
+        required
+      />
     </label>
 
-    <label>
-      Empresa o marca
-      <input type="text" name="empresa" placeholder="Nombre de tu negocio" autocomplete="organization" />
+    <label for="solicitud-email">
+      Tu correo
+      <input
+        type="email"
+        id="solicitud-email"
+        name="email"
+        placeholder="Para responderte"
+        autocomplete="email"
+        required
+      />
     </label>
 
-    <label>
+    <label for="solicitud-telefono">
+      Teléfono o WhatsApp <span class="opcional">(opcional)</span>
+      <input
+        type="tel"
+        id="solicitud-telefono"
+        name="telefono"
+        placeholder="+56 9 ..."
+        autocomplete="tel"
+      />
+    </label>
+
+    <label for="solicitud-empresa">
+      Empresa o marca <span class="opcional">(opcional)</span>
+      <input
+        type="text"
+        id="solicitud-empresa"
+        name="empresa"
+        placeholder="Nombre de tu negocio"
+        autocomplete="organization"
+      />
+    </label>
+
+    <label for="solicitud-tipo">
       ¿Qué necesitas?
-      <select name="tipo">
+      <select id="solicitud-tipo" name="tipo">
         {TIPOS_DE_PROYECTO.map((tipo) => <option value={tipo}>{tipo}</option>)}
       </select>
     </label>
 
-    <label>
+    <label for="solicitud-idea">
       Cuéntanos tu idea
-      <textarea name="idea" rows="4" placeholder="¿Qué vendes y qué te gustaría lograr?"></textarea>
+      <textarea
+        id="solicitud-idea"
+        name="idea"
+        rows="4"
+        placeholder="¿Qué vendes y qué te gustaría lograr?"></textarea>
     </label>
 
-    <div class="acciones">
-      {
-        TIENE_WHATSAPP && (
-          <button type="button" class="boton boton-primario" data-enviar="whatsapp">
-            Enviar por WhatsApp <span aria-hidden="true">↗</span>
-          </button>
-        )
-      }
-      <button type="button" class="boton boton-secundario" data-enviar="email">
-        Enviar por correo
-      </button>
-    </div>
+    <button type="submit" class="boton boton-primario" id="solicitud-enviar">
+      Enviar solicitud <span aria-hidden="true">↗</span>
+    </button>
 
-    <p class="aviso">
-      Se abre WhatsApp o tu correo con el mensaje ya escrito: tú decides si lo envías.
-    </p>
+    <p class="aviso">Responde una persona del equipo, el mismo día hábil.</p>
   </form>
+
+  {
+    TIENE_WHATSAPP && (
+      <p class="alternativa" id="solicitud-alternativa">
+        ¿Prefieres escribirnos directo?{' '}
+        <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_modal">
+          WhatsApp {WHATSAPP_DISPLAY}
+        </a>
+      </p>
+    )
+  }
 </dialog>
 
 <style>
   .solicitud {
     width: min(520px, calc(100vw - 32px));
-    max-height: min(88vh, 760px);
+    max-height: min(88vh, 820px);
     padding: clamp(24px, 4vw, 40px);
     border: 1px solid var(--acento-borde-suave);
     border-radius: 4px;
@@ -79,13 +145,10 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
     backdrop-filter: blur(4px);
   }
 
-  .cerrar-form {
-    display: flex;
-    justify-content: flex-end;
-    margin: 0 0 4px;
-  }
-
   .cerrar {
+    position: absolute;
+    top: clamp(14px, 2vw, 22px);
+    right: clamp(14px, 2vw, 22px);
     background: none;
     border: none;
     color: var(--texto-tenue);
@@ -105,6 +168,7 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
     letter-spacing: 0.18em;
     color: var(--acento);
     margin-bottom: 16px;
+    padding-right: 32px;
   }
 
   h2 {
@@ -123,7 +187,54 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
     margin: 0 0 28px;
   }
 
-  .campos {
+  .error {
+    border: 1px solid rgba(255, 138, 122, 0.5);
+    background: rgba(255, 138, 122, 0.08);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+
+  .error p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--texto-suave);
+  }
+
+  .exito {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 0 8px;
+  }
+
+  .exito-marca {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--acento);
+    color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .exito h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .exito p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0;
+  }
+
+  form {
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -136,6 +247,11 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
     font-size: 14px;
     font-weight: 600;
     color: var(--texto);
+  }
+
+  .opcional {
+    font-weight: 400;
+    color: var(--texto-debil);
   }
 
   input,
@@ -169,19 +285,27 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
     border-color: var(--acento);
   }
 
-  input[aria-invalid='true'] {
+  :is(input, textarea)[aria-invalid='true'] {
     border-color: #ff8a7a;
   }
 
-  .acciones {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  /* Honeypot: fuera de la vista pero disponible para los bots. */
+  .trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  button[type='submit'] {
+    justify-content: center;
     margin-top: 4px;
   }
 
-  .acciones .boton {
-    justify-content: center;
+  button[type='submit']:disabled {
+    opacity: 0.6;
+    cursor: progress;
   }
 
   .aviso {
@@ -191,14 +315,32 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
     color: var(--texto-debil);
     margin: 0;
   }
+
+  .alternativa {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 22px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--linea-media);
+  }
 </style>
 
 <script>
-  const dialogo = document.querySelector<HTMLDialogElement>('dialog.solicitud');
+  import { emailValido, nombreValido, primerError } from '../lib/formulario';
 
-  if (dialogo) {
-    const formulario = dialogo.querySelector<HTMLFormElement>('form.campos');
-    const nombre = dialogo.querySelector<HTMLInputElement>('input[name="nombre"]');
+  const dialogo = document.querySelector<HTMLDialogElement>('dialog.solicitud');
+  const formulario = document.getElementById('solicitud-form') as HTMLFormElement | null;
+
+  if (dialogo && formulario) {
+    const nombre = document.getElementById('solicitud-nombre') as HTMLInputElement | null;
+    const email = document.getElementById('solicitud-email') as HTMLInputElement | null;
+    const enviar = document.getElementById('solicitud-enviar') as HTMLButtonElement | null;
+    const error = document.getElementById('solicitud-error');
+    const exito = document.getElementById('solicitud-exito');
+    const bajada = document.getElementById('solicitud-bajada');
+    const alternativa = document.getElementById('solicitud-alternativa');
+    const textoBoton = enviar?.innerHTML ?? '';
 
     document.querySelectorAll<HTMLElement>('[data-abrir-solicitud]').forEach((boton) => {
       boton.addEventListener('click', () => {
@@ -207,45 +349,62 @@ import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
       });
     });
 
+    dialogo.querySelector('[data-cerrar]')?.addEventListener('click', () => dialogo.close());
+
     // Clic fuera del contenido = cerrar.
     dialogo.addEventListener('click', (evento) => {
       if (evento.target === dialogo) dialogo.close();
     });
 
-    const texto = () => {
-      const datos = new FormData(formulario!);
-      const valor = (campo: string) => String(datos.get(campo) ?? '').trim();
-      return [
-        `Hola, soy ${valor('nombre')}.`,
-        valor('empresa') && `Empresa o marca: ${valor('empresa')}.`,
-        `Necesito: ${valor('tipo')}.`,
-        valor('idea') && `Mi idea: ${valor('idea')}`,
-      ]
-        .filter(Boolean)
-        .join('\n');
-    };
+    formulario.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      error?.setAttribute('hidden', '');
 
-    dialogo.querySelectorAll<HTMLButtonElement>('[data-enviar]').forEach((boton) => {
-      boton.addEventListener('click', () => {
-        if (!nombre?.value.trim()) {
-          nombre?.setAttribute('aria-invalid', 'true');
-          nombre?.focus();
-          return;
-        }
-        nombre.removeAttribute('aria-invalid');
+      const fallo = primerError([
+        { el: nombre, ok: nombreValido(nombre?.value ?? ''), mensaje: 'Escribe tu nombre.' },
+        {
+          el: email,
+          ok: emailValido(email?.value ?? ''),
+          mensaje: 'Revisa tu correo: no parece una dirección válida.',
+        },
+      ]);
+      if (fallo) {
+        fallo.el?.focus();
+        fallo.el?.reportValidity?.();
+        return;
+      }
 
-        const canal = boton.dataset.enviar;
-        const mensaje = texto();
-        window.track?.('solicitud_enviada', { label: canal });
+      if (enviar) {
+        enviar.disabled = true;
+        enviar.textContent = 'Enviando…';
+      }
 
-        if (canal === 'whatsapp') {
-          const numero = dialogo.dataset.whatsapp;
-          window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+      try {
+        const respuesta = await fetch(formulario.action, {
+          method: 'POST',
+          body: new FormData(formulario),
+          headers: { Accept: 'application/json' },
+        });
+
+        if (respuesta.ok) {
+          formulario.hidden = true;
+          bajada?.setAttribute('hidden', '');
+          alternativa?.setAttribute('hidden', '');
+          exito?.removeAttribute('hidden');
+          window.track?.('solicitud_enviada', { label: 'formspree' });
         } else {
-          const asunto = encodeURIComponent('Solicitud desde el sitio web');
-          window.location.href = `mailto:${dialogo.dataset.email}?subject=${asunto}&body=${encodeURIComponent(mensaje)}`;
+          error?.removeAttribute('hidden');
+          window.track?.('solicitud_error', { label: String(respuesta.status) });
         }
-      });
+      } catch {
+        error?.removeAttribute('hidden');
+        window.track?.('solicitud_error', { label: 'red' });
+      } finally {
+        if (enviar) {
+          enviar.disabled = false;
+          enviar.innerHTML = textoBoton;
+        }
+      }
     });
   }
 </script>
