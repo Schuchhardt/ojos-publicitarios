@@ -9,13 +9,15 @@ interface Props {
   /** Texto de la barra de propuesta. Vacío = sin barra (índice de propuestas). */
   cliente?: string;
   nota?: string;
+  /** Idioma del contenido de la propuesta. */
+  lang?: string;
 }
 
-const { title, description, cliente, nota } = Astro.props;
+const { title, description, cliente, nota, lang = 'es' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,6 +46,7 @@ const { title, description, cliente, nota } = Astro.props;
     </style>
   </head>
   <body>
+    <slot />
     {
       cliente && (
         <div class="barra">
@@ -54,11 +57,9 @@ const { title, description, cliente, nota } = Astro.props;
             <span>{cliente}</span>
           </div>
           {nota && <div class="barra-nota">{nota}</div>}
-          <a href="/propuestas/" class="barra-link">Todas las propuestas ↗</a>
         </div>
       )
     }
-    <slot />
 
     <style>
       .barra {
@@ -73,7 +74,7 @@ const { title, description, cliente, nota } = Astro.props;
         font-family: 'Inter Variable', system-ui, sans-serif;
         font-size: 12.5px;
         line-height: 1.5;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .barra-izq {
@@ -103,15 +104,6 @@ const { title, description, cliente, nota } = Astro.props;
         color: #7e97a5;
       }
 
-      .barra-link {
-        color: #00c8e6;
-        text-decoration: none;
-        white-space: nowrap;
-      }
-
-      .barra-link:hover {
-        color: #7ce7f7;
-      }
     </style>
   </body>
 </html>

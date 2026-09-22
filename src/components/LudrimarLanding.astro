@@ -1,96 +1,33 @@
 ---
 import { Image } from 'astro:assets';
-import PropuestaLayout from '../../layouts/PropuestaLayout.astro';
+import PropuestaLayout from '../layouts/PropuestaLayout.astro';
+import { CONTENIDO, IDIOMAS, type Idioma } from '../data/ludrimar';
+import { cargarImagen } from '../lib/imagenes';
 // Lockup horizontal armado con la gráfica del propio logo: en una barra fija,
 // la versión apilada obliga a una cabecera de 110 px.
-import lockupBlanco from '../../assets/ludrimar/ludrimar-lockup-blanco.png';
-import lockupColor from '../../assets/ludrimar/ludrimar-lockup.png';
-import marcaBlanca from '../../assets/ludrimar/ludrimar-marca-blanco.png';
+import lockupBlanco from '../assets/ludrimar/ludrimar-lockup-blanco.png';
+import lockupColor from '../assets/ludrimar/ludrimar-lockup.png';
+import marcaBlanca from '../assets/ludrimar/ludrimar-marca-blanco.png';
 
-const NAV = [
-  { texto: 'Squid', href: '#squid' },
-  { texto: 'Specifications', href: '#specs' },
-  { texto: 'Quality', href: '#quality' },
-  { texto: 'Process', href: '#process' },
-  { texto: 'Contact', href: '#contact' },
-];
+interface Props {
+  idioma: Idioma;
+}
 
-const CORTES = [
-  {
-    nombre: 'Tubes',
-    latin: 'Cleaned mantle',
-    texto: 'Skin-on or skin-off, graded by weight. The base cut for rings and strips.',
-  },
-  {
-    nombre: 'Tentacles',
-    latin: 'Whole or cut',
-    texto: 'Cleaned and graded, ready for the fryer or the retail tray.',
-  },
-  {
-    nombre: 'Wings',
-    latin: 'Fins',
-    texto: 'Trimmed and graded. Firm texture, strong yield for value-added lines.',
-  },
-  {
-    nombre: 'Rings',
-    latin: 'Cut to width',
-    texto: 'Cut to the width your line needs, IQF so they separate in the bag.',
-  },
-  {
-    nombre: 'Strips',
-    latin: 'Cut to length',
-    texto: 'Uniform strips for breaded, marinated and ready-meal producers.',
-  },
-  {
-    nombre: 'Steaks',
-    latin: 'Tenderized',
-    texto: 'Portioned and tenderized to spec, for foodservice and retail.',
-  },
-];
+const { idioma } = Astro.props;
+const c = CONTENIDO[idioma];
 
-const ESPECIFICACIONES = [
-  { campo: 'Species', valor: 'Humboldt squid — Dosidicus gigas', confirmado: true },
-  { campo: 'Catch area', valor: 'FAO 87 — Southeast Pacific, Chile', confirmado: true },
-  { campo: 'Presentation', valor: 'IQF and block frozen', confirmado: false },
-  { campo: 'Packing', valor: 'Inner bags in master cartons', confirmado: false },
-  { campo: 'Size grades', valor: 'Graded to buyer specification', confirmado: false },
-  { campo: 'Glazing', valor: 'To buyer specification', confirmado: false },
-  { campo: 'Shelf life', valor: 'Frozen at −18 °C', confirmado: false },
-  { campo: 'Plant approval number', valor: '', confirmado: false },
-];
-
-const PROCESO = [
-  {
-    paso: '01',
-    titulo: 'Reception',
-    texto:
-      'Raw material is received, checked and chilled on arrival. Every lot is recorded from the moment it enters the plant.',
-  },
-  {
-    paso: '02',
-    titulo: 'Processing',
-    texto:
-      'Cleaning, cutting and grading to the specification agreed with the buyer, by a trained workforce.',
-  },
-  {
-    paso: '03',
-    titulo: 'Freezing and storage',
-    texto: 'Frozen and held in our own cold storage until the container is booked.',
-  },
-  {
-    paso: '04',
-    titulo: 'Documentation and dispatch',
-    texto:
-      'Health certificates and export paperwork issued under the Sernapesca programme, then loaded for shipment.',
-  },
-];
+const cortes = await Promise.all(
+  c.producto.cortes.map(async (corte) => ({ ...corte, foto: await cargarImagen(corte.imagen) }))
+);
+const planta = await cargarImagen('ludrimar/productos/planta.jpg');
 ---
 
 <PropuestaLayout
-  title="Propuesta — Pesquera Ludrimar Ltda | Ojos Publicitarios"
-  description="Propuesta de landing page internacional para Pesquera Ludrimar Ltda, exportadores de jibia desde Chile."
+  title={`Propuesta — Pesquera Ludrimar Ltda | Ojos Publicitarios`}
+  description={c.meta.descripcion}
   cliente="Pesquera Ludrimar Ltda"
-  nota="Demo navegable · los datos marcados en ámbar están por confirmar"
+  nota="Demo navegable · datos en ámbar por confirmar · fotos de referencia, se reemplazan por las reales"
+  lang={idioma}
 >
   <div class="ludrimar">
     <!-- Cabecera ------------------------------------------------------ -->
@@ -99,58 +36,66 @@ const PROCESO = [
         <Image src={lockupBlanco} alt="" width={178} height={42} densities={[1, 2]} loading="eager" />
       </a>
       <nav class="nav" aria-label="Sections">
-        {NAV.map((item) => <a href={item.href}>{item.texto}</a>)}
+        {c.nav.map((item) => <a href={item.href}>{item.texto}</a>)}
       </nav>
-      <a href="#contact" class="lud-boton lud-boton-primario cta-cabecera">Request a quote</a>
+      <div class="acciones">
+        <div class="idiomas" role="group" aria-label="Language">
+          {
+            IDIOMAS.map((item) => (
+              <a
+                href={item.ruta}
+                class:list={['idioma', { activo: item.codigo === idioma }]}
+                hreflang={item.codigo}
+                aria-current={item.codigo === idioma ? 'true' : undefined}
+              >
+                {item.etiqueta}
+              </a>
+            ))
+          }
+        </div>
+        <a href="#contact" class="lud-boton lud-boton-primario cta-cabecera">{c.cta}</a>
+      </div>
     </header>
 
     <!-- Portada ------------------------------------------------------- -->
     <section class="portada" id="top">
       <Image src={marcaBlanca} alt="" class="marca-agua" width={720} densities={[1, 2]} />
       <div class="portada-texto">
-        <div class="lud-rotulo">Humboldt squid · Dosidicus gigas · Chile</div>
-        <h1>Chilean squid,<br />cut to your spec,<br />shipped worldwide.</h1>
-        <p class="lud-bajada">
-          Fifteen years handling, processing and cold-storing seafood for the white fish and salmon
-          industry. Today that plant works for one species: Humboldt squid, processed to the
-          specification your line runs on.
-        </p>
+        <div class="lud-rotulo">{c.hero.epigrafe}</div>
+        <h1>
+          {
+            c.hero.titulo.map((linea, i) => (
+              <>
+                {i > 0 && <br />}
+                {linea}
+              </>
+            ))
+          }
+        </h1>
+        <p class="lud-bajada">{c.hero.bajada}</p>
         <div class="portada-botones">
           <a href="#contact" class="lud-boton lud-boton-primario">
-            Request a quote <span aria-hidden="true">↗</span>
+            {c.hero.ctaPrimario} <span aria-hidden="true">↗</span>
           </a>
-          <a href="#specs" class="lud-boton lud-boton-secundario">See specifications</a>
+          <a href="#specs" class="lud-boton lud-boton-secundario">{c.hero.ctaSecundario}</a>
         </div>
-        <div class="portada-pie">
-          Sernapesca PAC · SENASA validated production and processes · Export authorizations in
-          place
-        </div>
+        <div class="portada-pie">{c.hero.pie}</div>
       </div>
     </section>
 
     <!-- Cifras -------------------------------------------------------- -->
     <section class="cifras">
-      <div class="cifra">
-        <div class="cifra-valor">15+</div>
-        <div class="cifra-texto">Years processing and cold-storing seafood in Chile</div>
-      </div>
-      <div class="cifra">
-        <div class="cifra-valor">PAC</div>
-        <div class="cifra-texto">
-          Quality Assurance Programme under Sernapesca, the Chilean fisheries authority
-        </div>
-      </div>
-      <div class="cifra">
-        <div class="cifra-valor">SENASA</div>
-        <div class="cifra-texto">Production and process validation</div>
-      </div>
-      <div class="cifra">
-        <div class="cifra-valor">Worldwide</div>
-        <div class="cifra-texto">
-          Dispatch authorizations for practically every market
-          <span class="lud-pendiente">confirmar países</span>
-        </div>
-      </div>
+      {
+        c.cifras.map((cifra) => (
+          <div class="cifra">
+            <div class="cifra-valor">{cifra.valor}</div>
+            <div class="cifra-texto">
+              {cifra.texto}
+              {cifra.pendiente && <span class="lud-pendiente">{cifra.pendiente}</span>}
+            </div>
+          </div>
+        ))
+      }
     </section>
 
     <!-- Producto ------------------------------------------------------ -->
@@ -158,27 +103,29 @@ const PROCESO = [
       <div class="lud-ancho">
         <div class="encabezado">
           <div>
-            <div class="lud-rotulo">The product</div>
-            <h2 class="lud-h2">One species. Every cut your line needs.</h2>
+            <div class="lud-rotulo">{c.producto.rotulo}</div>
+            <h2 class="lud-h2">{c.producto.titulo}</h2>
           </div>
-          <p class="lud-bajada">
-            Humboldt squid is abundant, consistent and firm enough to travel. We clean, cut and
-            grade it in our own plant, so what lands in your factory is already the format you
-            work with.
-          </p>
+          <p class="lud-bajada">{c.producto.bajada}</p>
         </div>
 
         <div class="cortes">
           {
-            CORTES.map((corte) => (
+            cortes.map((corte) => (
               <article class="corte">
-                <div class="lud-marco corte-foto">
-                  <div>[ product photo ]</div>
-                  <div class="marco-nota">{corte.nombre.toLowerCase()} · 1200×900</div>
-                </div>
+                {corte.foto && (
+                  <Image
+                    src={corte.foto}
+                    alt={corte.nombre}
+                    widths={[400, 700, 1168]}
+                    sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                    loading="lazy"
+                    class="corte-foto"
+                  />
+                )}
                 <div class="corte-texto">
                   <h3>{corte.nombre}</h3>
-                  <div class="corte-latin">{corte.latin}</div>
+                  <div class="corte-bajada">{corte.bajada}</div>
                   <p>{corte.texto}</p>
                 </div>
               </article>
@@ -187,36 +134,32 @@ const PROCESO = [
         </div>
 
         <p class="nota-seccion">
-          <span class="lud-pendiente">por confirmar</span>
-          Cortes, calibres y presentaciones reales que produce la planta: la grilla se ajusta a lo
-          que ustedes trabajan.
+          <span class="lud-pendiente">{c.producto.notaEtiqueta}</span>
+          {c.producto.nota}
         </p>
       </div>
     </section>
 
-    <!-- Especificaciones ---------------------------------------------- -->
+    <!-- Ficha técnica -------------------------------------------------- -->
     <section class="lud-seccion lud-hielo" id="specs">
       <div class="lud-ancho especificaciones">
         <div>
-          <div class="lud-rotulo">Specifications</div>
-          <h2 class="lud-h2">The sheet your buyer asks for.</h2>
-          <p class="lud-bajada">
-            Everything a purchasing team needs before the first call, on the page instead of in a
-            PDF they have to request. Grades and packing are set with each buyer.
-          </p>
+          <div class="lud-rotulo">{c.specs.rotulo}</div>
+          <h2 class="lud-h2">{c.specs.titulo}</h2>
+          <p class="lud-bajada">{c.specs.bajada}</p>
           <a href="#contact" class="lud-boton lud-boton-azul ficha-cta">
-            Ask for the full spec sheet <span aria-hidden="true">↗</span>
+            {c.specs.cta} <span aria-hidden="true">↗</span>
           </a>
         </div>
 
         <dl class="tabla">
           {
-            ESPECIFICACIONES.map((fila) => (
+            c.specs.filas.map((fila) => (
               <div class="fila">
                 <dt>{fila.campo}</dt>
                 <dd>
                   {fila.valor}
-                  {!fila.confirmado && <span class="lud-pendiente">confirmar</span>}
+                  {!fila.confirmado && <span class="lud-pendiente">{c.specs.porConfirmar}</span>}
                 </dd>
               </div>
             ))
@@ -230,54 +173,26 @@ const PROCESO = [
       <div class="lud-ancho">
         <div class="encabezado">
           <div>
-            <div class="lud-rotulo">Quality and compliance</div>
-            <h2 class="lud-h2">Cleared to ship, on paper.</h2>
+            <div class="lud-rotulo">{c.calidad.rotulo}</div>
+            <h2 class="lud-h2">{c.calidad.titulo}</h2>
           </div>
-          <p class="lud-bajada">
-            Ludrimar works under a quality assurance plan built on Sernapesca regulations. Every
-            dispatch carries the authorizations the destination market requires.
-          </p>
+          <p class="lud-bajada">{c.calidad.bajada}</p>
         </div>
 
         <div class="calidad">
-          <article>
-            <h3>Sernapesca PAC</h3>
-            <p>
-              Quality Assurance Programme of Chile's National Fisheries and Aquaculture Service,
-              the authority that certifies seafood exports.
-            </p>
-          </article>
-          <article>
-            <h3>SENASA validation</h3>
-            <p>Production and processes validated for export.</p>
-          </article>
-          <article>
-            <h3>Cold chain</h3>
-            <p>
-              Own cold storage: the product stays under our control from reception to the container
-              door.
-            </p>
-          </article>
-          <article>
-            <h3>Traceability</h3>
-            <p>Every lot recorded from reception to dispatch, with documentation per shipment.</p>
-          </article>
-          <article>
-            <h3>Trained workforce</h3>
-            <p>
-              A large specialised workforce, hired and trained locally. Handling quality is a people
-              problem before it is a machine problem.
-            </p>
-          </article>
-          <article class="calidad-pendiente">
-            <h3>
-              Certifications <span class="lud-pendiente">por confirmar</span>
-            </h3>
-            <p>
-              Aquí van HACCP, BRC, IFS, número de planta o el registro que corresponda. Es lo
-              primero que mira un comprador extranjero.
-            </p>
-          </article>
+          {
+            c.calidad.bloques.map((bloque) => (
+              <article>
+                <h3>
+                  {bloque.titulo}
+                  {bloque.pendiente && (
+                    <span class="lud-pendiente">{c.calidad.porConfirmar}</span>
+                  )}
+                </h3>
+                <p>{bloque.texto}</p>
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -287,18 +202,15 @@ const PROCESO = [
       <div class="lud-ancho">
         <div class="encabezado">
           <div>
-            <div class="lud-rotulo">How it works</div>
-            <h2 class="lud-h2">From reception to container.</h2>
+            <div class="lud-rotulo">{c.proceso.rotulo}</div>
+            <h2 class="lud-h2">{c.proceso.titulo}</h2>
           </div>
-          <p class="lud-bajada">
-            One plant, one team and one chain of custody. No intermediaries between the raw
-            material and the paperwork your customs broker receives.
-          </p>
+          <p class="lud-bajada">{c.proceso.bajada}</p>
         </div>
 
         <div class="proceso">
           {
-            PROCESO.map((etapa) => (
+            c.proceso.etapas.map((etapa) => (
               <div class="etapa">
                 <div class="etapa-numero">{etapa.paso}</div>
                 <h3>{etapa.titulo}</h3>
@@ -314,17 +226,22 @@ const PROCESO = [
     <section class="lud-seccion lud-hielo">
       <div class="lud-ancho otras">
         <div>
-          <div class="lud-rotulo">Also available</div>
-          <h2 class="lud-h2">White fish and salmon.</h2>
-          <p class="lud-bajada">
-            The company was built handling, processing and storing white fish and salmon, and that
-            capacity is still here. Squid is where we specialise; it is not all we can run.
-          </p>
+          <div class="lud-rotulo">{c.otras.rotulo}</div>
+          <h2 class="lud-h2">{c.otras.titulo}</h2>
+          <p class="lud-bajada">{c.otras.bajada}</p>
         </div>
-        <div class="lud-marco otras-foto">
-          <div>[ plant photo ]</div>
-          <div class="marco-nota">línea de proceso o cámara de frío · 1600×1000</div>
-        </div>
+        {
+          planta && (
+            <Image
+              src={planta}
+              alt=""
+              widths={[600, 900, 1296]}
+              sizes="(max-width: 900px) 100vw, 50vw"
+              loading="lazy"
+              class="otras-foto"
+            />
+          )
+        }
       </div>
     </section>
 
@@ -332,86 +249,94 @@ const PROCESO = [
     <section class="lud-seccion lud-oscuro" id="contact">
       <div class="lud-ancho contacto">
         <div>
-          <div class="lud-rotulo">Talk to us</div>
-          <h2 class="lud-h2">Tell us what you buy.<br />We'll tell you what we can ship.</h2>
-          <p class="lud-bajada">
-            Send the cut, the volume and the market. You get an answer from the people who run the
-            plant, not a generic reply.
-          </p>
+          <div class="lud-rotulo">{c.contacto.rotulo}</div>
+          <h2 class="lud-h2">
+            {
+              c.contacto.titulo.map((linea, i) => (
+                <>
+                  {i > 0 && <br />}
+                  {linea}
+                </>
+              ))
+            }
+          </h2>
+          <p class="lud-bajada">{c.contacto.bajada}</p>
           <div class="contacto-datos">
             <div>
-              <span class="dato-rotulo">Email</span>
+              <span class="dato-rotulo">{c.contacto.email}</span>
               <a href="mailto:info@ludrimar.cl">info@ludrimar.cl</a>
             </div>
             <div>
-              <span class="dato-rotulo">Plant</span>
-              <span class="lud-pendiente">dirección por confirmar</span>
+              <span class="dato-rotulo">{c.contacto.planta}</span>
+              <span class="lud-pendiente">dirección {c.contacto.porConfirmar}</span>
             </div>
             <div>
-              <span class="dato-rotulo">Phone</span>
-              <span class="lud-pendiente">teléfono por confirmar</span>
+              <span class="dato-rotulo">{c.contacto.telefono}</span>
+              <span class="lud-pendiente">teléfono {c.contacto.porConfirmar}</span>
             </div>
           </div>
         </div>
 
         <div class="columna-formulario">
-        <form class="formulario" id="lud-form" novalidate>
-          <div class="campo-doble">
+          <form class="formulario" id="lud-form" novalidate>
+            <div class="campo-doble">
+              <label>
+                {c.contacto.campos.empresa}
+                <input
+                  type="text"
+                  name="company"
+                  placeholder={c.contacto.marcadores.empresa}
+                  required
+                />
+              </label>
+              <label>
+                {c.contacto.campos.pais}
+                <input type="text" name="country" placeholder={c.contacto.marcadores.pais} required />
+              </label>
+            </div>
+            <div class="campo-doble">
+              <label>
+                {c.contacto.campos.nombre}
+                <input type="text" name="name" placeholder={c.contacto.marcadores.nombre} required />
+              </label>
+              <label>
+                {c.contacto.campos.correo}
+                <input
+                  type="email"
+                  name="email"
+                  placeholder={c.contacto.marcadores.correo}
+                  required
+                />
+              </label>
+            </div>
+            <div class="campo-doble">
+              <label>
+                {c.contacto.campos.producto}
+                <select name="product">
+                  {c.contacto.productos.map((producto) => <option>{producto}</option>)}
+                </select>
+              </label>
+              <label>
+                {c.contacto.campos.volumen}
+                <input type="text" name="volume" placeholder={c.contacto.marcadores.volumen} />
+              </label>
+            </div>
             <label>
-              Company
-              <input type="text" name="company" placeholder="Your company" required />
+              {c.contacto.campos.mensaje}
+              <textarea name="message" rows="3" placeholder={c.contacto.marcadores.mensaje}
+              ></textarea>
             </label>
-            <label>
-              Country
-              <input type="text" name="country" placeholder="Destination market" required />
-            </label>
-          </div>
-          <div class="campo-doble">
-            <label>
-              Contact name
-              <input type="text" name="name" placeholder="Who we should reply to" required />
-            </label>
-            <label>
-              Email
-              <input type="email" name="email" placeholder="name@company.com" required />
-            </label>
-          </div>
-          <div class="campo-doble">
-            <label>
-              Product
-              <select name="product">
-                <option>Squid tubes</option>
-                <option>Squid tentacles</option>
-                <option>Squid wings</option>
-                <option>Rings or strips</option>
-                <option>White fish</option>
-                <option>Salmon</option>
-                <option>Not sure yet</option>
-              </select>
-            </label>
-            <label>
-              Volume per month
-              <input type="text" name="volume" placeholder="e.g. 2 containers" />
-            </label>
-          </div>
-          <label>
-            Message
-            <textarea name="message" rows="3" placeholder="Specification, incoterm, target price…"
-            ></textarea>
-          </label>
-          <button type="submit" class="lud-boton lud-boton-primario">
-            Send enquiry <span aria-hidden="true">↗</span>
-          </button>
-          <p class="formulario-nota">
-            Demo: en el sitio publicado esta consulta llega al correo de Ludrimar.
-          </p>
-        </form>
+            <button type="submit" class="lud-boton lud-boton-primario">
+              {c.contacto.enviar} <span aria-hidden="true">↗</span>
+            </button>
+            <p class="formulario-nota">{c.contacto.nota}</p>
+          </form>
 
-        <div class="formulario-ok" id="lud-ok" hidden>
-          <div class="ok-marca" aria-hidden="true">✓</div>
-          <h3>Thank you — we have your enquiry.</h3>
-          <p>Someone from the plant will get back to you.</p>
-        </div>
+          <div class="formulario-ok" id="lud-ok" hidden>
+            <div class="ok-marca" aria-hidden="true">✓</div>
+            <h3>{c.contacto.okTitulo}</h3>
+            <p>{c.contacto.okTexto}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -429,10 +354,10 @@ const PROCESO = [
           />
         </div>
         <div class="pie-texto">
-          <p>Pesquera Ludrimar Ltda — handling, processing and cold storage of seafood. Chile.</p>
+          <p>{c.pie.descripcion}</p>
           <p><a href="mailto:info@ludrimar.cl">info@ludrimar.cl</a></p>
         </div>
-        <div class="pie-legal">© 2026 Pesquera Ludrimar Ltda</div>
+        <div class="pie-legal">{c.pie.legal}</div>
       </div>
     </footer>
   </div>
@@ -474,10 +399,40 @@ const PROCESO = [
     color: var(--marea-clara);
   }
 
+  .acciones {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: none;
+  }
+
+  .idiomas {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .idioma {
+    padding: 6px 9px;
+    border-radius: 3px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .idioma:hover {
+    color: var(--blanco);
+  }
+
+  .idioma.activo {
+    color: var(--blanco);
+    background: rgba(255, 255, 255, 0.12);
+  }
+
   .cta-cabecera {
     padding: 12px 20px;
     font-size: 14px;
-    flex: none;
   }
 
   /* Portada -------------------------------------------------------- */
@@ -510,7 +465,7 @@ const PROCESO = [
     font-size: clamp(38px, 5.4vw, 76px);
     line-height: 1.02;
     margin-bottom: 28px;
-    max-width: 16ch;
+    max-width: 17ch;
   }
 
   .portada-botones {
@@ -580,13 +535,12 @@ const PROCESO = [
     background: var(--blanco);
   }
 
-  .corte-foto {
+  .corte :global(.corte-foto) {
+    display: block;
+    width: 100%;
+    height: auto;
     aspect-ratio: 4 / 3;
-  }
-
-  .marco-nota {
-    font-size: 11px;
-    opacity: 0.75;
+    object-fit: cover;
   }
 
   .corte-texto {
@@ -598,7 +552,7 @@ const PROCESO = [
     margin-bottom: 4px;
   }
 
-  .corte-latin {
+  .corte-bajada {
     font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -622,7 +576,7 @@ const PROCESO = [
     color: var(--texto-tenue);
   }
 
-  /* Especificaciones ----------------------------------------------- */
+  /* Ficha técnica --------------------------------------------------- */
   .especificaciones {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
@@ -734,8 +688,12 @@ const PROCESO = [
     align-items: center;
   }
 
-  .otras-foto {
+  .otras :global(.otras-foto) {
+    display: block;
+    width: 100%;
+    height: auto;
     aspect-ratio: 16 / 10;
+    object-fit: cover;
     border-radius: 6px;
   }
 
