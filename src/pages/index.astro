@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Cifras from '../components/Cifras.astro';
+import Servicios from '../components/Servicios.astro';
+import Automatizacion from '../components/Automatizacion.astro';
+import Criterio from '../components/Criterio.astro';
+import Proceso from '../components/Proceso.astro';
+import Equipo from '../components/Equipo.astro';
+import Proyectos from '../components/Proyectos.astro';
+import Testimonios from '../components/Testimonios.astro';
+import Contacto from '../components/Contacto.astro';
+import SolicitudModal from '../components/SolicitudModal.astro';
+import Footer from '../components/Footer.astro';
+import {
+  MOSTRAR_EQUIPO,
+  MOSTRAR_FORMULARIO_SOLICITUD,
+  MOSTRAR_POLITICA_IA,
+} from '../lib/config';
+---
+
+<BaseLayout
+  title="Ojos Publicitarios — Páginas web y automatización para tu negocio"
+  description="Estudio creativo y digital: diseñamos páginas web, sitios corporativos y tiendas online que comunican mejor y facilitan vender, y dejamos tu atención funcionando sola."
+  path="/"
+>
+  <Header />
+  <main>
+    <Hero />
+    <Cifras />
+    <Servicios />
+    <Automatizacion />
+    {MOSTRAR_POLITICA_IA && <Criterio />}
+    <Proceso />
+    {MOSTRAR_EQUIPO && <Equipo />}
+    <Proyectos />
+    <Testimonios />
+    <Contacto />
+  </main>
+  <Footer />
+  {MOSTRAR_FORMULARIO_SOLICITUD && <SolicitudModal />}
+</BaseLayout>

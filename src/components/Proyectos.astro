@@ -1,18 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import { PROYECTOS, PROYECTOS_PENDIENTES } from '../data/contenido';
-
-// Las capturas viven en src/assets para que Astro las optimice; el dato solo
-// guarda el nombre del archivo.
-const imagenes = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/*.{png,jpg,jpeg,webp,avif}'
-);
+import { cargarImagen } from '../lib/imagenes';
 
 const proyectos = await Promise.all(
-  PROYECTOS.map(async (proyecto) => {
-    const cargar = proyecto.imagen ? imagenes[`../assets/${proyecto.imagen}`] : undefined;
-    return { ...proyecto, imagen: cargar ? (await cargar()).default : undefined };
-  })
+  PROYECTOS.map(async (proyecto) => ({
+    ...proyecto,
+    imagen: await cargarImagen(proyecto.imagen),
+  }))
 );
 ---
 

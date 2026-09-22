@@ -1,6 +1,11 @@
 ---
 import { Image } from 'astro:assets';
-import chilecamiones from '../assets/chilecamiones.png';
+import { cargarImagen } from '../lib/imagenes';
+import { PROYECTOS } from '../data/contenido';
+
+// El sitio del hero es el primer proyecto de la lista.
+const destacado = PROYECTOS[0];
+const captura = await cargarImagen(destacado?.imagen);
 ---
 
 <section class="hero">
@@ -33,16 +38,20 @@ import chilecamiones from '../assets/chilecamiones.png';
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
-        <div class="url">chilecamiones.cl</div>
+        <div class="url">{destacado.url.replace('https://', '')}</div>
       </div>
-      <Image
-        src={chilecamiones}
-        alt="Sitio chilecamiones.cl desarrollado por Ojos Publicitarios"
-        widths={[420, 760, 1126]}
-        sizes="(max-width: 900px) 100vw, 45vw"
-        loading="eager"
-        fetchpriority="high"
-      />
+      {
+        captura && (
+          <Image
+            src={captura}
+            alt={`Sitio ${destacado.nombre} desarrollado por Ojos Publicitarios`}
+            widths={[420, 760, 1126]}
+            sizes="(max-width: 900px) 100vw, 45vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        )
+      }
     </div>
     <div class="pie">
       <span>PROYECTO ENTREGADO</span>

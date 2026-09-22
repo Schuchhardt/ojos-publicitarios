@@ -1,5 +1,10 @@
 ---
 import Seo from '../components/Seo.astro';
+// Fuentes servidas desde el propio dominio: Astro las versiona y Netlify las
+// cachea para siempre. Evita dos conexiones extra a Google en cada visita.
+import '@fontsource-variable/space-grotesk/wght.css';
+import '@fontsource-variable/archivo/standard.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
 import { CONTACTO_EMAIL, MARCA, REDES, TAGLINE } from '../lib/config';
 import '../styles/global.css';
 
@@ -9,9 +14,10 @@ interface Props {
   path: string;
   image?: string;
   type?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { title, description, path, image, type } = Astro.props;
+const { title, description, path, image, type, noindex } = Astro.props;
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -35,17 +41,17 @@ const organizationJsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#06111a" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-
     <link rel="icon" type="image/png" href="/logo-ojos.png" />
     <link rel="apple-touch-icon" href="/logo-ojos.png" />
 
-    <Seo title={title} description={description} path={path} image={image} type={type} />
+    <Seo
+      title={title}
+      description={description}
+      path={path}
+      image={image}
+      type={type}
+      noindex={noindex}
+    />
 
     <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
     <slot name="head" />

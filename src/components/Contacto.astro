@@ -1,0 +1,147 @@
+---
+import Redes from './Redes.astro';
+import {
+  MOSTRAR_FORMULARIO_SOLICITUD,
+  TIENE_WHATSAPP,
+  mailtoUrl,
+  whatsappUrl,
+} from '../lib/config';
+---
+
+<section id="contacto" class="seccion">
+  <div class="caja">
+    <div>
+      <div class="rotulo">TU PRÓXIMO PROYECTO EMPIEZA AQUÍ</div>
+      <h2>Que tu próxima visita<br />sea tu próximo <span>cliente.</span></h2>
+      <p>
+        Cuéntanos qué necesitas. Te respondemos con un plan concreto: qué incluye, de qué nos
+        encargamos nosotros y cuánto cuesta.
+      </p>
+    </div>
+
+    <div class="acciones">
+      {
+        MOSTRAR_FORMULARIO_SOLICITUD ? (
+          <button type="button" class="accion principal" data-abrir-solicitud data-track="cta_contacto">
+            Preparar mi solicitud <span aria-hidden="true">↗</span>
+          </button>
+        ) : (
+          <a href={mailtoUrl()} class="accion principal" data-track="cta_contacto">
+            Preparar mi solicitud <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+
+      {
+        TIENE_WHATSAPP && (
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noopener"
+            class="accion secundaria"
+            data-track="cta_whatsapp"
+          >
+            Escribir por WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+
+      <div class="nota">Responde una persona del equipo, el mismo día hábil.</div>
+
+      <Redes />
+    </div>
+  </div>
+</section>
+
+<style>
+  .caja {
+    background: var(--panel-destacado);
+    border: 1px solid var(--acento-borde-suave);
+    padding: clamp(28px, 4vw, 64px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: clamp(24px, 3vw, 48px);
+    align-items: center;
+  }
+
+  h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(28px, 3.4vw, 46px);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+
+  h2 span {
+    color: var(--acento);
+  }
+
+  .caja p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--texto-apagado);
+    margin: 0;
+  }
+
+  .acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .accion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 26px;
+    border-radius: var(--radio);
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .principal {
+    background: var(--acento);
+    color: var(--bg);
+    font-weight: 600;
+  }
+
+  .principal:hover {
+    background: var(--acento-claro);
+    color: var(--bg);
+  }
+
+  .secundaria {
+    border-color: var(--linea-boton);
+    color: var(--texto);
+    font-weight: 500;
+  }
+
+  .secundaria span {
+    color: var(--acento);
+  }
+
+  .secundaria:hover {
+    border-color: var(--acento);
+    background: var(--acento-fondo);
+    color: var(--texto);
+  }
+
+  .nota {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-debil);
+    line-height: 1.7;
+    margin-top: 6px;
+  }
+
+  .acciones :global(.redes) {
+    margin-top: 12px;
+  }
+</style>

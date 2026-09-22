@@ -44,9 +44,9 @@
   --claro-marcador-tenue: #8ba0ac;
 
   /* Tipografías */
-  --fuente-titulo: 'Space Grotesk', system-ui, sans-serif;
-  --fuente-texto: 'Archivo', system-ui, sans-serif;
-  --fuente-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --fuente-titulo: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+  --fuente-texto: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --fuente-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
   /* Ritmo */
   --pad-x: clamp(16px, 4vw, 56px);
@@ -168,6 +168,7 @@ a:hover {
 /* Botones */
 .boton {
   display: inline-flex;
+  background: none;
   align-items: center;
   gap: 10px;
   padding: 16px 26px;

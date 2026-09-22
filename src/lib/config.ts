@@ -10,7 +10,7 @@ export const ANIO = new Date().getFullYear();
 // Poner en false oculta la sección completa del sitio.
 // ---------------------------------------------------------------------------
 export const MOSTRAR_POLITICA_IA = true;
-export const MOSTRAR_EQUIPO = true;
+export const MOSTRAR_EQUIPO = false;
 export const MOSTRAR_WHATSAPP = true;
 /**
  * Modal "Preparar mi solicitud": formulario que arma el mensaje y lo abre en
@@ -23,7 +23,7 @@ export const MOSTRAR_FORMULARIO_SOLICITUD = true;
 // Contacto directo
 // ---------------------------------------------------------------------------
 /** Teléfono en formato internacional sin signos (para wa.me). '' oculta WhatsApp. */
-export const WHATSAPP_NUMERO = '56900000000'; // TODO: número real
+export const WHATSAPP_NUMERO: string = '56900000000'; // TODO: número real
 export const WHATSAPP_MENSAJE = 'Hola, vengo del sitio web y me gustaría conversar sobre mi proyecto.';
 export const CONTACTO_EMAIL = 'contacto@ojospublicitarios.cl'; // TODO: correo real
 
@@ -60,8 +60,8 @@ export const REDES: Red[] = [
 // Navegación del header
 // ---------------------------------------------------------------------------
 export const NAV = [
-  { texto: 'Diseño web', href: '#servicios' },
-  { texto: 'Qué incluye', href: '#automatizacion' },
-  ...(MOSTRAR_POLITICA_IA ? [{ texto: 'Cómo trabajamos', href: '#criterio' }] : []),
-  ...(MOSTRAR_EQUIPO ? [{ texto: 'Equipo', href: '#equipo' }] : []),
+  { texto: 'Diseño web', href: '/#servicios' },
+  { texto: 'Qué incluye', href: '/#automatizacion' },
+  ...(MOSTRAR_POLITICA_IA ? [{ texto: 'Cómo trabajamos', href: '/#criterio' }] : []),
+  ...(MOSTRAR_EQUIPO ? [{ texto: 'Equipo', href: '/#equipo' }] : []),
 ];

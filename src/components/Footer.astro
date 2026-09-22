@@ -1,0 +1,35 @@
+---
+import Logo from './Logo.astro';
+import Redes from './Redes.astro';
+import { ANIO, TAGLINE } from '../lib/config';
+---
+
+<footer>
+  <Logo variante="footer" />
+  <Redes />
+  <div class="tagline">{TAGLINE}</div>
+  <div class="copyright">© {ANIO} OJOS PUBLICITARIOS</div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--linea);
+    padding: 32px var(--pad-x);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .tagline {
+    font-size: 13px;
+    color: var(--texto-tenue);
+  }
+
+  .copyright {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-debil);
+  }
+</style>

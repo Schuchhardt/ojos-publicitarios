@@ -70,7 +70,14 @@ const { variante = 'header' } = Astro.props;
     font-size: 13px;
   }
 
-  @media (max-width: 400px) {
+  /* En pantallas angostas se achica la palabra antes que recortarla. */
+  @media (max-width: 440px) {
+    .header .palabra {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 360px) {
     .header .palabra span {
       display: none;
     }
