@@ -82,8 +82,30 @@
   outline-offset: 3px;
 }
 
-.lud-oscuro :focus-visible {
+.lud-oscuro :focus-visible,
+.lud-sobre-oscuro :focus-visible {
   outline-color: var(--marea-clara);
+}
+
+/* Íconos: el trazo toma el color del texto de su bloque. */
+.lud-icono-caja {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  flex: none;
+  color: var(--marea-clara);
+  background: rgba(127, 215, 232, 0.12);
+  border: 1px solid rgba(127, 215, 232, 0.28);
+}
+
+.lud-hielo .lud-icono-caja,
+.ludrimar > section:not(.lud-oscuro):not(.portada) .lud-icono-caja {
+  color: var(--marea-texto);
+  background: rgba(10, 127, 153, 0.08);
+  border-color: rgba(10, 127, 153, 0.22);
 }
 
 /* Bloques -------------------------------------------------------------- */
@@ -115,7 +137,8 @@
   margin-bottom: 22px;
 }
 
-.lud-oscuro .lud-rotulo {
+.lud-oscuro .lud-rotulo,
+.lud-sobre-oscuro .lud-rotulo {
   color: var(--marea-clara);
 }
 
@@ -131,8 +154,9 @@
   max-width: 62ch;
 }
 
-.lud-oscuro .lud-bajada {
-  color: rgba(255, 255, 255, 0.82);
+.lud-oscuro .lud-bajada,
+.lud-sobre-oscuro .lud-bajada {
+  color: rgba(255, 255, 255, 0.86);
 }
 
 /* Botones -------------------------------------------------------------- */
@@ -152,31 +176,34 @@
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-.lud-boton-primario {
+.ludrimar .lud-boton-primario {
   background: var(--marea);
   color: var(--blanco);
 }
 
-.lud-boton-primario:hover {
+.ludrimar .lud-boton-primario:hover {
   background: var(--marea-honda);
-}
-
-.lud-boton-secundario {
-  border-color: rgba(255, 255, 255, 0.45);
   color: var(--blanco);
 }
 
-.lud-boton-secundario:hover {
-  border-color: var(--marea-clara);
-  background: rgba(127, 215, 232, 0.14);
+.ludrimar .lud-boton-secundario {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--blanco);
 }
 
-.lud-boton-azul {
+.ludrimar .lud-boton-secundario:hover {
+  border-color: var(--marea-clara);
+  background: rgba(127, 215, 232, 0.16);
+  color: var(--blanco);
+}
+
+.ludrimar .lud-boton-azul {
   background: var(--azul);
   color: var(--blanco);
 }
 
-.lud-boton-azul:hover {
+.ludrimar .lud-boton-azul:hover {
   background: var(--azul-medio);
+  color: var(--blanco);
 }
 

@@ -11,6 +11,8 @@ import { cargarImagen } from '../lib/imagenes';
 import lockupBlanco from '../assets/ludrimar/ludrimar-lockup-blanco.png';
 import lockupColor from '../assets/ludrimar/ludrimar-lockup.png';
 import marcaBlanca from '../assets/ludrimar/ludrimar-marca-blanco.png';
+import heroFoto from '../assets/ludrimar/hero-oceano.jpg';
+import LudIcono from './LudIcono.astro';
 
 interface Props {
   idioma: Idioma;
@@ -61,7 +63,19 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     </header>
 
     <!-- Portada ------------------------------------------------------- -->
-    <section class="portada" id="top">
+    <section class="portada lud-sobre-oscuro" id="top">
+      <div class="fondo" aria-hidden="true">
+        <Image
+          src={heroFoto}
+          alt=""
+          widths={[900, 1344]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="foto"
+        />
+        <div class="velo"></div>
+      </div>
       <Image src={marcaBlanca} alt="" class="marca-agua" width={720} densities={[1, 2]} />
       <div class="portada-texto">
         <div class="lud-rotulo">{c.hero.epigrafe}</div>
@@ -144,6 +158,7 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
           <h2 class="lud-h2">{c.specs.titulo}</h2>
           <p class="lud-bajada">{c.specs.bajada}</p>
           <a href="#contact" class="lud-boton lud-boton-azul ficha-cta">
+            <LudIcono nombre="documento" tamano={18} />
             {c.specs.cta} <span aria-hidden="true">↗</span>
           </a>
         </div>
@@ -176,6 +191,9 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
           {
             c.calidad.bloques.map((bloque) => (
               <article>
+                <div class="lud-icono-caja">
+                  <LudIcono nombre={bloque.icono} />
+                </div>
                 <h3>{bloque.titulo}</h3>
                 <p>{bloque.texto}</p>
               </article>
@@ -200,7 +218,12 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
           {
             c.proceso.etapas.map((etapa) => (
               <div class="etapa">
-                <div class="etapa-numero">{etapa.paso}</div>
+                <div class="etapa-cabeza">
+                  <div class="lud-icono-caja">
+                    <LudIcono nombre={etapa.icono} />
+                  </div>
+                  <div class="etapa-numero">{etapa.paso}</div>
+                </div>
                 <h3>{etapa.titulo}</h3>
                 <p>{etapa.texto}</p>
               </div>
@@ -251,10 +274,12 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
           <p class="lud-bajada">{c.contacto.bajada}</p>
           <div class="contacto-datos">
             <div>
+              <LudIcono nombre="correo" tamano={18} />
               <span class="dato-rotulo">{c.contacto.email}</span>
               <a href="mailto:info@ludrimar.cl">info@ludrimar.cl</a>
             </div>
             <div>
+              <LudIcono nombre="pin" tamano={18} />
               <span class="dato-rotulo">{c.contacto.planta}</span>
               <span>{c.contacto.direccion}</span>
             </div>
@@ -423,9 +448,49 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
   .portada {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(165deg, #0c2339 0%, #10314e 55%, #153b5f 100%);
+    background: #0c2339;
     color: var(--blanco);
     padding: clamp(72px, 10vw, 148px) var(--pad-x) clamp(64px, 8vw, 120px);
+  }
+
+  .fondo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  /* Acercamiento lento: 26 s de ida y vuelta, sin saltos. */
+  .fondo :global(.foto) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    transform: scale(1.02);
+    animation: acercar 26s ease-in-out infinite alternate;
+  }
+
+  @keyframes acercar {
+    from {
+      transform: scale(1.02) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.12) translate3d(-1.5%, -1%, 0);
+    }
+  }
+
+  /* Velo azul: la foto es ambiente, el texto manda. */
+  .velo {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(100deg, rgba(8, 26, 43, 0.96) 0%, rgba(12, 35, 57, 0.86) 42%, rgba(21, 59, 95, 0.72) 100%),
+      linear-gradient(to bottom, rgba(12, 35, 57, 0.5), transparent 40%, rgba(12, 35, 57, 0.6));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fondo :global(.foto) {
+      animation: none;
+    }
   }
 
   .marca-agua {
@@ -433,9 +498,9 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     right: -6%;
     top: 50%;
     transform: translateY(-50%);
-    width: min(56%, 720px);
+    width: min(52%, 660px);
     height: auto;
-    opacity: 0.07;
+    opacity: 0.1;
     pointer-events: none;
   }
 
@@ -566,6 +631,10 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     margin-top: 28px;
   }
 
+  .ficha-cta :global(.lud-icono) {
+    color: currentColor;
+  }
+
   .tabla {
     margin: 0;
     border-top: 1px solid var(--linea);
@@ -613,12 +682,12 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
   }
 
   .calidad h3 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
     font-size: 20px;
     margin-bottom: 12px;
+  }
+
+  .calidad :global(.lud-icono-caja) {
+    margin-bottom: 18px;
   }
 
   .calidad p {
@@ -639,12 +708,18 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     border-top: 2px solid var(--azul);
   }
 
+  .etapa-cabeza {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
   .etapa-numero {
     font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.14em;
     color: var(--marea-texto);
-    margin-bottom: 14px;
   }
 
   .etapa h3 {
@@ -698,6 +773,11 @@ const planta = await cargarImagen('ludrimar/productos/planta.jpg');
     align-items: center;
     gap: 12px;
     font-size: 15px;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .contacto-datos :global(.lud-icono) {
+    color: var(--marea-clara);
   }
 
   .dato-rotulo {

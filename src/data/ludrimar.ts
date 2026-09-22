@@ -16,15 +16,31 @@ interface Corte {
   imagen: string;
 }
 
+type Icono =
+  | 'escudo'
+  | 'sello'
+  | 'copo'
+  | 'trazabilidad'
+  | 'equipo'
+  | 'certificado'
+  | 'recepcion'
+  | 'corte'
+  | 'contenedor'
+  | 'correo'
+  | 'pin'
+  | 'documento';
+
 interface Etapa {
   paso: string;
   titulo: string;
   texto: string;
+  icono: Icono;
 }
 
 interface Bloque {
   titulo: string;
   texto: string;
+  icono: Icono;
 }
 
 interface Especificacion {
@@ -209,29 +225,35 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       bloques: [
         {
           titulo: 'Sernapesca PAC',
+          icono: 'escudo',
           texto:
             "Quality Assurance Programme of Chile's National Fisheries and Aquaculture Service, the authority that certifies seafood exports.",
         },
         {
           titulo: 'SENASA validation',
+          icono: 'sello',
           texto: 'Production and processes validated for export.',
         },
         {
           titulo: 'Cold chain',
+          icono: 'copo',
           texto:
             'Own cold storage: the product stays under our control from reception to the container door.',
         },
         {
           titulo: 'Traceability',
+          icono: 'trazabilidad',
           texto: 'Every lot recorded from reception to dispatch, with documentation per shipment.',
         },
         {
           titulo: 'Trained workforce',
+          icono: 'equipo',
           texto:
             'A large specialised workforce, hired and trained locally. Handling quality is a people problem before it is a machine problem.',
         },
         {
           titulo: 'Certifications',
+          icono: 'certificado',
           texto:
             'HACCP plan across the line, BRCGS Food Safety, and the registrations required to ship into the European Union, the United States and China.',
         },
@@ -246,23 +268,27 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
         {
           paso: '01',
           titulo: 'Reception',
+          icono: 'recepcion',
           texto:
             'Raw material is received, checked and chilled on arrival. Every lot is recorded from the moment it enters the plant.',
         },
         {
           paso: '02',
           titulo: 'Processing',
+          icono: 'corte',
           texto:
             'Cleaning, cutting and grading to the specification agreed with the buyer, by a trained workforce.',
         },
         {
           paso: '03',
           titulo: 'Freezing and storage',
+          icono: 'copo',
           texto: 'Frozen and held in our own cold storage until the container is booked.',
         },
         {
           paso: '04',
           titulo: 'Documentation and dispatch',
+          icono: 'contenedor',
           texto:
             'Health certificates and export paperwork issued under the Sernapesca programme, then loaded for shipment.',
         },
@@ -425,29 +451,35 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
       bloques: [
         {
           titulo: 'PAC Sernapesca',
+          icono: 'escudo',
           texto:
             'Programa de Aseguramiento de Calidad del Servicio Nacional de Pesca y Acuicultura, la autoridad que certifica las exportaciones del rubro.',
         },
         {
           titulo: 'Validación SENASA',
+          icono: 'sello',
           texto: 'Producción y procesos validados para exportación.',
         },
         {
           titulo: 'Cadena de frío',
+          icono: 'copo',
           texto:
             'Almacenamiento propio: el producto no sale de nuestro control entre la recepción y la puerta del contenedor.',
         },
         {
           titulo: 'Trazabilidad',
+          icono: 'trazabilidad',
           texto: 'Cada lote registrado desde la recepción hasta el despacho, con documentación por embarque.',
         },
         {
           titulo: 'Mano de obra especializada',
+          icono: 'equipo',
           texto:
             'Un alto número de trabajadores contratados y formados localmente. La calidad de la manipulación es un tema de personas antes que de máquinas.',
         },
         {
           titulo: 'Certificaciones',
+          icono: 'certificado',
           texto:
             'Plan HACCP en toda la línea, BRCGS Food Safety y los registros para despachar a la Unión Europea, Estados Unidos y China.',
         },
@@ -462,23 +494,27 @@ export const CONTENIDO: Record<Idioma, ContenidoLudrimar> = {
         {
           paso: '01',
           titulo: 'Recepción',
+          icono: 'recepcion',
           texto:
             'La materia prima se recibe, se revisa y se enfría al llegar. Cada lote queda registrado desde que entra a planta.',
         },
         {
           paso: '02',
           titulo: 'Proceso',
+          icono: 'corte',
           texto:
             'Limpieza, corte y calibrado según la especificación acordada con el comprador, con mano de obra capacitada.',
         },
         {
           paso: '03',
           titulo: 'Congelado y almacenaje',
+          icono: 'copo',
           texto: 'Congelado y mantenido en cámara propia hasta que se reserva el contenedor.',
         },
         {
           paso: '04',
           titulo: 'Documentación y despacho',
+          icono: 'contenedor',
           texto:
             'Certificados sanitarios y documentación de exportación emitidos bajo el programa de Sernapesca, y carga para embarque.',
         },
