@@ -2,22 +2,32 @@
    Paleta y tipografías de la propuesta para Ludrimar. Vive aparte del sitio de
    Ojos Publicitarios: es la marca del cliente, no la nuestra.
    El azul sale del logo entregado (#153b5f).
+
+   Los colores de texto están elegidos para pasar 4.5:1 sobre su fondo, que es
+   el mínimo legible: el turquesa de marca sirve de relleno, no de texto sobre
+   blanco, así que hay una versión oscura para eso.
 --------------------------------------------------------------------------- */
 .ludrimar {
   --azul: #153b5f;
   --azul-hondo: #0c2339;
   --azul-medio: #1e4d78;
   --azul-claro: #e7eef4;
-  --marea: #0b9fc0;
+
+  /* Turquesa: relleno / texto sobre claro / texto sobre oscuro */
+  --marea: #0a7f99;
+  --marea-honda: #07687d;
+  --marea-texto: #07718a;
   --marea-clara: #7fd7e8;
+
   --hielo: #f4f7f9;
   --blanco: #ffffff;
-  --tinta: #0c2339;
-  --texto: #46606f;
-  --texto-tenue: #7d949f;
-  --linea: #dde5ea;
-  --linea-oscura: rgba(255, 255, 255, 0.14);
-  --fuente-titulo: 'Manrope Variable', system-ui, sans-serif;
+  --tinta: #0a1f33;
+  --texto: #3d5866;
+  --texto-tenue: #5f727c;
+  --linea: #d7e1e8;
+  --linea-oscura: rgba(255, 255, 255, 0.16);
+
+  --fuente-titulo: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
   --fuente-texto: 'Inter Variable', system-ui, sans-serif;
   --pad-x: clamp(20px, 5vw, 72px);
   --pad-y: clamp(64px, 8vw, 120px);
@@ -26,8 +36,9 @@
   background: var(--blanco);
   color: var(--tinta);
   font-family: var(--fuente-texto);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
 .ludrimar h1,
@@ -35,9 +46,10 @@
 .ludrimar h3,
 .ludrimar h4 {
   font-family: var(--fuente-titulo);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.12;
   margin: 0;
   text-wrap: balance;
 }
@@ -70,6 +82,10 @@
   outline-offset: 3px;
 }
 
+.lud-oscuro :focus-visible {
+  outline-color: var(--marea-clara);
+}
+
 /* Bloques -------------------------------------------------------------- */
 .lud-seccion {
   padding: var(--pad-y) var(--pad-x);
@@ -89,13 +105,14 @@
   background: var(--hielo);
 }
 
+/* Rótulo de sección: versalitas, que necesitan más peso y más aire */
 .lud-rotulo {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--marea);
-  margin-bottom: 20px;
+  color: var(--marea-texto);
+  margin-bottom: 22px;
 }
 
 .lud-oscuro .lud-rotulo {
@@ -103,8 +120,8 @@
 }
 
 .lud-h2 {
-  font-size: clamp(30px, 3.6vw, 48px);
-  margin-bottom: 20px;
+  font-size: clamp(32px, 3.8vw, 50px);
+  margin-bottom: 22px;
 }
 
 .lud-bajada {
@@ -115,7 +132,7 @@
 }
 
 .lud-oscuro .lud-bajada {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 /* Botones -------------------------------------------------------------- */
@@ -125,9 +142,9 @@
   gap: 10px;
   padding: 16px 28px;
   border-radius: 4px;
-  font-family: var(--fuente-titulo);
+  font-family: var(--fuente-texto);
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.01em;
   border: 1px solid transparent;
   cursor: pointer;
@@ -141,17 +158,17 @@
 }
 
 .lud-boton-primario:hover {
-  background: #0b8ba8;
+  background: var(--marea-honda);
 }
 
 .lud-boton-secundario {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.45);
   color: var(--blanco);
 }
 
 .lud-boton-secundario:hover {
   border-color: var(--marea-clara);
-  background: rgba(11, 159, 192, 0.12);
+  background: rgba(127, 215, 232, 0.14);
 }
 
 .lud-boton-azul {
@@ -170,37 +187,19 @@
   gap: 6px;
   font-family: var(--fuente-texto);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #a9761f;
-  background: #fdf3e0;
-  border: 1px dashed #e0be84;
+  color: #8a6013;
+  background: #fbeed3;
+  border: 1px dashed #c99b3e;
   border-radius: 3px;
   padding: 3px 8px;
   white-space: nowrap;
 }
 
 .lud-oscuro .lud-pendiente {
-  color: #f0c988;
-  background: rgba(240, 201, 136, 0.1);
-  border-color: rgba(240, 201, 136, 0.45);
-}
-
-.lud-marco {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
-  padding: 24px;
-  background: repeating-linear-gradient(
-    135deg,
-    #e9eff3 0 10px,
-    #e2eaef 10px 20px
-  );
-  color: var(--texto-tenue);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  color: #f6d9a3;
+  background: rgba(246, 217, 163, 0.12);
+  border-color: rgba(246, 217, 163, 0.55);
 }
