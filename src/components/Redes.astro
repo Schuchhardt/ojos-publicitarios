@@ -1,0 +1,67 @@
+---
+import { REDES } from '../lib/config';
+
+interface Props {
+  /** Color del ícono en hexadecimal sin '#', como lo espera simpleicons. */
+  color?: string;
+}
+
+const { color = '8fa7b5' } = Astro.props;
+---
+
+{
+  REDES.length > 0 && (
+    <div class="redes">
+      {REDES.map((red) => (
+        <a
+          href={red.url}
+          target="_blank"
+          rel="noopener"
+          title={red.nombre}
+          aria-label={red.nombre}
+          data-track="red_social"
+          data-track-label={red.nombre}
+        >
+          <img
+            src={`https://cdn.simpleicons.org/${red.icono}/${color}`}
+            alt=""
+            width="16"
+            height="16"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          />
+        </a>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .redes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--linea-fuerte);
+    border-radius: 50%;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  a:hover {
+    border-color: var(--acento);
+    background: var(--acento-fondo);
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+</style>

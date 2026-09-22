@@ -1,0 +1,96 @@
+---
+import { TESTIMONIOS, TESTIMONIOS_PENDIENTES } from '../data/contenido';
+---
+
+<section class="testimonios">
+  <div class="contenedor rejilla">
+    {
+      TESTIMONIOS.map((testimonio) => (
+        <figure class="tarjeta">
+          <blockquote>“{testimonio.cita}”</blockquote>
+          <figcaption>
+            <div class="avatar" aria-hidden="true" />
+            <div>
+              <div class="nombre">{testimonio.nombre}</div>
+              <div class="cargo">{testimonio.cargo}</div>
+            </div>
+          </figcaption>
+        </figure>
+      ))
+    }
+
+    {
+      Array.from({ length: TESTIMONIOS_PENDIENTES }).map((_, i) => (
+        <div class="marcador">
+          <div class="marcador-titulo">
+            [ {['tercer', 'cuarto', 'quinto'][i] ?? 'siguiente'} testimonio ]
+          </div>
+          <div class="marcador-nota">pedir 2 líneas + nombre y cargo</div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .testimonios {
+    background: var(--bg-alt);
+    border-top: 1px solid var(--linea);
+    padding: clamp(48px, 6vw, 88px) var(--pad-x);
+  }
+
+  .rejilla {
+    --min-col: 320px;
+    gap: clamp(20px, 2.6vw, 32px);
+  }
+
+  .tarjeta {
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: clamp(24px, 2.6vw, 36px);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  blockquote {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(18px, 1.6vw, 21px);
+    line-height: 1.5;
+    color: var(--texto);
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  figcaption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #16303d;
+    flex: none;
+  }
+
+  .nombre {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .cargo {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-debil);
+  }
+
+  .marcador {
+    padding: clamp(24px, 2.6vw, 36px);
+    justify-content: center;
+  }
+</style>

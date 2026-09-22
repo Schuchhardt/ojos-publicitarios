@@ -1,0 +1,74 @@
+---
+import Seo from '../components/Seo.astro';
+import { CONTACTO_EMAIL, MARCA, REDES, TAGLINE } from '../lib/config';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, path, image, type } = Astro.props;
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: MARCA,
+  slogan: TAGLINE,
+  description:
+    'Estudio creativo y digital: diseño de páginas web, tiendas online y automatización de la atención para negocios en Chile.',
+  url: Astro.site?.toString(),
+  logo: new URL('/logo-ojos.png', Astro.site).toString(),
+  email: CONTACTO_EMAIL,
+  areaServed: 'CL',
+  sameAs: REDES.filter((red) => red.icono !== 'whatsapp').map((red) => red.url),
+};
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#06111a" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/png" href="/logo-ojos.png" />
+    <link rel="apple-touch-icon" href="/logo-ojos.png" />
+
+    <Seo title={title} description={description} path={path} image={image} type={type} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <slot name="head" />
+
+    <!--
+      Capa de analytics agnóstica: empuja eventos a window.dataLayer.
+      Si mañana se conecta GTM o GA4, los eventos ya están emitidos y nombrados.
+    -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      window.track = function (event, params) {
+        window.dataLayer.push(Object.assign({ event: event }, params || {}));
+      };
+      document.addEventListener('click', function (e) {
+        var el = e.target instanceof Element ? e.target.closest('[data-track]') : null;
+        if (!el) return;
+        window.track(el.getAttribute('data-track'), {
+          label: el.getAttribute('data-track-label') || el.textContent.trim().slice(0, 80),
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

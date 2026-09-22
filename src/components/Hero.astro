@@ -1,0 +1,175 @@
+---
+import { Image } from 'astro:assets';
+import chilecamiones from '../assets/chilecamiones.png';
+---
+
+<section class="hero">
+  <div class="texto">
+    <div class="epigrafe">
+      <div class="linea" aria-hidden="true"></div>
+      <div class="etiqueta">ESTUDIO CREATIVO &amp; DIGITAL</div>
+    </div>
+
+    <h1>Tu negocio en su<br />mejor versión <span>digital.</span></h1>
+
+    <p>
+      Creamos páginas web que se ven bien, comunican mejor y facilitan vender. Y nos encargamos
+      de que sigan funcionando, sin que tengas que aprender nada nuevo.
+    </p>
+
+    <div class="botones">
+      <a href="#contacto" class="boton boton-primario" data-track="cta_hero">
+        Quiero mi nueva web <span aria-hidden="true">↗</span>
+      </a>
+      <a href="#automatizacion" class="boton boton-secundario">Ver qué incluye</a>
+    </div>
+
+    <div class="nota">Diseño con intención. Sin suscripciones mensuales: todo queda tuyo.</div>
+  </div>
+
+  <div class="visual">
+    <div class="ventana">
+      <div class="barra">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <div class="url">chilecamiones.cl</div>
+      </div>
+      <Image
+        src={chilecamiones}
+        alt="Sitio chilecamiones.cl desarrollado por Ojos Publicitarios"
+        widths={[420, 760, 1126]}
+        sizes="(max-width: 900px) 100vw, 45vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="pie">
+      <span>PROYECTO ENTREGADO</span>
+      <span>CATÁLOGO, BUSCADOR Y CONSULTAS QUE LLEGAN SOLAS</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+    padding: clamp(48px, 7vw, 104px) var(--pad-x) clamp(40px, 5vw, 72px);
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+  }
+
+  .texto,
+  .visual {
+    min-width: 0;
+  }
+
+  .epigrafe {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .linea {
+    width: 28px;
+    height: 2px;
+    background: var(--acento);
+  }
+
+  .etiqueta {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--acento);
+  }
+
+  h1 {
+    font-family: var(--fuente-titulo);
+    font-weight: 600;
+    font-size: clamp(34px, 4.6vw, 60px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    margin: 0 0 24px;
+    text-wrap: pretty;
+  }
+
+  h1 span {
+    color: var(--acento);
+  }
+
+  p {
+    font-size: clamp(16px, 1.3vw, 19px);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0 0 32px;
+    max-width: 52ch;
+    text-wrap: pretty;
+  }
+
+  .botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .nota {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    color: var(--texto-debil);
+    letter-spacing: 0.02em;
+  }
+
+  .ventana {
+    border: 1px solid var(--linea-media);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--panel);
+  }
+
+  .barra {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .barra span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #2c4250;
+  }
+
+  .url {
+    margin-left: 10px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-debil);
+  }
+
+  .ventana :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .pie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-debil);
+  }
+</style>

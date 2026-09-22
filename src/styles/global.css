@@ -1,0 +1,229 @@
+/* ---------------------------------------------------------------------------
+   Tokens del diseño. Los valores vienen del diseño propuesto
+   (design/Ojos Publicitarios - Home.dc.html): un solo lugar para ajustarlos.
+--------------------------------------------------------------------------- */
+:root {
+  /* Fondo oscuro y sus capas */
+  --bg: #06111a;
+  --bg-alt: #081620;
+  --panel: #0b1a24;
+  --panel-destacado: #0d222d;
+
+  /* Acento */
+  --acento: #00c8e6;
+  --acento-claro: #7ce7f7;
+  --acento-borde: rgba(0, 200, 230, 0.45);
+  --acento-borde-suave: rgba(0, 200, 230, 0.3);
+  --acento-fondo: rgba(0, 200, 230, 0.1);
+  --acento-oscuro: #0d7f93;
+
+  /* Texto sobre oscuro */
+  --texto: #e8f1f4;
+  --texto-suave: #d5e3e9;
+  --texto-medio: #b8c9d2;
+  --texto-apagado: #a9bec9;
+  --texto-tenue: #8fa7b5;
+  --texto-debil: #6c8391;
+  --texto-marcador: #7e97a5;
+  --texto-marcador-tenue: #546b79;
+
+  /* Líneas */
+  --linea: rgba(255, 255, 255, 0.08);
+  --linea-media: rgba(255, 255, 255, 0.12);
+  --linea-fuerte: rgba(255, 255, 255, 0.16);
+  --linea-punteada: rgba(255, 255, 255, 0.2);
+  --linea-boton: rgba(255, 255, 255, 0.22);
+
+  /* Secciones claras */
+  --claro-bg: #f4f7f8;
+  --claro-superficie: #ffffff;
+  --claro-texto: #0a1116;
+  --claro-texto-suave: #4a5f6c;
+  --claro-linea: #d8e2e6;
+  --claro-marcador: #6b8492;
+  --claro-marcador-tenue: #8ba0ac;
+
+  /* Tipografías */
+  --fuente-titulo: 'Space Grotesk', system-ui, sans-serif;
+  --fuente-texto: 'Archivo', system-ui, sans-serif;
+  --fuente-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Ritmo */
+  --pad-x: clamp(16px, 4vw, 56px);
+  --pad-y: clamp(56px, 7vw, 104px);
+  --ancho-max: 1440px;
+  --radio: 2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--texto);
+  font-family: var(--fuente-texto);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: var(--acento);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--acento-claro);
+}
+
+::selection {
+  background: var(--acento);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Piezas compartidas entre secciones
+--------------------------------------------------------------------------- */
+.seccion {
+  padding: var(--pad-y) var(--pad-x);
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+}
+
+/* Secciones a ancho completo con fondo propio: el contenido va en .contenedor */
+.seccion-ancha {
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.contenedor {
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+}
+
+.rotulo {
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--acento);
+  margin-bottom: 18px;
+}
+
+.titulo-seccion {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.texto-apoyo {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--texto-apagado);
+  margin: 0;
+  max-width: 48ch;
+  text-wrap: pretty;
+}
+
+/* Encabezado de dos columnas: título a la izquierda, bajada a la derecha */
+.encabezado {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 32px;
+  align-items: end;
+  margin-bottom: 44px;
+}
+
+/* Rejilla de tarjetas: el ancho mínimo lo fija cada sección */
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min-col, 290px)), 1fr));
+  gap: clamp(16px, 1.6vw, 20px);
+}
+
+/* Botones */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 26px;
+  border-radius: var(--radio);
+  font-weight: 600;
+  font-size: 15px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.boton-primario {
+  background: var(--acento);
+  color: var(--bg);
+}
+
+.boton-primario:hover {
+  background: var(--acento-claro);
+  color: var(--bg);
+}
+
+.boton-secundario {
+  border-color: var(--linea-boton);
+  color: var(--texto);
+  font-weight: 500;
+}
+
+.boton-secundario:hover {
+  border-color: var(--acento);
+  color: var(--texto);
+  background: var(--acento-fondo);
+}
+
+/* Marcadores de contenido pendiente del diseño */
+.marcador {
+  border: 1px dashed var(--linea-punteada);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px;
+  text-align: center;
+}
+
+.marcador-titulo {
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--texto-marcador);
+}
+
+.marcador-nota {
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  color: var(--texto-marcador-tenue);
+  line-height: 1.6;
+  max-width: 32ch;
+}

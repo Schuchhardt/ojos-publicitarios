@@ -1,0 +1,252 @@
+---
+import { TIPOS_DE_PROYECTO } from '../data/contenido';
+import { CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_NUMERO } from '../lib/config';
+---
+
+<dialog
+  class="solicitud"
+  id="solicitud"
+  aria-labelledby="solicitud-titulo"
+  data-whatsapp={TIENE_WHATSAPP ? WHATSAPP_NUMERO : ''}
+  data-email={CONTACTO_EMAIL}
+>
+  <form method="dialog" class="cerrar-form">
+    <button class="cerrar" aria-label="Cerrar">×</button>
+  </form>
+
+  <div class="rotulo">CONVERSEMOS SOBRE TU IDEA</div>
+  <h2 id="solicitud-titulo">Tu proyecto,<br />en pocas palabras.</h2>
+  <p class="bajada">
+    Prepara tu solicitud y la envías por el canal que prefieras. Nada se envía desde esta página.
+  </p>
+
+  <form class="campos" novalidate>
+    <label>
+      Tu nombre
+      <input type="text" name="nombre" placeholder="¿Cómo te llamas?" autocomplete="name" required />
+    </label>
+
+    <label>
+      Empresa o marca
+      <input type="text" name="empresa" placeholder="Nombre de tu negocio" autocomplete="organization" />
+    </label>
+
+    <label>
+      ¿Qué necesitas?
+      <select name="tipo">
+        {TIPOS_DE_PROYECTO.map((tipo) => <option value={tipo}>{tipo}</option>)}
+      </select>
+    </label>
+
+    <label>
+      Cuéntanos tu idea
+      <textarea name="idea" rows="4" placeholder="¿Qué vendes y qué te gustaría lograr?"></textarea>
+    </label>
+
+    <div class="acciones">
+      {
+        TIENE_WHATSAPP && (
+          <button type="button" class="boton boton-primario" data-enviar="whatsapp">
+            Enviar por WhatsApp <span aria-hidden="true">↗</span>
+          </button>
+        )
+      }
+      <button type="button" class="boton boton-secundario" data-enviar="email">
+        Enviar por correo
+      </button>
+    </div>
+
+    <p class="aviso">
+      Se abre WhatsApp o tu correo con el mensaje ya escrito: tú decides si lo envías.
+    </p>
+  </form>
+</dialog>
+
+<style>
+  .solicitud {
+    width: min(520px, calc(100vw - 32px));
+    max-height: min(88vh, 760px);
+    padding: clamp(24px, 4vw, 40px);
+    border: 1px solid var(--acento-borde-suave);
+    border-radius: 4px;
+    background: var(--panel-destacado);
+    color: var(--texto);
+    overflow: auto;
+  }
+
+  .solicitud::backdrop {
+    background: rgba(3, 9, 14, 0.78);
+    backdrop-filter: blur(4px);
+  }
+
+  .cerrar-form {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 4px;
+  }
+
+  .cerrar {
+    background: none;
+    border: none;
+    color: var(--texto-tenue);
+    font-size: 26px;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+  }
+
+  .cerrar:hover {
+    color: var(--acento);
+  }
+
+  .rotulo {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--acento);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(26px, 3.4vw, 34px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+  }
+
+  .bajada {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0 0 28px;
+  }
+
+  .campos {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 13px 14px;
+    background: var(--bg);
+    border: 1px solid var(--linea-media);
+    border-radius: var(--radio);
+    color: var(--texto);
+    font-family: var(--fuente-texto);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 96px;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--texto-debil);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--acento);
+  }
+
+  input[aria-invalid='true'] {
+    border-color: #ff8a7a;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .acciones .boton {
+    flex: 1 1 200px;
+    justify-content: center;
+  }
+
+  .aviso {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--texto-debil);
+    margin: 0;
+  }
+</style>
+
+<script>
+  const dialogo = document.querySelector<HTMLDialogElement>('dialog.solicitud');
+
+  if (dialogo) {
+    const formulario = dialogo.querySelector<HTMLFormElement>('form.campos');
+    const nombre = dialogo.querySelector<HTMLInputElement>('input[name="nombre"]');
+
+    document.querySelectorAll<HTMLElement>('[data-abrir-solicitud]').forEach((boton) => {
+      boton.addEventListener('click', () => {
+        dialogo.showModal();
+        nombre?.focus();
+      });
+    });
+
+    // Clic fuera del contenido = cerrar.
+    dialogo.addEventListener('click', (evento) => {
+      if (evento.target === dialogo) dialogo.close();
+    });
+
+    const texto = () => {
+      const datos = new FormData(formulario!);
+      const valor = (campo: string) => String(datos.get(campo) ?? '').trim();
+      return [
+        `Hola, soy ${valor('nombre')}.`,
+        valor('empresa') && `Empresa o marca: ${valor('empresa')}.`,
+        `Necesito: ${valor('tipo')}.`,
+        valor('idea') && `Mi idea: ${valor('idea')}`,
+      ]
+        .filter(Boolean)
+        .join('\n');
+    };
+
+    dialogo.querySelectorAll<HTMLButtonElement>('[data-enviar]').forEach((boton) => {
+      boton.addEventListener('click', () => {
+        if (!nombre?.value.trim()) {
+          nombre?.setAttribute('aria-invalid', 'true');
+          nombre?.focus();
+          return;
+        }
+        nombre.removeAttribute('aria-invalid');
+
+        const canal = boton.dataset.enviar;
+        const mensaje = texto();
+        window.track?.('solicitud_enviada', { label: canal });
+
+        if (canal === 'whatsapp') {
+          const numero = dialogo.dataset.whatsapp;
+          window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        } else {
+          const asunto = encodeURIComponent('Solicitud desde el sitio web');
+          window.location.href = `mailto:${dialogo.dataset.email}?subject=${asunto}&body=${encodeURIComponent(mensaje)}`;
+        }
+      });
+    });
+  }
+</script>

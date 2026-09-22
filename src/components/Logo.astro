@@ -1,0 +1,78 @@
+---
+interface Props {
+  /** 'header' = 30px, 'footer' = 24px */
+  variante?: 'header' | 'footer';
+}
+
+const { variante = 'header' } = Astro.props;
+---
+
+<div class:list={['logo', variante]}>
+  <div class="ojo" aria-hidden="true"><div class="pupila"></div></div>
+  <div class="palabra">OJOS<span>PUBLICITARIOS</span></div>
+</div>
+
+<style>
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ojo {
+    border-radius: 50%;
+    background: var(--acento);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+
+  .pupila {
+    border-radius: 50%;
+    background: var(--bg);
+  }
+
+  .palabra {
+    font-family: var(--fuente-titulo);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--texto);
+    white-space: nowrap;
+  }
+
+  .palabra span {
+    font-weight: 400;
+    color: var(--texto-tenue);
+  }
+
+  .header .ojo {
+    width: 30px;
+    height: 30px;
+  }
+  .header .pupila {
+    width: 11px;
+    height: 11px;
+  }
+  .header .palabra {
+    font-size: 15px;
+  }
+
+  .footer .ojo {
+    width: 24px;
+    height: 24px;
+  }
+  .footer .pupila {
+    width: 9px;
+    height: 9px;
+  }
+  .footer .palabra {
+    font-size: 13px;
+  }
+
+  @media (max-width: 400px) {
+    .header .palabra span {
+      display: none;
+    }
+  }
+</style>

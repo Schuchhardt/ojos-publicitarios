@@ -1,0 +1,144 @@
+---
+import { EQUIPO } from '../data/contenido';
+---
+
+<section id="equipo" class="equipo seccion-ancha">
+  <div class="contenedor">
+    <div class="encabezado">
+      <div>
+        <div class="rotulo">QUIÉNES RESPONDEN</div>
+        <h2 class="titulo-seccion">Detrás de tu negocio online hay alguien con nombre.</h2>
+      </div>
+      <p class="bajada">
+        No hay tickets ni respuestas genéricas: sabes a quién escribirle y quién revisó tu sitio.
+      </p>
+    </div>
+
+    <div class="rejilla">
+      {
+        EQUIPO.map((persona, i) => (
+          <div class="persona">
+            {persona.foto ? (
+              <img class="retrato" src={persona.foto} alt={persona.nombre} loading="lazy" />
+            ) : (
+              <div class="retrato marcador-foto">
+                <div class="marcador-linea">[ foto equipo {String(i + 1).padStart(2, '0')} ]</div>
+                <div class="marcador-linea tenue">retrato vertical 800×1000</div>
+              </div>
+            )}
+            <div class="nombre">{persona.nombre}</div>
+            <div class="rol">{persona.rol}</div>
+          </div>
+        ))
+      }
+
+      <div class="tarjeta-contacto">
+        <h3>Hablas con nosotros, no con un bot</h3>
+        <p>Escríbenos y te responde una persona del equipo el mismo día hábil.</p>
+        <a href="#contacto" data-track="cta_equipo">Escribir ahora ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .equipo {
+    background: var(--claro-bg);
+    color: var(--claro-texto);
+  }
+
+  .rotulo {
+    color: var(--acento-oscuro);
+  }
+
+  .bajada {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--claro-texto-suave);
+    margin: 0;
+    max-width: 46ch;
+  }
+
+  .rejilla {
+    --min-col: 240px;
+    gap: clamp(16px, 2.4vw, 28px);
+  }
+
+  .retrato {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    margin-bottom: 16px;
+  }
+
+  .marcador-foto {
+    background-image: repeating-linear-gradient(
+      135deg,
+      #e4ebee 0px,
+      #e4ebee 8px,
+      #dae3e7 8px,
+      #dae3e7 16px
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    padding: 18px;
+  }
+
+  .marcador-linea {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    color: var(--claro-marcador);
+  }
+
+  .marcador-linea.tenue {
+    font-size: 11px;
+    color: var(--claro-marcador-tenue);
+  }
+
+  .nombre {
+    font-family: var(--fuente-titulo);
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .rol {
+    font-size: 14px;
+    color: var(--claro-texto-suave);
+    margin-top: 4px;
+  }
+
+  .tarjeta-contacto {
+    background: var(--claro-superficie);
+    border: 1px solid var(--claro-linea);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .tarjeta-contacto h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .tarjeta-contacto p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--claro-texto-suave);
+    margin: 0;
+  }
+
+  .tarjeta-contacto a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--acento-oscuro);
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+import { AUTOMATIZACIONES } from '../data/contenido';
+---
+
+<section id="automatizacion" class="automatizacion seccion-ancha">
+  <div class="contenedor">
+    <div class="encabezado">
+      <div>
+        <div class="rotulo">LO QUE NO TIENES QUE APRENDER</div>
+        <h2 class="titulo-seccion">Y que siga funcionando<br />cuando tú no estás.</h2>
+      </div>
+      <p class="bajada">
+        No necesitas saber cómo se hace. Dejamos tu negocio online respondiendo, registrando y
+        vendiendo solo, y nosotros quedamos a cargo de que funcione bien.
+      </p>
+    </div>
+
+    <div class="rejilla">
+      {
+        AUTOMATIZACIONES.map((item) => (
+          <article class="tarjeta">
+            <div class="numero">{item.numero}</div>
+            <h3>{item.titulo}</h3>
+            <p>{item.descripcion}</p>
+          </article>
+        ))
+      }
+
+      <article class="tarjeta oscura">
+        <h3>Delegas y listo</h3>
+        <p>
+          Lo dejamos todo armado sobre tus propias cuentas y nos encargamos de mantenerlo. Tú
+          vuelves a tu negocio.
+        </p>
+        <a href="#contacto" data-track="cta_automatizacion">Quiero delegarlo ↗</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .automatizacion {
+    background: var(--claro-bg);
+    color: var(--claro-texto);
+  }
+
+  .rotulo {
+    color: var(--acento-oscuro);
+  }
+
+  .encabezado {
+    margin-bottom: 48px;
+  }
+
+  .titulo-seccion {
+    font-size: clamp(26px, 3vw, 42px);
+    line-height: 1.12;
+  }
+
+  .bajada {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--claro-texto-suave);
+    margin: 0;
+    max-width: 50ch;
+    text-wrap: pretty;
+  }
+
+  .rejilla {
+    --min-col: 260px;
+  }
+
+  .tarjeta {
+    background: var(--claro-superficie);
+    border: 1px solid var(--claro-linea);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .numero {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--acento-oscuro);
+  }
+
+  h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--claro-texto-suave);
+    margin: 0;
+  }
+
+  .oscura {
+    background: var(--claro-texto);
+    border-color: var(--claro-texto);
+    color: var(--texto);
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .oscura p {
+    color: var(--texto-apagado);
+  }
+
+  .oscura a {
+    font-size: 14px;
+    font-weight: 600;
+  }
+</style>

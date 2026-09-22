@@ -1,0 +1,135 @@
+---
+import { NOS_ENCARGAMOS, NO_LO_DEJA_UNA_MAQUINA } from '../data/contenido';
+---
+
+<section id="criterio" class="seccion">
+  <div class="intro">
+    <div class="rotulo">CÓMO TRABAJAMOS</div>
+    <h2 class="titulo-seccion">
+      Tecnología con criterio: nada sale sin que una persona lo revise.
+    </h2>
+    <p>
+      Usamos herramientas para trabajar más rápido, no para reemplazar el criterio. Te decimos
+      qué funciona solo, qué revisamos nosotros y quién responde por cada entrega.
+    </p>
+  </div>
+
+  <div class="columnas">
+    <div class="columna automatico">
+      <div class="titulo">DE ESTO NOS ENCARGAMOS</div>
+      <ul>
+        {
+          NOS_ENCARGAMOS.map((item) => (
+            <li>
+              <span class="marca" aria-hidden="true">
+                ✓
+              </span>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="columna humano">
+      <div class="titulo">ESTO NO LO DEJA UNA MÁQUINA</div>
+      <ul>
+        {
+          NO_LO_DEJA_UNA_MAQUINA.map((item) => (
+            <li>
+              <span class="marca" aria-hidden="true">
+                —
+              </span>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro {
+    max-width: 720px;
+    margin-bottom: 48px;
+  }
+
+  .titulo-seccion {
+    font-size: clamp(26px, 3vw, 42px);
+    line-height: 1.12;
+    margin-bottom: 20px;
+  }
+
+  .intro p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--texto-apagado);
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .columnas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  .columna {
+    padding: clamp(24px, 2.6vw, 36px);
+  }
+
+  .automatico {
+    border: 1px solid rgba(0, 200, 230, 0.35);
+    background: var(--panel);
+  }
+
+  .humano {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--bg-alt);
+  }
+
+  .titulo {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    margin-bottom: 22px;
+  }
+
+  .automatico .titulo {
+    color: var(--acento);
+  }
+
+  .humano .titulo {
+    color: var(--texto-tenue);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  li {
+    display: flex;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--texto-suave);
+  }
+
+  .marca {
+    flex: none;
+  }
+
+  .automatico .marca {
+    color: var(--acento);
+  }
+
+  .humano .marca {
+    color: var(--texto-tenue);
+  }
+</style>

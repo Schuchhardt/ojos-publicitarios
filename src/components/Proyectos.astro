@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import { PROYECTOS, PROYECTOS_PENDIENTES } from '../data/contenido';
+
+// Las capturas viven en src/assets para que Astro las optimice; el dato solo
+// guarda el nombre del archivo.
+const imagenes = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/*.{png,jpg,jpeg,webp,avif}'
+);
+
+const proyectos = await Promise.all(
+  PROYECTOS.map(async (proyecto) => {
+    const cargar = proyecto.imagen ? imagenes[`../assets/${proyecto.imagen}`] : undefined;
+    return { ...proyecto, imagen: cargar ? (await cargar()).default : undefined };
+  })
+);
+---
+
+<section id="proyectos" class="seccion">
+  <div class="encabezado">
+    <h2 class="titulo-seccion">Proyectos entregados.</h2>
+    <p class="texto-apoyo">Negocios reales funcionando hoy. Puedes entrar y probarlos.</p>
+  </div>
+
+  <div class="rejilla">
+    {
+      proyectos.map((proyecto) => (
+        <article class="tarjeta">
+          {proyecto.imagen && (
+            <Image
+              src={proyecto.imagen}
+              alt={`Sitio ${proyecto.nombre}`}
+              widths={[420, 760, 1126]}
+              sizes="(max-width: 900px) 100vw, 45vw"
+              loading="lazy"
+            />
+          )}
+          <div class="cuerpo">
+            <div class="rotulo-proyecto">{proyecto.rotulo}</div>
+            <h3>{proyecto.nombre}</h3>
+            <p>{proyecto.descripcion}</p>
+            <a
+              href={proyecto.url}
+              target="_blank"
+              rel="noopener"
+              data-track="proyecto"
+              data-track-label={proyecto.nombre}
+            >
+              {proyecto.url.replace('https://', '')} ↗
+            </a>
+          </div>
+        </article>
+      ))
+    }
+
+    {
+      Array.from({ length: PROYECTOS_PENDIENTES }).map((_, i) => (
+        <div class="marcador pendiente">
+          <div class="marcador-titulo">
+            [ {['segundo', 'tercer', 'cuarto'][i] ?? 'siguiente'} proyecto ]
+          </div>
+          <div class="marcador-nota">agregar nombre, link, captura y una línea de resultado</div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .rejilla {
+    --min-col: 340px;
+    gap: clamp(20px, 2.6vw, 32px);
+  }
+
+  .tarjeta {
+    border: 1px solid var(--linea-media);
+    background: var(--panel);
+  }
+
+  .tarjeta :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .cuerpo {
+    padding: clamp(22px, 2.4vw, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rotulo-proyecto {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--acento);
+  }
+
+  h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0;
+  }
+
+  .cuerpo a {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .pendiente {
+    min-height: 280px;
+  }
+</style>

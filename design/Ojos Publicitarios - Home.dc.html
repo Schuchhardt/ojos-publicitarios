@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#06111a; font-family:'Archivo',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#00c8e6; text-decoration:none; }
+  a:hover { color:#7ce7f7; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+
+<div style="width:100%; background:#06111a; color:#e8f1f4; overflow-x:hidden;">
+
+  <header style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:16px clamp(16px,4vw,56px); background:rgba(6,17,26,0.88); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:30px; height:30px; border-radius:50%; background:#00c8e6; display:flex; align-items:center; justify-content:center; flex:none;">
+        <div style="width:11px; height:11px; border-radius:50%; background:#06111a;"></div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.06em;">OJOS<span style="font-weight:400; color:#8fa7b5;">PUBLICITARIOS</span></div>
+    </div>
+    <nav style="display:flex; align-items:center; gap:clamp(14px,2.4vw,32px); font-size:14px; color:#b8c9d2;">
+      <a href="#servicios" style="color:#b8c9d2;">Diseño web</a>
+      <a href="#automatizacion" style="color:#b8c9d2;">Qué incluye</a>
+      <a href="#criterio" style="color:#b8c9d2;">Cómo trabajamos</a>
+      <a href="#equipo" style="color:#b8c9d2;">Equipo</a>
+    </nav>
+    <a href="#contacto" style="display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:2px; background:#00c8e6; color:#06111a; font-weight:600; font-size:14px; flex:none;">Hablemos <span style="font-size:13px;">↗</span></a>
+  </header>
+
+  <section style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:clamp(32px,5vw,64px); align-items:center; padding:clamp(48px,7vw,104px) clamp(16px,4vw,56px) clamp(40px,5vw,72px); max-width:1440px; margin:0 auto;">
+    <div style="min-width:0;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
+        <div style="width:28px; height:2px; background:#00c8e6;"></div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#00c8e6;">ESTUDIO CREATIVO &amp; DIGITAL</div>
+      </div>
+      <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(34px,4.6vw,60px); line-height:1.06; letter-spacing:-0.02em; margin:0 0 24px; text-wrap:pretty;">Tu negocio en su<br>mejor versión <span style="color:#00c8e6;">digital.</span></h1>
+      <p style="font-size:clamp(16px,1.3vw,19px); line-height:1.6; color:#a9bec9; margin:0 0 32px; max-width:52ch; text-wrap:pretty;">Creamos páginas web que se ven bien, comunican mejor y facilitan vender. Y nos encargamos de que sigan funcionando, sin que tengas que aprender nada nuevo.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:24px;">
+        <a href="#contacto" style="display:inline-flex; align-items:center; gap:10px; padding:16px 26px; background:#00c8e6; color:#06111a; font-weight:600; font-size:15px; border-radius:2px;">Quiero mi nueva web <span>↗</span></a>
+        <a href="#automatizacion" style="display:inline-flex; align-items:center; gap:10px; padding:16px 26px; border:1px solid rgba(255,255,255,0.22); color:#e8f1f4; font-weight:500; font-size:15px; border-radius:2px;">Ver qué incluye</a>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6c8391; letter-spacing:0.02em;">Diseño con intención. Sin suscripciones mensuales: todo queda tuyo.</div>
+    </div>
+
+    <div style="min-width:0;">
+      <div style="border:1px solid rgba(255,255,255,0.12); border-radius:4px; overflow:hidden; background:#0b1a24;">
+        <div style="display:flex; align-items:center; gap:7px; padding:11px 14px; border-bottom:1px solid rgba(255,255,255,0.09);">
+          <div style="width:9px; height:9px; border-radius:50%; background:#2c4250;"></div>
+          <div style="width:9px; height:9px; border-radius:50%; background:#2c4250;"></div>
+          <div style="width:9px; height:9px; border-radius:50%; background:#2c4250;"></div>
+          <div style="margin-left:10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#6c8391;">chilecamiones.cl</div>
+        </div>
+        <img src="assets/chilecamiones.png" alt="Sitio chilecamiones.cl" style="display:block; width:100%; aspect-ratio:16/10; object-fit:cover; object-position:top center;">
+      </div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:16px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#6c8391;">
+        <span>PROYECTO ENTREGADO</span>
+        <span>CATÁLOGO, BUSCADOR Y CONSULTAS QUE LLEGAN SOLAS</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); border-top:1px solid rgba(255,255,255,0.08); border-bottom:1px solid rgba(255,255,255,0.08); background:#081620;">
+    <div style="padding:28px clamp(16px,3vw,40px); border-right:1px solid rgba(255,255,255,0.06);">
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:600; color:#00c8e6; margin-bottom:6px;">0 %</div>
+      <div style="font-size:14px; color:#a9bec9; line-height:1.5;">De lo que publicamos sale sin que una persona lo revise</div>
+    </div>
+    <div style="padding:28px clamp(16px,3vw,40px); border-right:1px solid rgba(255,255,255,0.06);">
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:600; color:#e8f1f4; margin-bottom:6px;">$0</div>
+      <div style="font-size:14px; color:#a9bec9; line-height:1.5;">En suscripciones mensuales: tu sitio y tus herramientas son tuyos</div>
+    </div>
+    <div style="padding:28px clamp(16px,3vw,40px); border-right:1px solid rgba(255,255,255,0.06);">
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:600; color:#e8f1f4; margin-bottom:6px;">1</div>
+      <div style="font-size:14px; color:#a9bec9; line-height:1.5;">Persona a cargo de tu proyecto, siempre la misma</div>
+    </div>
+    <div style="padding:28px clamp(16px,3vw,40px);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#00c8e6; letter-spacing:0.14em; margin-bottom:8px;">DATO POR COMPLETAR</div>
+      <div style="font-size:14px; color:#6c8391; line-height:1.5;">Agregar una métrica real (ej. en cuánto tiempo respondemos una consulta)</div>
+    </div>
+  </section>
+
+  <section id="servicios" style="padding:clamp(56px,7vw,104px) clamp(16px,4vw,56px); max-width:1440px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:32px; align-items:end; margin-bottom:44px;">
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(26px,3vw,40px); font-weight:600; line-height:1.14; letter-spacing:-0.015em; margin:0; text-wrap:pretty;">Una web a la altura de tu negocio.</h2>
+      <p style="font-size:16px; line-height:1.65; color:#a9bec9; margin:0; max-width:48ch; text-wrap:pretty;">Si tu negocio todavía no tiene sitio ni redes, empezamos por ahí. No todos necesitan lo mismo: encontramos el formato que mejor conecta tu marca con su próximo cliente.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr)); gap:clamp(16px,1.6vw,20px);">
+      <div style="background:#0b1a24; border:1px solid rgba(255,255,255,0.12); padding:clamp(24px,2.6vw,36px); display:flex; flex-direction:column; gap:18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6c8391;">01</span>
+          <span style="color:#00c8e6;">↗</span>
+        </div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:600; margin:0;">Landing page</h3>
+        <div style="font-size:14px; font-weight:600; color:#e8f1f4;">Un objetivo. Toda la atención.</div>
+        <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Una página enfocada en presentar tu oferta y convertir el interés en consultas.</p>
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; font-size:14px; color:#b8c9d2;">
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Ideal para campañas y servicios</li>
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Mensaje claro y llamados a la acción</li>
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Contacto simple y directo</li>
+        </ul>
+        <a href="#contacto" style="margin-top:auto; padding-top:18px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; font-size:14px; font-weight:600; color:#e8f1f4;">Quiero una landing <span style="color:#00c8e6;">↗</span></a>
+      </div>
+
+      <div style="background:#0d222d; border:1px solid rgba(0,200,230,0.45); padding:clamp(24px,2.6vw,36px); display:flex; flex-direction:column; gap:18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6c8391;">02</span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.12em; color:#00c8e6; border:1px solid rgba(0,200,230,0.5); border-radius:999px; padding:5px 11px;">TU MARCA, EN GRANDE</span>
+        </div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:600; margin:0;">Sitio corporativo</h3>
+        <div style="font-size:14px; font-weight:600; color:#e8f1f4;">Confianza desde el primer clic.</div>
+        <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Un sitio que presenta tu empresa, explica lo que haces y da espacio a tu propuesta de valor.</p>
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; font-size:14px; color:#b8c9d2;">
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Servicios organizados con claridad</li>
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Identidad visual consistente</li>
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Estructura que acompaña tu crecimiento</li>
+        </ul>
+        <a href="#contacto" style="margin-top:auto; padding-top:18px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; font-size:14px; font-weight:600; color:#e8f1f4;">Quiero mi sitio web <span style="color:#00c8e6;">↗</span></a>
+      </div>
+
+      <div style="background:#0b1a24; border:1px solid rgba(255,255,255,0.12); padding:clamp(24px,2.6vw,36px); display:flex; flex-direction:column; gap:18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6c8391;">03</span>
+          <span style="color:#00c8e6; font-size:20px;">+</span>
+        </div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:600; margin:0;">Ecommerce</h3>
+        <div style="font-size:14px; font-weight:600; color:#e8f1f4;">Tu vitrina, abierta al mundo.</div>
+        <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Una tienda online pensada para mostrar tus productos y hacer más fácil la compra.</p>
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; font-size:14px; color:#b8c9d2;">
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Catálogo fácil de explorar</li>
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Carrito y proceso de compra claro</li>
+          <li style="display:flex; gap:10px;"><span style="color:#00c8e6;">✓</span> Pagos y envíos según tu operación</li>
+        </ul>
+        <a href="#contacto" style="margin-top:auto; padding-top:18px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; font-size:14px; font-weight:600; color:#e8f1f4;">Quiero mi tienda online <span style="color:#00c8e6;">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="automatizacion" style="background:#f4f7f8; color:#0a1116; padding:clamp(56px,7vw,104px) clamp(16px,4vw,56px);">
+    <div style="max-width:1440px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:32px; align-items:end; margin-bottom:48px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#0d7f93; margin-bottom:18px;">LO QUE NO TIENES QUE APRENDER</div>
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(26px,3vw,42px); font-weight:600; line-height:1.12; letter-spacing:-0.015em; margin:0; text-wrap:pretty;">Y que siga funcionando<br>cuando tú no estás.</h2>
+        </div>
+        <p style="font-size:16px; line-height:1.65; color:#4a5f6c; margin:0; max-width:50ch; text-wrap:pretty;">No necesitas saber cómo se hace. Dejamos tu negocio online respondiendo, registrando y vendiendo solo, y nosotros quedamos a cargo de que funcione bien.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:clamp(16px,1.6vw,20px);">
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">01</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Atención por WhatsApp</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Tus clientes preguntan y reciben respuesta al instante. Cuando hay que decidir algo, la conversación llega a ti.</p>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">02</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Ninguna consulta se pierde</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Quien te escriba recibe respuesta en segundos, a cualquier hora. El seguimiento lo hace una persona del equipo.</p>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">03</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Tus clientes, ordenados</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Cada consulta queda guardada en un solo lugar, con su estado, para que veas de dónde vienen tus ventas.</p>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">04</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Agendamiento de citas</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Tus clientes reservan hora según tu disponibilidad real y reciben el recordatorio antes de llegar.</p>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">05</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Tu tienda al día</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Confirmaciones, estados de envío y avisos de stock salen solos, sin que nadie copie datos a mano.</p>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">06</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Clientes que vuelven</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Correos de seguimiento que mantienen la conversación viva, escritos con tu tono y revisados antes de salir.</p>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; gap:10px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#0d7f93;">07</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Contenido siempre listo</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Piezas y textos para tus redes, producidos rápido y aprobados por una persona antes de publicarse.</p>
+        </div>
+        <div style="background:#0a1116; color:#e8f1f4; padding:28px; display:flex; flex-direction:column; gap:14px; justify-content:center;">
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Delegas y listo</h3>
+          <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Lo dejamos todo armado sobre tus propias cuentas y nos encargamos de mantenerlo. Tú vuelves a tu negocio.</p>
+          <a href="#contacto" style="font-size:14px; font-weight:600;">Quiero delegarlo ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ mostrarPoliticaIA }}" hint-placeholder-val="{{ true }}">
+  <section id="criterio" style="padding:clamp(56px,7vw,104px) clamp(16px,4vw,56px); max-width:1440px; margin:0 auto;">
+    <div style="max-width:720px; margin-bottom:48px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#00c8e6; margin-bottom:18px;">CÓMO TRABAJAMOS</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(26px,3vw,42px); font-weight:600; line-height:1.12; letter-spacing:-0.015em; margin:0 0 20px; text-wrap:pretty;">Tecnología con criterio: nada sale sin que una persona lo revise.</h2>
+      <p style="font-size:16px; line-height:1.65; color:#a9bec9; margin:0; text-wrap:pretty;">Usamos herramientas para trabajar más rápido, no para reemplazar el criterio. Te decimos qué funciona solo, qué revisamos nosotros y quién responde por cada entrega.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:clamp(20px,3vw,40px);">
+      <div style="border:1px solid rgba(0,200,230,0.35); background:#0b1a24; padding:clamp(24px,2.6vw,36px);">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#00c8e6; margin-bottom:22px;">DE ESTO NOS ENCARGAMOS</div>
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px;">
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#00c8e6; flex:none;">✓</span> Que tu sitio esté siempre arriba y actualizado</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#00c8e6; flex:none;">✓</span> Respuestas inmediatas, confirmaciones y recordatorios</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#00c8e6; flex:none;">✓</span> El registro y orden de cada consulta que llega</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#00c8e6; flex:none;">✓</span> La producción de contenido para tus redes</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#00c8e6; flex:none;">✓</span> Los reportes que antes armabas a mano</li>
+        </ul>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,0.14); background:#081620; padding:clamp(24px,2.6vw,36px);">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#8fa7b5; margin-bottom:22px;">ESTO NO LO DEJA UNA MÁQUINA</div>
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px;">
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#8fa7b5; flex:none;">—</span> Un reclamo o una conversación delicada</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#8fa7b5; flex:none;">—</span> Precios, descuentos y compromisos con tus clientes</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#8fa7b5; flex:none;">—</span> Publicar algo sin tu aprobación</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#8fa7b5; flex:none;">—</span> El diseño y la estrategia de tu marca</li>
+          <li style="display:flex; gap:12px; font-size:15px; line-height:1.55; color:#d5e3e9;"><span style="color:#8fa7b5; flex:none;">—</span> Entregar los datos de tu negocio a terceros</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <section style="background:#081620; padding:clamp(56px,7vw,96px) clamp(16px,4vw,56px); border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="max-width:1440px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:32px; align-items:end; margin-bottom:44px;">
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(24px,2.6vw,36px); font-weight:600; line-height:1.14; margin:0;">Un proceso cercano, con decisiones claras.</h2>
+        <p style="font-size:16px; line-height:1.65; color:#a9bec9; margin:0; max-width:46ch;">Cuatro pasos, siempre con la misma persona a cargo de tu proyecto.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:clamp(20px,2.6vw,36px);">
+        <div style="padding-top:22px; border-top:1px solid rgba(255,255,255,0.16);">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#00c8e6; margin-bottom:14px;">01 — CONVERSAMOS</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0 0 10px;">Entendemos tu negocio.</h3>
+          <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Definimos tus objetivos, tu público y lo que necesitas comunicar.</p>
+        </div>
+        <div style="padding-top:22px; border-top:1px solid rgba(255,255,255,0.16);">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#00c8e6; margin-bottom:14px;">02 — DISEÑAMOS</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0 0 10px;">Le damos forma a tu idea.</h3>
+          <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Organizamos el contenido y creamos una propuesta visual para revisar contigo.</p>
+        </div>
+        <div style="padding-top:22px; border-top:1px solid rgba(255,255,255,0.16);">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#00c8e6; margin-bottom:14px;">03 — NOS ENCARGAMOS</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0 0 10px;">Lo dejamos funcionando.</h3>
+          <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Conectamos lo que tiene que responder solo y dejamos por escrito en qué momento entra una persona.</p>
+        </div>
+        <div style="padding-top:22px; border-top:1px solid rgba(255,255,255,0.16);">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#00c8e6; margin-bottom:14px;">04 — LANZAMOS</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0 0 10px;">Preparamos el siguiente paso.</h3>
+          <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Publicamos, te enseñamos a usarlo y acompañamos las primeras semanas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ mostrarEquipo }}" hint-placeholder-val="{{ true }}">
+  <section id="equipo" style="background:#f4f7f8; color:#0a1116; padding:clamp(56px,7vw,104px) clamp(16px,4vw,56px);">
+    <div style="max-width:1440px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:32px; align-items:end; margin-bottom:44px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#0d7f93; margin-bottom:18px;">QUIÉNES RESPONDEN</div>
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(26px,3vw,40px); font-weight:600; line-height:1.12; letter-spacing:-0.015em; margin:0; text-wrap:pretty;">Detrás de tu negocio online hay alguien con nombre.</h2>
+        </div>
+        <p style="font-size:16px; line-height:1.65; color:#4a5f6c; margin:0; max-width:46ch;">No hay tickets ni respuestas genéricas: sabes a quién escribirle y quién revisó tu sitio.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:clamp(16px,2.4vw,28px);">
+        <div>
+          <div style="aspect-ratio:4/5; background-image:repeating-linear-gradient(135deg,#e4ebee 0px,#e4ebee 8px,#dae3e7 8px,#dae3e7 16px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:18px; margin-bottom:16px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6b8492;">[ foto equipo 01 ]</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8ba0ac;">retrato vertical 800×1000</div>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:600;">Nombre Apellido</div>
+          <div style="font-size:14px; color:#4a5f6c; margin-top:4px;">Rol — qué revisa en tu proyecto</div>
+        </div>
+        <div>
+          <div style="aspect-ratio:4/5; background-image:repeating-linear-gradient(135deg,#e4ebee 0px,#e4ebee 8px,#dae3e7 8px,#dae3e7 16px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:18px; margin-bottom:16px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6b8492;">[ foto equipo 02 ]</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8ba0ac;">retrato vertical 800×1000</div>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:600;">Nombre Apellido</div>
+          <div style="font-size:14px; color:#4a5f6c; margin-top:4px;">Rol — qué revisa en tu proyecto</div>
+        </div>
+        <div>
+          <div style="aspect-ratio:4/5; background-image:repeating-linear-gradient(135deg,#e4ebee 0px,#e4ebee 8px,#dae3e7 8px,#dae3e7 16px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; padding:18px; margin-bottom:16px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#6b8492;">[ foto equipo 03 ]</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8ba0ac;">retrato vertical 800×1000</div>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:600;">Nombre Apellido</div>
+          <div style="font-size:14px; color:#4a5f6c; margin-top:4px;">Rol — qué revisa en tu proyecto</div>
+        </div>
+        <div style="background:#ffffff; border:1px solid #d8e2e6; padding:28px; display:flex; flex-direction:column; justify-content:center; gap:14px;">
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin:0;">Hablas con nosotros, no con un bot</h3>
+          <p style="font-size:15px; line-height:1.6; color:#4a5f6c; margin:0;">Escríbenos y te responde una persona del equipo el mismo día hábil.</p>
+          <a href="#contacto" style="font-size:14px; font-weight:600; color:#0d7f93;">Escribir ahora ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <section id="proyectos" style="padding:clamp(56px,7vw,104px) clamp(16px,4vw,56px); max-width:1440px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:32px; align-items:end; margin-bottom:44px;">
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(26px,3vw,40px); font-weight:600; line-height:1.12; margin:0;">Proyectos entregados.</h2>
+      <p style="font-size:16px; line-height:1.65; color:#a9bec9; margin:0; max-width:46ch;">Negocios reales funcionando hoy. Puedes entrar y probarlos.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr)); gap:clamp(20px,2.6vw,32px);">
+      <div style="border:1px solid rgba(255,255,255,0.12); background:#0b1a24;">
+        <img src="assets/chilecamiones.png" alt="Sitio chilecamiones.cl" style="display:block; width:100%; aspect-ratio:16/10; object-fit:cover; object-position:top center;">
+        <div style="padding:clamp(22px,2.4vw,32px); display:flex; flex-direction:column; gap:12px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#00c8e6;">MARKETPLACE · ENTREGADO</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:600; margin:0;">Chilecamiones</h3>
+          <p style="font-size:15px; line-height:1.6; color:#a9bec9; margin:0;">Plataforma para encontrar el camión correcto: catálogo con buscador por marca y año, fichas de vehículo y consultas que llegan ordenadas al vendedor.</p>
+          <a href="https://chilecamiones.cl" target="_blank" rel="noopener" style="font-size:14px; font-weight:600; margin-top:4px;">chilecamiones.cl ↗</a>
+        </div>
+      </div>
+
+      <div style="border:1px dashed rgba(255,255,255,0.2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:40px; text-align:center; min-height:280px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#7e97a5;">[ segundo proyecto ]</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#546b79; max-width:32ch; line-height:1.6;">agregar nombre, link, captura y una línea de resultado</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#081620; border-top:1px solid rgba(255,255,255,0.08); padding:clamp(48px,6vw,88px) clamp(16px,4vw,56px);">
+    <div style="max-width:1440px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:clamp(20px,2.6vw,32px);">
+      <div style="background:#0b1a24; border:1px solid rgba(255,255,255,0.1); padding:clamp(24px,2.6vw,36px); display:flex; flex-direction:column; gap:20px;">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:clamp(18px,1.6vw,21px); line-height:1.5; color:#e8f1f4; text-wrap:pretty;">“Testimonio del cliente: qué problema tenía antes y qué cambió después.”</div>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:auto;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#16303d; flex:none;"></div>
+          <div>
+            <div style="font-size:14px; font-weight:600;">Nombre del cliente</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#6c8391;">Cargo, empresa</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#0b1a24; border:1px solid rgba(255,255,255,0.1); padding:clamp(24px,2.6vw,36px); display:flex; flex-direction:column; gap:20px;">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:clamp(18px,1.6vw,21px); line-height:1.5; color:#e8f1f4; text-wrap:pretty;">“Testimonio sobre la atención: con quién habló, cómo respondieron, qué tan claro fue el proceso.”</div>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:auto;">
+          <div style="width:40px; height:40px; border-radius:50%; background:#16303d; flex:none;"></div>
+          <div>
+            <div style="font-size:14px; font-weight:600;">Nombre del cliente</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#6c8391;">Cargo, empresa</div>
+          </div>
+        </div>
+      </div>
+      <div style="border:1px dashed rgba(255,255,255,0.2); padding:clamp(24px,2.6vw,36px); display:flex; flex-direction:column; justify-content:center; gap:10px; text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#7e97a5;">[ tercer testimonio ]</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#546b79; line-height:1.6;">pedir 2 líneas + nombre y cargo</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" style="padding:clamp(56px,7vw,104px) clamp(16px,4vw,56px); max-width:1440px; margin:0 auto;">
+    <div style="background:#0d222d; border:1px solid rgba(0,200,230,0.3); padding:clamp(28px,4vw,64px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:clamp(24px,3vw,48px); align-items:center;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#00c8e6; margin-bottom:20px;">TU PRÓXIMO PROYECTO EMPIEZA AQUÍ</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(28px,3.4vw,46px); font-weight:600; line-height:1.08; letter-spacing:-0.02em; margin:0 0 18px; text-wrap:pretty;">Que tu próxima visita<br>sea tu próximo <span style="color:#00c8e6;">cliente.</span></h2>
+        <p style="font-size:16px; line-height:1.65; color:#a9bec9; margin:0;">Cuéntanos qué necesitas. Te respondemos con un plan concreto: qué incluye, de qué nos encargamos nosotros y cuánto cuesta.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <a href="#contacto" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 26px; background:#00c8e6; color:#06111a; font-weight:600; font-size:16px; border-radius:2px;">Preparar mi solicitud <span>↗</span></a>
+        <sc-if value="{{ mostrarWhatsapp }}" hint-placeholder-val="{{ true }}">
+        <a href="#contacto" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 26px; border:1px solid rgba(255,255,255,0.22); color:#e8f1f4; font-weight:500; font-size:16px; border-radius:2px;">Escribir por WhatsApp <span style="color:#00c8e6;">↗</span></a>
+        </sc-if>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#6c8391; line-height:1.7; margin-top:6px;">Responde una persona del equipo, el mismo día hábil.</div>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:12px;">
+          <a href="https://wa.me/56900000000" target="_blank" rel="noopener" title="WhatsApp" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/whatsapp/8fa7b5" alt="WhatsApp" style="width:16px; height:16px; display:block;"></a>
+          <a href="https://instagram.com/" target="_blank" rel="noopener" title="Instagram" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/instagram/8fa7b5" alt="Instagram" style="width:16px; height:16px; display:block;"></a>
+          <a href="https://tiktok.com/" target="_blank" rel="noopener" title="TikTok" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/tiktok/8fa7b5" alt="TikTok" style="width:16px; height:16px; display:block;"></a>
+          <a href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/facebook/8fa7b5" alt="Facebook" style="width:16px; height:16px; display:block;"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid rgba(255,255,255,0.08); padding:32px clamp(16px,4vw,56px); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:24px; height:24px; border-radius:50%; background:#00c8e6; display:flex; align-items:center; justify-content:center;">
+        <div style="width:9px; height:9px; border-radius:50%; background:#06111a;"></div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; letter-spacing:0.06em;">OJOS<span style="font-weight:400; color:#8fa7b5;">PUBLICITARIOS</span></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://wa.me/56900000000" target="_blank" rel="noopener" title="WhatsApp" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/whatsapp/8fa7b5" alt="WhatsApp" style="width:16px; height:16px; display:block;"></a>
+      <a href="https://instagram.com/" target="_blank" rel="noopener" title="Instagram" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/instagram/8fa7b5" alt="Instagram" style="width:16px; height:16px; display:block;"></a>
+      <a href="https://tiktok.com/" target="_blank" rel="noopener" title="TikTok" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/tiktok/8fa7b5" alt="TikTok" style="width:16px; height:16px; display:block;"></a>
+      <a href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border:1px solid rgba(255,255,255,0.16); border-radius:50%;" style-hover="border-color:#00c8e6; background:rgba(0,200,230,0.1);"><img src="https://cdn.simpleicons.org/facebook/8fa7b5" alt="Facebook" style="width:16px; height:16px; display:block;"></a>
+    </div>
+    <div style="font-size:13px; color:#8fa7b5;">Diseño con visión. Comunicación con propósito.</div>
+    <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#6c8391;">© 2026 OJOS PUBLICITARIOS</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mostrarPoliticaIA&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Secciones&quot;},&quot;mostrarEquipo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Secciones&quot;},&quot;mostrarWhatsapp&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      mostrarPoliticaIA: this.props.mostrarPoliticaIA ?? true,
+      mostrarEquipo: this.props.mostrarEquipo ?? true,
+      mostrarWhatsapp: this.props.mostrarWhatsapp ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

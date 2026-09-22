@@ -1,0 +1,73 @@
+---
+import { PROCESO } from '../data/contenido';
+---
+
+<section class="proceso">
+  <div class="contenedor">
+    <div class="encabezado">
+      <h2 class="titulo-seccion">Un proceso cercano, con decisiones claras.</h2>
+      <p class="texto-apoyo">Cuatro pasos, siempre con la misma persona a cargo de tu proyecto.</p>
+    </div>
+
+    <div class="pasos">
+      {
+        PROCESO.map((paso) => (
+          <div class="paso">
+            <div class="rotulo-paso">{paso.rotulo}</div>
+            <h3>{paso.titulo}</h3>
+            <p>{paso.descripcion}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .proceso {
+    background: var(--bg-alt);
+    padding: clamp(56px, 7vw, 96px) var(--pad-x);
+    border-top: 1px solid var(--linea);
+  }
+
+  .titulo-seccion {
+    font-size: clamp(24px, 2.6vw, 36px);
+  }
+
+  .texto-apoyo {
+    max-width: 46ch;
+  }
+
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: clamp(20px, 2.6vw, 36px);
+  }
+
+  .paso {
+    padding-top: 22px;
+    border-top: 1px solid var(--linea-fuerte);
+  }
+
+  .rotulo-paso {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--acento);
+    margin-bottom: 14px;
+  }
+
+  h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0;
+  }
+</style>

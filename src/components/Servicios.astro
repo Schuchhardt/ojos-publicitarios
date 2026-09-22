@@ -1,0 +1,160 @@
+---
+import { SERVICIOS } from '../data/contenido';
+---
+
+<section id="servicios" class="seccion">
+  <div class="encabezado">
+    <h2 class="titulo-seccion">Una web a la altura de tu negocio.</h2>
+    <p class="texto-apoyo">
+      Si tu negocio todavía no tiene sitio ni redes, empezamos por ahí. No todos necesitan lo
+      mismo: encontramos el formato que mejor conecta tu marca con su próximo cliente.
+    </p>
+  </div>
+
+  <div class="rejilla">
+    {
+      SERVICIOS.map((servicio) => (
+        <article class:list={['tarjeta', { destacada: servicio.destacado }]}>
+          <div class="fila">
+            <span class="numero">{servicio.numero}</span>
+            {servicio.destacado && servicio.etiqueta ? (
+              <span class="insignia">{servicio.etiqueta}</span>
+            ) : (
+              <span class="simbolo" aria-hidden="true">
+                {servicio.simbolo ?? '↗'}
+              </span>
+            )}
+          </div>
+
+          <h3>{servicio.titulo}</h3>
+          <div class="bajada">{servicio.bajada}</div>
+          <p>{servicio.descripcion}</p>
+
+          <ul>
+            {servicio.puntos.map((punto) => (
+              <li>
+                <span aria-hidden="true">✓</span> {punto}
+              </li>
+            ))}
+          </ul>
+
+          <a href="#contacto" data-track="cta_servicio" data-track-label={servicio.titulo}>
+            {servicio.cta} <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .rejilla {
+    --min-col: 290px;
+  }
+
+  .tarjeta {
+    background: var(--panel);
+    border: 1px solid var(--linea-media);
+    padding: clamp(24px, 2.6vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .tarjeta.destacada {
+    background: var(--panel-destacado);
+    border-color: var(--acento-borde);
+  }
+
+  .fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .numero {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    color: var(--texto-debil);
+  }
+
+  .simbolo {
+    color: var(--acento);
+    font-size: 16px;
+  }
+
+  .tarjeta:last-child .simbolo {
+    font-size: 20px;
+  }
+
+  .insignia {
+    font-family: var(--fuente-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--acento);
+    border: 1px solid rgba(0, 200, 230, 0.5);
+    border-radius: 999px;
+    padding: 5px 11px;
+  }
+
+  h3 {
+    font-family: var(--fuente-titulo);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .bajada {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto);
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-size: 14px;
+    color: var(--texto-medio);
+  }
+
+  li {
+    display: flex;
+    gap: 10px;
+  }
+
+  li span {
+    color: var(--acento);
+    flex: none;
+  }
+
+  .tarjeta > a {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto);
+  }
+
+  .tarjeta > a span {
+    color: var(--acento);
+  }
+
+  .tarjeta > a:hover {
+    color: var(--acento);
+  }
+</style>
