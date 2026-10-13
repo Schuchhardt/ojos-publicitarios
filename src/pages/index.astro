@@ -1,5 +1,19 @@
 ---
-import Home from '../components/Home.astro';
+import OjosLayout from '../layouts/OjosLayout.astro';
+import OjosHome from '../components/ojos/OjosHome';
+import { HOME_OJOS } from '../data/ojos';
+import { imagenesOjos } from '../lib/imagenes';
+import { faqJsonLd } from '../lib/jsonld';
+
+const imagenes = await imagenesOjos();
+const faq = faqJsonLd(HOME_OJOS.es.faq.map((item) => ({ pregunta: item.q, respuesta: item.a })));
 ---
 
-<Home idioma="es" />
+<OjosLayout
+  title="Diseño web, software a medida y marketing digital en Chile | Ojos Publicitarios"
+  description="Estudio creativo y digital chileno: sitios web y tiendas online, software a medida para tu operación y marketing digital que hace crecer tu marca. Te respondemos en 12 h."
+  path="/"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(faq)} />
+  <OjosHome client:load imagenes={imagenes} />
+</OjosLayout>

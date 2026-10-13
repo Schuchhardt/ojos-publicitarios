@@ -44,14 +44,14 @@ export default function OjosCaso({ slug, imagen }: { slug: string; imagen: strin
           'position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px clamp(16px,3vw,44px);mix-blend-mode:difference;color:#f1ede6'
         )}
       >
-        <a href="/ojos/" data-cursor="" aria-label={narrow ? t.back : undefined} style={css('display:flex;align-items:baseline;gap:12px;color:#f1ede6')}>
+        <a href="/" data-cursor="" aria-label={narrow ? t.back : undefined} style={css('display:flex;align-items:baseline;gap:12px;color:#f1ede6')}>
           <span style={css('font-weight:800;font-size:22px;letter-spacing:-0.03em;font-stretch:80%')}>OJOS®</span>
           <span style={css(`${MONO}font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.75`)}>{narrow ? '←' : t.back}</span>
         </a>
         <div style={css('display:flex;align-items:center;gap:18px')}>
           <SelectorIdioma idioma={idioma} elegir={setIdioma} />
           <a
-            href="/ojos/#contacto"
+            href="/#contacto"
             data-cursor=""
             style={css(
               `${MONO}font-size:12px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;padding:${ctaPad};border:1px solid #f1ede6;border-radius:999px;color:#f1ede6`
@@ -95,7 +95,12 @@ export default function OjosCaso({ slug, imagen }: { slug: string; imagen: strin
         </section>
 
         <section style={css('padding:0 clamp(16px,3vw,44px)')}>
-          <div data-parallax-wrap="" style={css('border-radius:10px;overflow:hidden;aspect-ratio:var(--ar,16/9);min-height:260px;background:var(--card)')}>
+          {/* max-width: con min-height y aspect-ratio, en un teléfono el marco se
+              ensanchaba más que la pantalla y desbordaba la página. */}
+          <div
+            data-parallax-wrap=""
+            style={css('border-radius:10px;overflow:hidden;aspect-ratio:var(--ar,16/9);min-height:260px;max-width:100%;background:var(--card)')}
+          >
             <img
               data-parallax=""
               src={imagen}

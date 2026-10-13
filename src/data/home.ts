@@ -6,8 +6,8 @@ export type Idioma = 'es' | 'en';
 
 export const IDIOMAS: Idioma[] = ['es', 'en'];
 
-/** Ruta de la home en cada idioma. */
-export const RUTA_HOME: Record<Idioma, string> = { es: '/', en: '/en/' };
+/** Ruta del home en cada idioma: el home cambia de idioma en el navegador. */
+export const RUTA_HOME: Record<Idioma, string> = { es: '/', en: '/?lang=en' };
 
 export interface Enlace {
   texto: string;
@@ -210,10 +210,10 @@ const es: ContenidoHome = {
   },
   marcaBajada: 'Estudio creativo & Digital',
   nav: [
-    { texto: 'Diseño web', href: '#web' },
-    { texto: 'Desarrollo software', href: '#software' },
-    { texto: 'Marketing digital', href: '#marketing' },
+    { texto: 'Servicios', href: '#servicios' },
+    { texto: 'Proyectos', href: '#proyectos' },
     { texto: 'Cómo trabajamos', href: '#proceso' },
+    { texto: 'Preguntas', href: '#faq' },
     { texto: 'Blog', href: '/blog/' },
   ],
   headerCta: 'Hablemos',
@@ -602,10 +602,10 @@ const en: ContenidoHome = {
   },
   marcaBajada: 'Creative & Digital Studio',
   nav: [
-    { texto: 'Web design', href: '#web' },
-    { texto: 'Software', href: '#software' },
-    { texto: 'Digital marketing', href: '#marketing' },
+    { texto: 'Services', href: '#servicios' },
+    { texto: 'Work', href: '#proyectos' },
     { texto: 'How we work', href: '#proceso' },
+    { texto: 'FAQ', href: '#faq' },
     { texto: 'Blog', href: '/blog/' },
   ],
   headerCta: "Let's talk",

@@ -1,8 +1,8 @@
 ---
-import OjosLayout from '../../../layouts/OjosLayout.astro';
-import OjosCaso from '../../../components/ojos/OjosCaso';
-import { CASOS, rutaCaso } from '../../../data/ojos';
-import { imagenesOjos } from '../../../lib/imagenes';
+import OjosLayout from '../../layouts/OjosLayout.astro';
+import OjosCaso from '../../components/ojos/OjosCaso';
+import { CASOS, rutaCaso } from '../../data/ojos';
+import { imagenesOjos } from '../../lib/imagenes';
 
 export function getStaticPaths() {
   return CASOS.map((caso) => ({ params: { slug: caso.slug }, props: { caso } }));

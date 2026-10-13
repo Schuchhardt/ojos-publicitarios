@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Idioma } from '../../data/ojos';
 
-// Piezas compartidas por el home y los casos de /ojos: estilos en línea, idioma,
+// Piezas compartidas por el home y los casos: estilos en línea, idioma,
 // paleta, cursor propio y aparición al hacer scroll.
 
 export type Tema = 'dark' | 'blue';
@@ -52,12 +52,26 @@ function guardar(clave: string, valor: string) {
   }
 }
 
-/** Idioma elegido a mano, compartido entre el home y los casos. */
+/**
+ * Idioma, compartido entre el home y los casos. Manda `?lang=` (al que llegan
+ * los enlaces viejos a /en/), después lo elegido a mano y, si no, el navegador.
+ */
 export function useIdioma(): [Idioma, (idioma: Idioma) => void] {
   const [idioma, setIdioma] = useState<Idioma>('es');
   useEffect(() => {
+    const pedido = new URLSearchParams(location.search).get('lang');
+    if (pedido === 'es' || pedido === 'en') {
+      setIdioma(pedido);
+      guardar('ojos_lang', pedido);
+      return;
+    }
     const guardado = leer('ojos_lang');
-    if (guardado === 'es' || guardado === 'en') setIdioma(guardado);
+    if (guardado === 'es' || guardado === 'en') {
+      setIdioma(guardado);
+      return;
+    }
+    const idiomas = navigator.languages?.length ? navigator.languages : [navigator.language];
+    if (!idiomas.some((i) => i.toLowerCase().startsWith('es'))) setIdioma('en');
   }, []);
   useEffect(() => {
     document.documentElement.lang = idioma;

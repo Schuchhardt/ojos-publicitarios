@@ -9,6 +9,23 @@
   NODE_VERSION = "22"
   NPM_FLAGS = "--no-audit --no-fund"
 
+# El home en inglés ya no tiene ruta propia: el home cambia de idioma en el
+# navegador y ?lang=en lo abre en inglés. /ojos fue la URL de prueba del home.
+[[redirects]]
+  from = "/en/*"
+  to = "/?lang=en"
+  status = 301
+
+[[redirects]]
+  from = "/ojos/proyectos/:slug"
+  to = "/proyectos/:slug/"
+  status = 301
+
+[[redirects]]
+  from = "/ojos/*"
+  to = "/"
+  status = 301
+
 # Astro versiona por contenido todo lo que emite en /_astro (CSS, JS, fuentes,
 # imágenes): el mismo nombre siempre es el mismo archivo.
 [[headers]]

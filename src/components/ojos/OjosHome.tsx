@@ -102,6 +102,8 @@ export default function OjosHome({ imagenes }: { imagenes: Imagenes }) {
   }, []);
 
   const anim = useRef({ f: { x: 0, y: 0 }, lastY: 0, vel: 0, mx: 0, iniciado: false });
+  const tactil = useRef(coarse);
+  tactil.current = coarse;
   useAnimacion(
     (m) => {
       const a = anim.current;
@@ -178,6 +180,9 @@ export default function OjosHome({ imagenes }: { imagenes: Imagenes }) {
         linea.style.transform = `scaleY(${clamp((H * 0.6 - r.top) / r.height, 0, 1)})`;
       }
 
+      // En pantallas táctiles no hay mouse que seguir: el botón se corría hacia
+      // el último toque y quedaba descentrado al hacer scroll.
+      if (tactil.current) return;
       document.querySelectorAll<HTMLElement & { _x?: number; _y?: number }>('[data-magnet]').forEach((el) => {
         el._x = el._x || 0;
         el._y = el._y || 0;
@@ -788,7 +793,7 @@ export default function OjosHome({ imagenes }: { imagenes: Imagenes }) {
             </div>
             {envio !== 'enviado' ? (
               <form onSubmit={enviar} style={css('display:flex;flex-direction:column;gap:28px')}>
-                <input type="hidden" name="_subject" value="Solicitud desde la landing /ojos" />
+                <input type="hidden" name="_subject" value="Solicitud desde el sitio web" />
                 <input type="hidden" name="idioma" value={idioma} />
                 <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" style={css('display:none')} />
                 <div style={css('display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px')}>

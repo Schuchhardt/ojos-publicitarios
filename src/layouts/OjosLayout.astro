@@ -1,5 +1,6 @@
 ---
 import Seo from '../components/Seo.astro';
+import JsonLdNegocio from '../components/JsonLdNegocio.astro';
 import '../styles/ojos.css';
 
 interface Props {
@@ -26,9 +27,9 @@ const scriptTema = `try{if(localStorage.getItem('ojos_theme')==='blue')document.
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Propuesta de landing: navegable por link, fuera de buscadores mientras
-         el sitio oficial sea el de la raíz. -->
-    <Seo title={title} description={description} path={path} image={image} noindex />
+    <Seo title={title} description={description} path={path} image={image} />
+    <JsonLdNegocio />
+    <slot name="head" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

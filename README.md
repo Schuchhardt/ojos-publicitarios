@@ -1,40 +1,33 @@
 # Ojos Publicitarios — sitio web
 
-Home de una página construida en Astro a partir del diseño
-`PAGINA WEB 2_diseño.pdf` (diseño web, desarrollo de software y marketing
-digital), en **español (`/`) e inglés (`/en/`)**. Sitio 100 % estático: no hay
+Home de una página construida en Astro a partir del diseño "Rediseño Ojos
+Publicitarios" (Claude Design), portado pixel a pixel, con una página por
+proyecto en `/proyectos/<slug>/` (Chilecamiones, Mercado Mersan, Energy,
+Consultora KO). Español e inglés en la misma URL. Sitio 100 % estático: no hay
 backend, base de datos ni funciones.
+
+## Home y proyectos
+
+- Copy de los dos idiomas en `src/data/ojos.ts`, con la misma forma para ambos:
+  si a una versión le falta un campo, `npm run check` avisa.
+- Componentes React en `src/components/ojos/`; los estilos van en línea, igual
+  que en el diseño, con el helper `css()` de `comun.tsx`. El layout es
+  `src/layouts/OjosLayout.astro`.
+- Paleta oscura o azul al hacer clic en los ojos del hero (`localStorage`,
+  `ojos_theme`).
+- En pantallas táctiles no hay cursor propio, imagen flotante en servicios ni
+  botones con imán.
 
 ## Idiomas
 
-- Todo el texto de la home, en los dos idiomas, vive en `src/data/home.ts`, con
-  la misma forma para ambos: si a una versión le falta un campo, `npm run check`
-  avisa. `src/data/contenido.ts` solo reexporta la versión en español para el
-  JSON-LD, `/llms.txt` y las secciones opcionales.
-- `src/components/Home.astro` arma la página; `src/pages/index.astro` y
-  `src/pages/en/index.astro` solo eligen el idioma.
-- El header trae el selector ES / EN y cada home declara su `hreflang`.
-- En `/`, un navegador que no está en español va a `/en/`, salvo que el visitante
-  ya haya elegido idioma a mano (queda en `localStorage`, `op-idioma`). Los
-  rastreadores no se redirigen, para que Google indexe las dos versiones.
-- El blog, el 404 y el formulario desde el blog siguen solo en español.
-- Las imágenes del diseño (`src/assets/web/`) se recortaron del PDF; las del
-  diagrama de software y el mockup de marketing traen rótulos en español
-  también en la versión en inglés.
-
-## Landing alternativa `/ojos`
-
-Segunda propuesta de home, del diseño "Rediseño Ojos Publicitarios" (Claude
-Design), portada pixel a pixel: `/ojos/` y un caso por proyecto en
-`/ojos/proyectos/<slug>/` (Chilecamiones, Mercado Mersan, Energy, Consultora KO).
-
-- Copy de los dos idiomas en `src/data/ojos.ts`; el selector ES / EN cambia el
-  texto en el navegador (`localStorage`, `ojos_lang`).
-- Componentes React en `src/components/ojos/`; los estilos van en línea, igual
-  que en el diseño, con el helper `css()` de `comun.tsx`.
-- Paleta oscura o azul al hacer clic en los ojos del hero (`ojos_theme`).
-- El formulario envía por Formspree, como el modal del home.
-- Va con `noindex` y fuera del sitemap mientras el sitio oficial sea el de `/`.
+- El selector ES / EN cambia el texto en el navegador, sin cambiar de URL, y
+  recuerda la elección (`localStorage`, `ojos_lang`).
+- Sin elección guardada, un navegador que no está en español ve el sitio en
+  inglés. `/?lang=en` y `/?lang=es` fuerzan un idioma.
+- El HTML que leen los buscadores es el español. `/en/` ya no existe: redirige
+  con 301 a `/?lang=en`.
+- El blog y el 404 siguen solo en español, con el diseño anterior
+  (`BaseLayout`, `Header`, `Footer` y los textos de `src/data/home.ts`).
 
 ## Correr el proyecto
 
@@ -73,34 +66,33 @@ no hay que tocar código.
   cachea un año como inmutable; el resto queda con caché corta.
 - Cabeceras de seguridad: `X-Content-Type-Options`, `X-Frame-Options`,
   `Referrer-Policy`, `Permissions-Policy` y HSTS.
+- Redirecciones 301 de las URLs viejas: `/en/*` → `/?lang=en`, y `/ojos/` y
+  `/ojos/proyectos/<slug>/` (la URL de prueba del home) a `/` y
+  `/proyectos/<slug>/`.
 
 **Qué se optimizó para este deploy:**
 
-- Fuentes (Montserrat y Manrope, las del diseño) servidas desde el propio dominio (`@fontsource-variable`), no desde
-  Google Fonts: dos conexiones externas menos y caché inmutable en Netlify.
-- Íconos de redes incrustados como SVG (`src/assets/redes/`, de simpleicons.org,
-  CC0) en vez de pedirlos a un CDN. La página no hace **ninguna** petición a
-  terceros.
-- Capturas procesadas por Astro a WebP en tres tamaños (776 kB → 14-52 kB).
-- El JS (menú móvil y modal) queda incrustado en el HTML: cero archivos extra.
+- Home y proyectos: las fuentes del diseño (Bricolage Grotesque, Instrument
+  Serif, JetBrains Mono y Material Symbols) vienen de Google Fonts, como en el
+  diseño. El blog sirve las suyas desde el propio dominio
+  (`@fontsource-variable`).
+- Imágenes procesadas por Astro a WebP (`imagenesOjos()` en
+  `src/lib/imagenes.ts`).
 - `robots.txt` generado en el build con el sitemap del dominio que corresponda,
   y página 404 propia que Netlify sirve sola.
 
 ## Formulario de contacto
 
-El modal "Preparar mi solicitud" envía por **Formspree**
-(`FORMSPREE_ENDPOINT` en `src/lib/config.ts`), igual que en patio-riquelme: no
-hay backend ni funciones de Netlify de por medio.
+El formulario de la sección de contacto envía por **Formspree**
+(`FORMSPREE_ENDPOINT` en `src/lib/config.ts`): no hay backend ni funciones de
+Netlify de por medio.
 
-- Campos: nombre y correo obligatorios; teléfono, empresa, tipo de proyecto e
-  idea opcionales.
-- Valida antes de enviar y no toca la red si falta algo.
+- Campos: nombre, correo, tipo de proyecto e idea, más el idioma del visitante.
 - Trampa anti-spam (`_gotcha`) que Formspree descarta sola.
 - Si el envío falla, muestra el error sin perder lo escrito.
 
-El formulario es el **único** camino del modal: no abre el correo ni WhatsApp.
-El botón "Escribir por WhatsApp" del bloque de contacto y los íconos de redes
-son otra vía, en paralelo, y se controlan con `MOSTRAR_WHATSAPP`.
+Al lado van el botón de WhatsApp y el correo (`CONTACTO_EMAIL`), como otra vía.
+El botón "Preparar mi solicitud" del blog lleva a `/#contacto`.
 
 El primer envío real puede pedir confirmar el formulario desde el panel de
 Formspree; conviene mandar una prueba después del primer deploy.
@@ -132,12 +124,12 @@ como respuesta. Conviene que cada una se lea sola, sin el resto del artículo.
 Lo que ya está resuelto y no hay que volver a tocar:
 
 - **Metadatos por página**: título, descripción, canonical, Open Graph, Twitter
-  y `hreflang` es-CL. Los títulos de las notas no llevan la marca cuando ya son
+  e idioma es-CL. Los títulos de las notas no llevan la marca cuando ya son
   largos, para que Google no los corte.
 - **Datos estructurados** (JSON-LD), validables en
   [Rich Results Test](https://search.google.com/test/rich-results):
   `ProfessionalService` con catálogo de servicios y datos de contacto, `WebSite`,
-  `FAQPage` en la home y en cada nota, y `BlogPosting` + `BreadcrumbList` en los
+  `FAQPage` en la home (de `faq` en `src/data/ojos.ts`) y en cada nota, y `BlogPosting` + `BreadcrumbList` en los
   artículos. Todo cuelga de un mismo `@id`, así Google entiende que es un solo
   negocio.
 - **`/robots.txt`** permite explícitamente a los rastreadores de los buscadores
@@ -153,67 +145,45 @@ que te hagan por WhatsApp y respondas bien es una nota posible.
 
 ## Dónde se edita cada cosa
 
-| Qué                                        | Archivo                  |
-| ------------------------------------------ | ------------------------ |
-| Textos de la home (ES y EN)                | `src/data/home.ts`       |
-| WhatsApp, correo, redes, secciones on/off  | `src/lib/config.ts`      |
-| Colores, tipografías, espaciados           | `src/styles/global.css`  |
-| Estructura de la página                    | `src/pages/index.astro`  |
-| Cada bloque visual                         | `src/components/*.astro` |
-| Preguntas frecuentes de la home            | `faq` en `src/data/home.ts` |
-| Notas del blog                             | `src/content/blog/*.md`  |
-| Capturas y fotos de proyectos              | `src/assets/`            |
-| Logo del header y footer                   | `src/assets/logo-ojos-publicitarios.png` |
-
-Cada sección del diseño es un componente, en este orden: `Hero`, `Franja`,
-`Unico`, `Servicios`, `Software`, `Industrias`, `Marketing`, `Fotos`, `Cifras`,
-`Criterio`, `Equipo`, `Proyectos`, `Testimonios`, FAQ, `Cierre` (proceso y
-contacto) y `Footer`.
-
-### Secciones que se pueden apagar
-
-En `src/lib/config.ts`, igual que los interruptores del diseño:
-
-- `MOSTRAR_POLITICA_IA` — bloque "Tecnología con criterio".
-- `MOSTRAR_EQUIPO` — bloque "Quiénes responden". **Hoy está en `false`**: la
-  sección no se renderiza y el enlace desaparece del menú.
-- `MOSTRAR_TESTIMONIOS` — bloque de citas de clientes. **Hoy está en `false`**:
-  no hay testimonios reales todavía y es preferible no mostrarlo antes que
-  publicar "Nombre del cliente". Al cargar citas en `TESTIMONIOS`, encenderlo.
-- `MOSTRAR_WHATSAPP` — botón e ícono de WhatsApp, en paralelo al formulario.
-- `MOSTRAR_FAQ` — bloque de preguntas frecuentes de la home. Apagarlo también
-  saca el `FAQPage` de los datos estructurados, así que conviene dejarlo.
+| Qué                                        | Archivo                         |
+| ------------------------------------------ | ------------------------------- |
+| Textos de la home y los casos (ES y EN)    | `src/data/ojos.ts`              |
+| Preguntas frecuentes de la home            | `faq` en `src/data/ojos.ts`     |
+| WhatsApp, correo, redes, Formspree         | `src/lib/config.ts`             |
+| Home                                       | `src/components/ojos/OjosHome.tsx` |
+| Página de cada proyecto                    | `src/components/ojos/OjosCaso.tsx` |
+| Colores de las dos paletas                 | `src/styles/ojos.css`           |
+| Notas del blog                             | `src/content/blog/*.md`         |
+| Header, footer y textos del blog           | `src/components/`, `src/data/home.ts` |
+| Fotos de proyectos                         | `src/assets/proyectos/`         |
 
 ## Pendientes antes de publicar
 
-1. **Perfiles de redes** en `src/lib/config.ts` (`REDES`): Instagram, TikTok y
-   Facebook están vacíos, así que esos íconos no se muestran. Al pegar la URL
-   aparecen solos en contacto y footer.
-2. **`CONTACTO_EMAIL`** está vacío a propósito: mientras no haya una casilla
-   real, el sitio no muestra ningún correo y todo entra por el formulario y por
-   WhatsApp.
-3. **Dominio** en `astro.config.mjs` (constante `DOMINIO`), para cuando el sitio
+1. **Textos de Mersan, Energy y Consultora KO** en `CASOS` (`src/data/ojos.ts`):
+   el diseño solo traía el de Chilecamiones; los otros tres hay que revisarlos.
+2. **Galería de cada caso**: siguen los tres recuadros rayados del diseño, con
+   el rótulo de qué captura va en cada uno (`ph` en `CASOS`).
+3. **Perfiles de redes** en `src/lib/config.ts` (`REDES`).
+4. **Dominio** en `astro.config.mjs` (constante `DOMINIO`), para cuando el sitio
    deje de servirse desde la URL de Netlify.
-4. **Testimonios reales**: pedir dos o tres citas a clientes, cargarlas en
-   `TESTIMONIOS` y poner `MOSTRAR_TESTIMONIOS` en `true`.
-5. **Equipo**: si se enciende `MOSTRAR_EQUIPO`, completar `EQUIPO` con nombres,
-   roles y retratos verticales (800×1000) en `public/equipo/`.
-6. **`public/og-image.jpg`** es un provisorio generado con la paleta de la marca,
-   pero con tipografía del sistema. Reemplazarlo por uno hecho en Montserrat.
+5. **`public/og-image.jpg`** es un provisorio; conviene uno con el diseño nuevo.
 
 ## Estructura
 
 ```
 src/
 ├── assets/            capturas e íconos que Astro optimiza y versiona
-├── components/        una sección del diseño por componente
+├── components/ojos/   home y casos (React)
+├── components/        header, footer y piezas del blog y las propuestas
 ├── content/blog/      las notas, en markdown
 ├── content.config.ts  el esquema de una nota
-├── data/contenido.ts  todo el texto editable de la home
+├── data/ojos.ts       texto de la home y los casos, en ES y EN
+├── data/home.ts       texto del header y footer del blog
 ├── layouts/           <head>, fuentes, SEO, JSON-LD
 ├── lib/               configuración, fechas, imágenes y JSON-LD
-├── pages/             index, 404, blog/, robots.txt, llms.txt
-└── styles/global.css  tokens del diseño y piezas compartidas
+├── pages/             index, proyectos/, 404, blog/, robots.txt, llms.txt
+├── styles/ojos.css    tokens y paletas de la home
+└── styles/global.css  estilos del blog
 ```
 
 `design/` guarda el diseño original y el material del cliente; no entra al build
@@ -235,13 +205,13 @@ solo la marca y lockup horizontal).
 Los datos que faltan van marcados en ámbar con la clase `lud-pendiente`, para
 que en la reunión se vea de inmediato qué falta confirmar.
 
-## Proyectos de la sección "Proyectos entregados"
+## Proyectos
 
 Además de chilecamiones.cl, hay tres trabajos sacados del Instagram del estudio
-(Mercado Mersan, Energy y Consultora KO). Cada tarjeta enlaza a su publicación y
-la foto está descargada en `src/assets/proyectos/`, así no depende de que el CDN
-de Instagram siga sirviendo esa URL.
+(Mercado Mersan, Energy y Consultora KO). Cada uno tiene su página y la foto
+está descargada en `src/assets/proyectos/`, así no depende de que el CDN de
+Instagram siga sirviendo esa URL.
 
-Para agregar otro: bajar la imagen a esa carpeta y sumar una entrada en
-`PROYECTOS` con `url` (el post), `enlaceTexto: 'Ver en Instagram'` y el nombre
-del archivo.
+Para agregar otro: bajar la imagen a esa carpeta, sumar su clave en
+`ARCHIVOS_IMAGEN` y una entrada en `CASOS` (`src/data/ojos.ts`). La página
+`/proyectos/<slug>/` y la tarjeta del home salen solas.

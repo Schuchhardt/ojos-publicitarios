@@ -1,0 +1,101 @@
+---
+// Ficha del negocio y del sitio en JSON-LD. La comparten el home y el blog.
+import { SERVICIOS, SERVICIOS_MARKETING, MODULOS_SOFTWARE } from '../data/contenido';
+import {
+  CONTACTO_EMAIL,
+  MARCA,
+  REDES,
+  TAGLINE,
+  TIENE_EMAIL,
+  TIENE_WHATSAPP,
+  WHATSAPP_DISPLAY,
+} from '../lib/config';
+
+const contacto: Record<string, unknown>[] = [];
+if (TIENE_WHATSAPP) {
+  contacto.push({
+    '@type': 'ContactPoint',
+    contactType: 'ventas',
+    telephone: WHATSAPP_DISPLAY,
+    availableLanguage: ['es', 'en'],
+  });
+}
+if (TIENE_EMAIL) {
+  contacto.push({ '@type': 'ContactPoint', contactType: 'ventas', email: CONTACTO_EMAIL });
+}
+
+const perfiles = REDES.filter((red) => red.icono !== 'whatsapp').map((red) => red.url);
+const logo = new URL('/logo-ojos-publicitarios.png', Astro.site).toString();
+
+// Ficha del negocio con @id estable: los artículos del blog la referencian como
+// autor y editor en vez de repetir los datos.
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': new URL('/#negocio', Astro.site).href,
+  name: MARCA,
+  slogan: TAGLINE,
+  description:
+    'Estudio creativo y digital chileno: diseño de páginas web y tiendas online, desarrollo de software a medida, marketing digital y automatización de la atención a clientes.',
+  url: Astro.site?.toString(),
+  logo,
+  image: new URL('/og-image.jpg', Astro.site).toString(),
+  ...(TIENE_EMAIL ? { email: CONTACTO_EMAIL } : {}),
+  ...(TIENE_WHATSAPP ? { telephone: WHATSAPP_DISPLAY } : {}),
+  areaServed: { '@type': 'Country', name: 'Chile' },
+  availableLanguage: [
+    { '@type': 'Language', name: 'Español' },
+    { '@type': 'Language', name: 'English' },
+  ],
+  knowsAbout: [
+    'Diseño de páginas web',
+    'Landing pages',
+    'Sitios corporativos',
+    'Tiendas online',
+    'Desarrollo de software a medida',
+    ...MODULOS_SOFTWARE,
+    'Marketing digital',
+    'Automatización de la atención por WhatsApp',
+    'Identidad de marca',
+    'Publicidad exterior',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios',
+    itemListElement: [
+      ...SERVICIOS.map((servicio) => ({ name: servicio.titulo, description: servicio.descripcion })),
+      {
+        name: 'Desarrollo de software a medida',
+        description:
+          'Aplicaciones y sistemas a medida para conectar, automatizar y simplificar la operación: CRM, WMS, TMS, paneles de gestión y apps móviles.',
+      },
+      ...SERVICIOS_MARKETING.map((servicio) => ({
+        name: servicio.titulo,
+        description: servicio.descripcion,
+      })),
+    ].map((servicio) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        ...servicio,
+        areaServed: { '@type': 'Country', name: 'Chile' },
+      },
+    })),
+  },
+  ...(contacto.length > 0 ? { contactPoint: contacto } : {}),
+  ...(perfiles.length > 0 ? { sameAs: perfiles } : {}),
+};
+
+const sitioJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': new URL('/#sitio', Astro.site).href,
+  name: MARCA,
+  url: Astro.site?.toString(),
+  inLanguage: ['es-CL', 'en'],
+  publisher: { '@id': new URL('/#negocio', Astro.site).href },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+<script type="application/ld+json" set:html={JSON.stringify(sitioJsonLd)} />

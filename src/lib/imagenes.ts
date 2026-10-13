@@ -14,7 +14,7 @@ export async function cargarImagen(nombre?: string): Promise<ImageMetadata | und
   return cargar ? (await cargar()).default : undefined;
 }
 
-/** URLs en WebP de las imágenes de /ojos, ya optimizadas por Astro. */
+/** URLs en WebP de las imágenes del home y los casos, ya optimizadas por Astro. */
 export async function imagenesOjos(): Promise<Record<ClaveImagen, string>> {
   const pares = await Promise.all(
     (Object.entries(ARCHIVOS_IMAGEN) as [ClaveImagen, string][]).map(async ([clave, archivo]) => {

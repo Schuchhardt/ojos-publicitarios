@@ -5,22 +5,7 @@ export const MARCA = 'Ojos Publicitarios';
 export const TAGLINE = 'Diseño con visión. Comunicación con propósito.';
 export const ANIO = new Date().getFullYear();
 
-// ---------------------------------------------------------------------------
-// Secciones opcionales — equivalen a los toggles del diseño (sc-if).
-// Poner en false oculta la sección completa del sitio.
-// ---------------------------------------------------------------------------
-export const MOSTRAR_POLITICA_IA = true;
-export const MOSTRAR_EQUIPO = false;
-/** Bloque de preguntas frecuentes de la home. */
-export const MOSTRAR_FAQ = true;
-
-/**
- * Bloque de testimonios. En false mientras no haya citas reales de clientes:
- * es preferible no mostrarlo antes que publicar "Nombre del cliente".
- */
-export const MOSTRAR_TESTIMONIOS = false;
-
-/** Botón e ícono de WhatsApp, en paralelo al formulario. */
+/** WhatsApp en los datos estructurados, el blog y `llms.txt`. */
 export const MOSTRAR_WHATSAPP = true;
 
 // ---------------------------------------------------------------------------

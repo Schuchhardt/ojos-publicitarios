@@ -66,7 +66,6 @@ export const GET: APIRoute = async ({ site }) => {
     '## Páginas',
     '',
     `- [Inicio](${url('/')}): servicios, proyectos y contacto.`,
-    `- [Home in English](${url('/en/')}): the same site, in English.`,
     `- [Blog](${url('/blog/')}): guías sobre diseño web y automatización.`,
     ...notas.map((n) => `- [${n.data.titulo}](${url(`/blog/${n.id}/`)}): ${n.data.descripcion}`),
     '',

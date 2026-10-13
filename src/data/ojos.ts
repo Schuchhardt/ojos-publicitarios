@@ -1,4 +1,4 @@
-// Landing alternativa /ojos (diseño "Rediseño Ojos Publicitarios"). Copy en los
+// Home del sitio (diseño "Rediseño Ojos Publicitarios"). Copy en los
 // dos idiomas con la misma forma: el selector ES / EN la cambia en el navegador.
 
 export type Idioma = 'es' | 'en';
@@ -422,7 +422,7 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
 };
 
 // ---------------------------------------------------------------------------
-// Casos: una página por proyecto en /ojos/proyectos/<slug>/.
+// Casos: una página por proyecto en /proyectos/<slug>/.
 // ---------------------------------------------------------------------------
 
 interface CopyCaso {
@@ -658,5 +658,5 @@ export const CASOS: Caso[] = [
 ];
 
 export function rutaCaso(slug: string): string {
-  return `/ojos/proyectos/${slug}/`;
+  return `/proyectos/${slug}/`;
 }
