@@ -1,0 +1,47 @@
+---
+import Seo from '../components/Seo.astro';
+import '../styles/ojos.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+}
+
+const { title, description, path, image } = Astro.props;
+
+// La paleta elegida se aplica antes del primer pintado: sin parpadeo al pasar
+// del home a un caso con la paleta azul.
+const scriptTema = `try{if(localStorage.getItem('ojos_theme')==='blue')document.documentElement.setAttribute('data-theme','blue')}catch(e){}`;
+---
+
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0e0d0c" />
+    <script is:inline set:html={scriptTema} />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Propuesta de landing: navegable por link, fuera de buscadores mientras
+         el sitio oficial sea el de la raíz. -->
+    <Seo title={title} description={description} path={path} image={image} noindex />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&icon_names=add,autorenew,block,bolt,build,calendar_month,campaign,chat,check,colorize,contacts,draw,edit_note,forum,inventory_2,location_on,mail,notifications_active,rocket_launch,schedule,terminal,web&display=block"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

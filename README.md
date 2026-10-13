@@ -22,6 +22,20 @@ backend, base de datos ni funciones.
   diagrama de software y el mockup de marketing traen rótulos en español
   también en la versión en inglés.
 
+## Landing alternativa `/ojos`
+
+Segunda propuesta de home, del diseño "Rediseño Ojos Publicitarios" (Claude
+Design), portada pixel a pixel: `/ojos/` y un caso por proyecto en
+`/ojos/proyectos/<slug>/` (Chilecamiones, Mercado Mersan, Energy, Consultora KO).
+
+- Copy de los dos idiomas en `src/data/ojos.ts`; el selector ES / EN cambia el
+  texto en el navegador (`localStorage`, `ojos_lang`).
+- Componentes React en `src/components/ojos/`; los estilos van en línea, igual
+  que en el diseño, con el helper `css()` de `comun.tsx`.
+- Paleta oscura o azul al hacer clic en los ojos del hero (`ojos_theme`).
+- El formulario envía por Formspree, como el modal del home.
+- Va con `noindex` y fuera del sitemap mientras el sitio oficial sea el de `/`.
+
 ## Correr el proyecto
 
 ```bash

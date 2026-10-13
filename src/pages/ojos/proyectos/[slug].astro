@@ -1,0 +1,21 @@
+---
+import OjosLayout from '../../../layouts/OjosLayout.astro';
+import OjosCaso from '../../../components/ojos/OjosCaso';
+import { CASOS, rutaCaso } from '../../../data/ojos';
+import { imagenesOjos } from '../../../lib/imagenes';
+
+export function getStaticPaths() {
+  return CASOS.map((caso) => ({ params: { slug: caso.slug }, props: { caso } }));
+}
+
+const { caso } = Astro.props;
+const imagenes = await imagenesOjos();
+---
+
+<OjosLayout
+  title={`${caso.title} — Ojos Publicitarios`}
+  description={caso.copy.es.desc}
+  path={rutaCaso(caso.slug)}
+>
+  <OjosCaso client:load slug={caso.slug} imagen={imagenes[caso.img]} />
+</OjosLayout>
