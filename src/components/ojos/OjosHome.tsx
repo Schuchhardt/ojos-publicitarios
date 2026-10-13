@@ -7,6 +7,7 @@ import {
   SelectorIdioma,
   css,
   pintarCursor,
+  siguienteTema,
   useAncho,
   useAnimacion,
   useIdioma,
@@ -200,7 +201,7 @@ export default function OjosHome({ imagenes }: { imagenes: Imagenes }) {
   );
 
   const cambiarTema = () => {
-    const nuevo = tema === 'dark' ? 'blue' : 'dark';
+    const nuevo = siguienteTema(tema);
     setTema(nuevo);
     pintarCursor('dropper', nuevo);
   };

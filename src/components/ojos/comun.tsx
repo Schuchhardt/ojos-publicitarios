@@ -4,7 +4,22 @@ import type { Idioma } from '../../data/ojos';
 // Piezas compartidas por el home y los casos: estilos en línea, idioma,
 // paleta, cursor propio y aparición al hacer scroll.
 
-export type Tema = 'dark' | 'blue';
+export type Tema = 'blue' | 'dark' | 'green' | 'pink';
+
+/** Orden en que los ojos van pasando de una paleta a la otra; parte en la azul. */
+export const TEMAS: Tema[] = ['blue', 'dark', 'green', 'pink'];
+
+/** Acento de cada paleta (el mismo --accent de ojos.css). */
+const ACENTO: Record<Tema, string> = {
+  blue: 'oklch(0.52 0.23 263)',
+  dark: 'oklch(0.7 0.19 40)',
+  green: 'oklch(0.87 0.2 125)',
+  pink: 'oklch(0.6 0.22 0)',
+};
+
+export function siguienteTema(tema: Tema): Tema {
+  return TEMAS[(TEMAS.indexOf(tema) + 1) % TEMAS.length];
+}
 export interface Punto {
   x: number;
   y: number;
@@ -83,11 +98,12 @@ export function useIdioma(): [Idioma, (idioma: Idioma) => void] {
   return [idioma, elegir];
 }
 
-/** Paleta (oscura o azul). El layout la aplica antes del primer pintado. */
+/** Paleta (azul, oscura, verde o rosada). El layout la aplica antes del primer pintado. */
 export function useTema(): [Tema, (tema: Tema) => void] {
-  const [tema, setTema] = useState<Tema>('dark');
+  const [tema, setTema] = useState<Tema>('blue');
   useEffect(() => {
-    if (leer('ojos_theme') === 'blue') setTema('blue');
+    const guardado = leer('ojos_theme') as Tema | null;
+    if (guardado && TEMAS.includes(guardado)) setTema(guardado);
   }, []);
   const elegir = (nuevo: Tema) => {
     setTema(nuevo);
@@ -130,7 +146,8 @@ export function pintarCursor(rotulo: string | null, tema: Tema) {
   if (rotulo === 'dropper') {
     c.style.width = c.style.height = '72px';
     c.style.mixBlendMode = 'normal';
-    c.style.background = tema === 'dark' ? 'oklch(0.52 0.23 263)' : 'oklch(0.7 0.19 40)';
+    // El gotario anuncia la paleta que viene.
+    c.style.background = ACENTO[siguienteTema(tema)];
     Object.assign(lb.style, {
       fontFamily: "'Material Symbols Outlined'",
       fontSize: '34px',

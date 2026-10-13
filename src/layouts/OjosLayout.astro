@@ -13,16 +13,16 @@ interface Props {
 const { title, description, path, image } = Astro.props;
 
 // La paleta elegida se aplica antes del primer pintado: sin parpadeo al pasar
-// del home a un caso con la paleta azul.
-const scriptTema = `try{if(localStorage.getItem('ojos_theme')==='blue')document.documentElement.setAttribute('data-theme','blue')}catch(e){}`;
+// del home a un caso con otra paleta. Sin elección guardada, parte en la azul.
+const scriptTema = `try{var t=localStorage.getItem('ojos_theme');if(t==='dark'||t==='green'||t==='pink')document.documentElement.setAttribute('data-theme',t)}catch(e){}`;
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es" data-theme="blue">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0e0d0c" />
+    <meta name="theme-color" content="#f3f5fa" />
     <script is:inline set:html={scriptTema} />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
