@@ -1,35 +1,55 @@
 ---
 import Logo from './Logo.astro';
 import Redes from './Redes.astro';
-import { ANIO, TAGLINE } from '../lib/config';
+import { HOME, type Idioma } from '../data/home';
+import { ANIO, MARCA } from '../lib/config';
+
+interface Props {
+  idioma?: Idioma;
+}
+
+const { idioma = 'es' } = Astro.props;
 ---
 
-<footer>
+<footer class="tema-claro">
   <Logo variante="footer" />
-  <Redes />
-  <div class="tagline">{TAGLINE}</div>
-  <div class="copyright">© {ANIO} OJOS PUBLICITARIOS</div>
+  <div class="centro">
+    <Redes />
+    <div class="tagline">{HOME[idioma].tagline}</div>
+  </div>
+  <div class="copyright">© {ANIO} {MARCA}</div>
 </footer>
 
 <style>
   footer {
-    border-top: 1px solid var(--linea);
-    padding: 32px var(--pad-x);
+    padding: 28px var(--pad-x);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: space-around;
+    gap: 20px 40px;
   }
 
-  .tagline {
-    font-size: 13px;
-    color: var(--texto-tenue);
+  .centro {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
 
+  .tagline,
   .copyright {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    color: var(--texto-debil);
+    font-size: 12px;
+    color: var(--claro-texto-suave);
+  }
+
+  @media (max-width: 700px) {
+    footer {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .centro {
+      flex-direction: column;
+    }
   }
 </style>

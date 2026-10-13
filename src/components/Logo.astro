@@ -1,72 +1,89 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/logo-ojos-publicitarios.png';
+import ojo from '../assets/web/ojo.png';
 
 interface Props {
-  /** 'header' = 30px, 'footer' = 24px */
+  /** 'header' = ojo de 30px de alto, 'footer' = 20px. */
   variante?: 'header' | 'footer';
+  /** Línea bajo la palabra ("Estudio creativo & Digital"). */
+  bajada?: string;
 }
 
-const { variante = 'header' } = Astro.props;
-const lado = variante === 'header' ? 30 : 24;
+const { variante = 'header', bajada } = Astro.props;
+const alto = variante === 'header' ? 30 : 20;
+const ancho = Math.round((alto * ojo.width) / ojo.height);
 ---
 
 <div class:list={['logo', variante]}>
   <Image
-    src={logo}
+    src={ojo}
     alt=""
-    width={lado}
-    height={lado}
+    width={ancho}
+    height={alto}
     densities={[1, 2]}
     loading="eager"
     class="marca"
   />
-  <div class="palabra">OJOS<span>PUBLICITARIOS</span></div>
+  <div class="textos">
+    <div class="palabra">OJOS<span>PUBLICITARIOS</span></div>
+    {bajada && <div class="bajada">{bajada}</div>}
+  </div>
 </div>
 
 <style>
   .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    color: var(--claro-texto);
   }
 
   .marca {
     display: block;
     flex: none;
-    border-radius: 50%;
   }
 
   .palabra {
     font-family: var(--fuente-titulo);
     font-weight: 700;
-    letter-spacing: 0.06em;
-    color: var(--texto);
+    letter-spacing: -0.01em;
     white-space: nowrap;
+    line-height: 1.1;
   }
 
   .palabra span {
     font-weight: 400;
-    color: var(--texto-tenue);
+  }
+
+  .bajada {
+    font-family: var(--fuente-texto);
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-top: 2px;
+    white-space: nowrap;
   }
 
   .header .palabra {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .footer .palabra {
-    font-size: 13px;
+    font-size: 12px;
   }
 
-  /* En pantallas angostas se achica la palabra antes que recortarla. */
   @media (max-width: 440px) {
     .header .palabra {
-      font-size: 13px;
+      font-size: 14px;
+    }
+
+    .bajada {
+      font-size: 10px;
     }
   }
 
   @media (max-width: 360px) {
-    .header .palabra span {
+    .header .palabra span,
+    .bajada {
       display: none;
     }
   }

@@ -1,62 +1,52 @@
 ---
 import { Image } from 'astro:assets';
-import { cargarImagen } from '../lib/imagenes';
-import { PROYECTOS } from '../data/contenido';
+import foto from '../assets/web/hero.jpg';
+import { HOME, type Idioma } from '../data/home';
 
-// El sitio del hero es el primer proyecto de la lista.
-const destacado = PROYECTOS[0];
-const captura = await cargarImagen(destacado?.imagen);
+interface Props {
+  idioma: Idioma;
+}
+
+const c = HOME[Astro.props.idioma].hero;
 ---
 
 <section class="hero">
-  <div class="resplandor" aria-hidden="true"></div>
-  <div class="texto">
-    <div class="epigrafe" data-entrada style="--entrada-delay:0ms">
-      <div class="linea" aria-hidden="true"></div>
-      <div class="etiqueta">ESTUDIO CREATIVO &amp; DIGITAL</div>
-    </div>
+  <Image
+    src={foto}
+    alt={c.alt}
+    widths={[640, 960, 1440, 1907]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    class="foto"
+  />
+  <div class="velo" aria-hidden="true"></div>
 
-    <h1 data-entrada style="--entrada-delay:90ms">Tu negocio en su<br />mejor versión <span>digital.</span></h1>
+  <div class="contenido">
+    <h1 data-entrada style="--entrada-delay:0ms">
+      {c.titulo.map((linea) => <span class="linea">{linea}</span>)}
+      <span class="linea acento">{c.tituloAcento}</span>
+    </h1>
 
-    <p data-entrada style="--entrada-delay:180ms">
-      Creamos páginas web que se ven bien, comunican mejor y facilitan vender. Y nos encargamos
-      de que sigan funcionando, sin que tengas que aprender nada nuevo.
-    </p>
-
-    <div class="botones" data-entrada style="--entrada-delay:270ms">
-      <a href="#contacto" class="boton boton-primario" data-track="cta_hero">
-        Quiero mi nueva web <span aria-hidden="true">↗</span>
-      </a>
-      <a href="#automatizacion" class="boton boton-secundario">Ver qué incluye</a>
-    </div>
-
-    <div class="nota" data-entrada style="--entrada-delay:360ms">Diseño con intención. Sin suscripciones mensuales: todo queda tuyo.</div>
-  </div>
-
-  <div class="visual" data-entrada style="--entrada-delay:240ms">
-    <div class="ventana" data-flota>
-      <div class="barra">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <div class="url">{destacado.url.replace('https://', '')}</div>
-      </div>
+    <ul class="puntos" data-entrada style="--entrada-delay:120ms">
       {
-        captura && (
-          <Image
-            src={captura}
-            alt={`Sitio ${destacado.nombre} desarrollado por Ojos Publicitarios`}
-            widths={[420, 760, 1126]}
-            sizes="(max-width: 900px) 100vw, 45vw"
-            loading="eager"
-            fetchpriority="high"
-          />
-        )
+        c.puntos.map((punto) => (
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="12" />
+              <path d="M7 12.5l3.2 3.2L17 9" />
+            </svg>
+            {punto}
+          </li>
+        ))
       }
-    </div>
-    <div class="pie">
-      <span>PROYECTO ENTREGADO</span>
-      <span>CATÁLOGO, BUSCADOR Y CONSULTAS QUE LLEGAN SOLAS</span>
+    </ul>
+
+    <div class="acciones" data-entrada style="--entrada-delay:240ms">
+      <a href="#contacto" class="boton boton-oscuro" data-track="cta_hero">
+        {c.cta} <span aria-hidden="true">↗</span>
+      </a>
+      <p class="nota">{c.nota}</p>
     </div>
   </div>
 </section>
@@ -64,159 +54,162 @@ const captura = await cargarImagen(destacado?.imagen);
 <style>
   .hero {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-    gap: clamp(32px, 5vw, 64px);
+    display: flex;
     align-items: center;
-    padding: clamp(48px, 7vw, 104px) var(--pad-x) clamp(40px, 5vw, 72px);
+    min-height: clamp(560px, 56vw, 820px);
+    padding: clamp(48px, 6vw, 88px) var(--pad-x);
+    background: #f3f1ee;
+    color: var(--claro-texto);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .foto {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% center;
+    z-index: -2;
+  }
+
+  :global(.js) .foto {
+    animation: acercar 1.6s var(--curva) both;
+  }
+
+  @keyframes acercar {
+    from {
+      transform: scale(1.05);
+      opacity: 0.4;
+    }
+  }
+
+  /* Aclara el lado del texto sin tapar los equipos de la derecha. */
+  .velo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      90deg,
+      rgba(246, 245, 242, 0.92) 0%,
+      rgba(246, 245, 242, 0.7) 28%,
+      rgba(246, 245, 242, 0) 52%
+    );
+  }
+
+  .contenido {
+    width: 100%;
     max-width: var(--ancho-max);
     margin: 0 auto;
   }
 
-  .texto,
-  .visual {
-    position: relative;
-    min-width: 0;
+  h1 {
+    font-family: var(--fuente-titulo);
+    font-weight: 700;
+    font-size: clamp(38px, 4.2vw, 62px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin: 0 0 30px;
   }
 
-  /* Luz de fondo que respira, apenas perceptible. */
-  .resplandor {
-    position: absolute;
-    top: 8%;
-    left: -10%;
-    width: min(780px, 90%);
-    aspect-ratio: 1;
-    background: radial-gradient(circle, rgba(0, 200, 230, 0.14), transparent 62%);
-    filter: blur(28px);
-    pointer-events: none;
-    z-index: 0;
+  .linea {
+    display: block;
   }
 
-  :global(.js) .resplandor {
-    animation: respirar 14s ease-in-out infinite;
+  .acento {
+    color: var(--celeste);
   }
 
-  @keyframes respirar {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0) scale(1);
-      opacity: 0.85;
+  .puntos {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: clamp(17px, 1.5vw, 21px);
+    font-weight: 600;
+  }
+
+  .puntos li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .puntos svg {
+    width: 26px;
+    height: 26px;
+    flex: none;
+  }
+
+  .puntos circle {
+    fill: var(--celeste);
+  }
+
+  .puntos path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .acciones .boton {
+    padding: 20px 26px;
+    min-width: 290px;
+  }
+
+  .nota {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--claro-texto-suave);
+    margin: 0;
+  }
+
+  /* En pantallas angostas el texto va arriba y la foto abajo, entera. */
+  @media (max-width: 860px) {
+    .hero {
+      flex-direction: column;
+      align-items: stretch;
+      min-height: 0;
+      padding-bottom: 0;
+      background: linear-gradient(180deg, #f6f5f2 0%, #efece8 100%);
     }
-    50% {
-      transform: translate3d(5%, 3%, 0) scale(1.12);
-      opacity: 1;
+
+    .foto {
+      position: relative;
+      inset: auto;
+      order: 2;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      margin: 36px calc(var(--pad-x) * -1) 0;
+      width: calc(100% + var(--pad-x) * 2);
+      max-width: none;
+      object-position: 72% center;
+      z-index: 0;
+    }
+
+    .velo {
+      display: none;
+    }
+
+    .acciones .boton {
+      min-width: 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(.js) .resplandor {
+    :global(.js) .foto {
       animation: none;
     }
-  }
-
-  .epigrafe {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  .linea {
-    width: 28px;
-    height: 2px;
-    background: var(--acento);
-  }
-
-  .etiqueta {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--acento);
-  }
-
-  h1 {
-    font-family: var(--fuente-titulo);
-    font-weight: 600;
-    font-size: clamp(34px, 4.6vw, 60px);
-    line-height: 1.06;
-    letter-spacing: -0.02em;
-    margin: 0 0 24px;
-    text-wrap: pretty;
-  }
-
-  h1 span {
-    color: var(--acento);
-  }
-
-  p {
-    font-size: clamp(16px, 1.3vw, 19px);
-    line-height: 1.6;
-    color: var(--texto-apagado);
-    margin: 0 0 32px;
-    max-width: 52ch;
-    text-wrap: pretty;
-  }
-
-  .botones {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .nota {
-    font-family: var(--fuente-mono);
-    font-size: 12px;
-    color: var(--texto-debil);
-    letter-spacing: 0.02em;
-  }
-
-  .ventana {
-    border: 1px solid var(--linea-media);
-    border-radius: 4px;
-    overflow: hidden;
-    background: var(--panel);
-  }
-
-  .barra {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 11px 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-  }
-
-  .barra span {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #2c4250;
-  }
-
-  .url {
-    margin-left: 10px;
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    color: var(--texto-debil);
-  }
-
-  .ventana :global(img) {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    object-position: top center;
-  }
-
-  .pie {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 16px;
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    color: var(--texto-debil);
   }
 </style>

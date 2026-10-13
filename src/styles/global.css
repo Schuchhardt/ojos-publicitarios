@@ -4,26 +4,29 @@
 --------------------------------------------------------------------------- */
 :root {
   /* Fondo oscuro y sus capas */
-  --bg: #06111a;
-  --bg-alt: #081620;
-  --panel: #0b1a24;
-  --panel-destacado: #0d222d;
+  --bg: #0c1218;
+  --bg-alt: #080c0f;
+  --panel: #121b22;
+  --panel-destacado: #10272d;
 
-  /* Acento */
-  --acento: #00c8e6;
-  --acento-claro: #7ce7f7;
-  --acento-borde: rgba(0, 200, 230, 0.45);
-  --acento-borde-suave: rgba(0, 200, 230, 0.3);
-  --acento-fondo: rgba(0, 200, 230, 0.1);
-  --acento-oscuro: #0d7f93;
+  /* Acento sobre oscuro (botones, rótulos, detalles) */
+  --acento: #19bfe5;
+  --acento-claro: #7fdcf2;
+  --acento-borde: rgba(25, 191, 229, 0.5);
+  --acento-borde-suave: rgba(25, 191, 229, 0.3);
+  --acento-fondo: rgba(25, 191, 229, 0.1);
+  --acento-oscuro: #0679a6;
+
+  /* Celeste de los titulares sobre claro, tal como viene en el diseño. */
+  --celeste: #07b8fb;
 
   /* Texto sobre oscuro */
-  --texto: #e8f1f4;
+  --texto: #eef4f7;
   --texto-suave: #d5e3e9;
   --texto-medio: #b8c9d2;
-  --texto-apagado: #a9bec9;
+  --texto-apagado: #a6b8c2;
   --texto-tenue: #8fa7b5;
-  --texto-debil: #6c8391;
+  --texto-debil: #74899a;
   --texto-marcador: #7e97a5;
   --texto-marcador-tenue: #546b79;
 
@@ -35,24 +38,50 @@
   --linea-boton: rgba(255, 255, 255, 0.22);
 
   /* Secciones claras */
-  --claro-bg: #f4f7f8;
+  --claro-bg: #f2f2f2;
+  --claro-franja: #f4f8fb;
   --claro-superficie: #ffffff;
-  --claro-texto: #0a1116;
-  --claro-texto-suave: #4a5f6c;
-  --claro-linea: #d8e2e6;
+  --claro-texto: #0e1418;
+  --claro-texto-suave: #4a5a66;
+  --claro-linea: #dfe6ea;
   --claro-marcador: #6b8492;
   --claro-marcador-tenue: #8ba0ac;
 
-  /* Tipografías */
-  --fuente-titulo: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
-  --fuente-texto: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  /* Tipografías: Montserrat para titulares y rótulos, Manrope para el resto. */
+  --fuente-titulo: 'Montserrat Variable', 'Montserrat', system-ui, sans-serif;
+  --fuente-texto: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
   --fuente-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
   /* Ritmo */
   --pad-x: clamp(16px, 4vw, 56px);
   --pad-y: clamp(56px, 7vw, 104px);
-  --ancho-max: 1440px;
-  --radio: 2px;
+  --ancho-max: 1280px;
+  --radio: 4px;
+  --radio-tarjeta: 8px;
+}
+
+/* Sección clara: reasigna los tokens de texto, paneles y líneas, así cualquier
+   componente pensado para fondo oscuro se lee bien sobre claro. */
+.tema-claro {
+  --texto: var(--claro-texto);
+  --texto-suave: #23313a;
+  --texto-medio: #3c4d58;
+  --texto-apagado: var(--claro-texto-suave);
+  --texto-tenue: #5d707c;
+  --texto-debil: #677b87;
+  --panel: var(--claro-superficie);
+  --panel-destacado: #eaf7fc;
+  --bg-alt: #f7f9fa;
+  --linea: var(--claro-linea);
+  --linea-media: var(--claro-linea);
+  --linea-fuerte: #cfd9de;
+  --linea-boton: #c3d0d6;
+  --acento: var(--acento-oscuro);
+  --acento-claro: #0a8fc4;
+  --acento-borde: rgba(6, 121, 166, 0.45);
+  --acento-fondo: rgba(6, 121, 166, 0.08);
+  background: var(--claro-superficie);
+  color: var(--claro-texto);
 }
 
 * {
@@ -128,17 +157,36 @@ a:hover {
 }
 
 .rotulo {
-  font-family: var(--fuente-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-family: var(--fuente-titulo);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--acento);
   margin-bottom: 18px;
+}
+
+/* Titular grande de las secciones claras: negro con la segunda línea celeste. */
+.titular {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  font-size: clamp(32px, 4.2vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--claro-texto);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.titular span {
+  display: block;
+  color: var(--celeste);
 }
 
 .titulo-seccion {
   font-family: var(--fuente-titulo);
   font-size: clamp(26px, 3vw, 40px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.14;
   letter-spacing: -0.015em;
   margin: 0;
@@ -206,6 +254,43 @@ a:hover {
   border-color: var(--acento);
   color: var(--texto);
   background: var(--acento-fondo);
+}
+
+/* Negro sobre claro: el "Hablemos" y el "Quiero mi nueva web" del diseño. */
+.boton-oscuro {
+  background: var(--claro-texto);
+  color: #fff;
+  gap: 28px;
+  justify-content: space-between;
+}
+
+.boton-oscuro:hover {
+  background: #26323a;
+  color: #fff;
+}
+
+/* Píldora celeste: "Hablemos de tu proyecto". */
+.boton-pildora {
+  background: var(--celeste);
+  color: #fff;
+  border-radius: 999px;
+  padding: 16px 30px;
+  gap: 18px;
+}
+
+.boton-pildora:hover {
+  background: #0aa6e2;
+  color: #fff;
+}
+
+.boton-pildora span,
+.boton-oscuro span {
+  transition: transform 0.3s var(--curva);
+}
+
+.boton-pildora:hover span,
+.boton-oscuro:hover span {
+  transform: translateX(4px);
 }
 
 /* Marcadores de contenido pendiente del diseño */
@@ -330,12 +415,13 @@ a:hover {
 /* Tarjetas de servicio: fuera del scope de Astro porque el contenedor lo pinta
    un componente de React (SpotlightCard). */
 .svc-tarjeta {
-  background: var(--panel);
+  background: rgba(18, 27, 34, 0.85);
   border: 1px solid var(--linea-media);
-  padding: clamp(24px, 2.6vw, 36px);
+  border-radius: var(--radio-tarjeta);
+  padding: clamp(24px, 2.6vw, 34px);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   transition:
     transform 0.4s var(--curva),
     border-color 0.4s ease,
@@ -345,12 +431,12 @@ a:hover {
 .svc-tarjeta:hover {
   transform: translateY(-4px);
   border-color: var(--acento-borde);
-  box-shadow: 0 18px 40px -28px rgba(0, 200, 230, 0.55);
+  box-shadow: 0 18px 40px -28px rgba(25, 191, 229, 0.55);
 }
 
 .svc-tarjeta.destacada {
-  background: var(--panel-destacado);
-  border-color: var(--acento-borde);
+  background: linear-gradient(180deg, #123139 0%, #0f252c 100%);
+  border-color: rgba(25, 191, 229, 0.75);
 }
 
 .svc-fila {
@@ -358,50 +444,55 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-bottom: 14px;
 }
 
 .svc-numero {
-  font-family: var(--fuente-mono);
-  font-size: 12px;
-  color: var(--texto-debil);
+  font-size: 13px;
+  color: var(--texto-tenue);
 }
 
 .svc-simbolo {
-  color: var(--acento);
-  font-size: 16px;
+  color: var(--texto);
+  font-size: 22px;
+  line-height: 1;
   transition: transform 0.4s var(--curva);
 }
 
 .svc-tarjeta:hover .svc-simbolo {
   transform: translate(3px, -3px);
+  color: var(--acento);
 }
 
 .svc-insignia {
-  font-family: var(--fuente-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-family: var(--fuente-titulo);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   color: var(--acento);
-  border: 1px solid rgba(0, 200, 230, 0.5);
+  border: 1px solid var(--acento);
   border-radius: 999px;
-  padding: 5px 11px;
+  padding: 4px 10px;
 }
 
 .svc-tarjeta h3 {
-  font-family: var(--fuente-titulo);
-  font-size: 24px;
+  font-family: var(--fuente-texto);
+  font-size: 26px;
   font-weight: 600;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
 .svc-bajada {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--texto);
+  margin-top: -6px;
 }
 
 .svc-tarjeta p {
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--texto-apagado);
   margin: 0;
 }
@@ -409,12 +500,12 @@ a:hover {
 .svc-lista {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 4px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 10px;
   font-size: 14px;
-  color: var(--texto-medio);
+  color: var(--texto-suave);
 }
 
 .svc-lista li {
@@ -429,27 +520,40 @@ a:hover {
 
 .svc-enlace {
   margin-top: auto;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--texto);
 }
 
-.svc-enlace span {
-  color: var(--acento);
+/* El llamado va en una píldora celeste, como en el diseño. */
+.svc-enlace .svc-pildora {
+  background: var(--acento);
+  color: var(--bg-alt);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: var(--fuente-titulo);
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.svc-enlace .svc-flecha {
+  color: var(--texto);
   transition: transform 0.3s var(--curva);
   display: inline-block;
 }
 
-.svc-enlace:hover {
-  color: var(--acento);
+.svc-enlace:hover .svc-pildora {
+  background: var(--acento-claro);
 }
 
-.svc-enlace:hover span {
+.svc-enlace:hover .svc-flecha {
   transform: translate(3px, -3px);
+  color: var(--acento);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -472,7 +576,9 @@ a:hover {
 
   .svc-tarjeta,
   .svc-simbolo,
-  .svc-enlace span {
+  .svc-enlace span,
+  .boton-pildora span,
+  .boton-oscuro span {
     transition: none;
   }
 

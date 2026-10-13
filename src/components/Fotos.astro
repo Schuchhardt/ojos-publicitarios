@@ -1,0 +1,94 @@
+---
+// Tríptico de fotos y la frase que cierra el bloque de marketing.
+import { Image } from 'astro:assets';
+import redes from '../assets/web/foto-redes.jpg';
+import retoque from '../assets/web/foto-retoque.jpg';
+import identidad from '../assets/web/foto-identidad.jpg';
+import { HOME, type Idioma } from '../data/home';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const c = HOME[Astro.props.idioma];
+const fotos = [redes, retoque, identidad];
+---
+
+<section class="fotos" aria-label={c.marketing.rotulo}>
+  <div class="tira">
+    {
+      fotos.map((foto, i) => (
+        <div class="foto">
+          <Image
+            src={foto}
+            alt={c.fotos[i]}
+            widths={[400, 654]}
+            sizes="(max-width: 700px) 100vw, 34vw"
+            loading="lazy"
+          />
+        </div>
+      ))
+    }
+  </div>
+  <p class="banda" data-reveal>{c.banda}</p>
+</section>
+
+<style>
+  .tira {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .foto {
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  .foto :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 1.2s var(--curva),
+      filter 0.6s ease;
+  }
+
+  .foto:hover :global(img) {
+    transform: scale(1.05);
+  }
+
+  .banda {
+    margin: 0;
+    padding: clamp(28px, 3.4vw, 44px) var(--pad-x);
+    background: var(--claro-franja);
+    color: var(--claro-texto);
+    font-size: clamp(16px, 1.6vw, 21px);
+    font-weight: 600;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  @media (max-width: 700px) {
+    .tira {
+      grid-template-columns: repeat(3, 72%);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .foto {
+      scroll-snap-align: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .foto :global(img) {
+      transition: none;
+    }
+
+    .foto:hover :global(img) {
+      transform: none;
+    }
+  }
+</style>

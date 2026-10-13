@@ -10,6 +10,9 @@ interface Props {
   publicado?: Date;
   actualizado?: Date;
   autor?: string;
+  lang?: 'es' | 'en';
+  /** Ruta de la misma página en cada idioma, para los hreflang. */
+  alternos?: Partial<Record<'es' | 'en', string>>;
 }
 
 const {
@@ -22,6 +25,8 @@ const {
   publicado,
   actualizado,
   autor,
+  lang = 'es',
+  alternos,
 } = Astro.props;
 
 const canonicalURL = new URL(path, Astro.site);
@@ -36,7 +41,15 @@ const imageURL = new URL(image, Astro.site);
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content="Ojos Publicitarios" />
-<meta property="og:locale" content="es_CL" />
+<meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_CL'} />
+{
+  alternos &&
+    Object.keys(alternos)
+      .filter((codigo) => codigo !== lang)
+      .map((codigo) => (
+        <meta property="og:locale:alternate" content={codigo === 'en' ? 'en_US' : 'es_CL'} />
+      ))
+}
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalURL} />
@@ -52,8 +65,20 @@ const imageURL = new URL(image, Astro.site);
   )
 }
 
-<link rel="alternate" hreflang="es-cl" href={canonicalURL} />
-<link rel="alternate" hreflang="x-default" href={canonicalURL} />
+{
+  alternos ? (
+    <>
+      {alternos.es && <link rel="alternate" hreflang="es" href={new URL(alternos.es, Astro.site)} />}
+      {alternos.en && <link rel="alternate" hreflang="en" href={new URL(alternos.en, Astro.site)} />}
+      <link rel="alternate" hreflang="x-default" href={new URL(alternos.es ?? path, Astro.site)} />
+    </>
+  ) : (
+    <>
+      <link rel="alternate" hreflang="es-cl" href={canonicalURL} />
+      <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+    </>
+  )
+}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

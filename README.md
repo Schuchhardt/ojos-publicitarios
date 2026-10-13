@@ -1,8 +1,26 @@
 # Ojos Publicitarios — sitio web
 
-Home de una página construida en Astro a partir del diseño propuesto en
-`design/Ojos Publicitarios - Home.dc.html`. Sitio 100 % estático: no hay backend,
-base de datos ni funciones.
+Home de una página construida en Astro a partir del diseño
+`PAGINA WEB 2_diseño.pdf` (diseño web, desarrollo de software y marketing
+digital), en **español (`/`) e inglés (`/en/`)**. Sitio 100 % estático: no hay
+backend, base de datos ni funciones.
+
+## Idiomas
+
+- Todo el texto de la home, en los dos idiomas, vive en `src/data/home.ts`, con
+  la misma forma para ambos: si a una versión le falta un campo, `npm run check`
+  avisa. `src/data/contenido.ts` solo reexporta la versión en español para el
+  JSON-LD, `/llms.txt` y las secciones opcionales.
+- `src/components/Home.astro` arma la página; `src/pages/index.astro` y
+  `src/pages/en/index.astro` solo eligen el idioma.
+- El header trae el selector ES / EN y cada home declara su `hreflang`.
+- En `/`, un navegador que no está en español va a `/en/`, salvo que el visitante
+  ya haya elegido idioma a mano (queda en `localStorage`, `op-idioma`). Los
+  rastreadores no se redirigen, para que Google indexe las dos versiones.
+- El blog, el 404 y el formulario desde el blog siguen solo en español.
+- Las imágenes del diseño (`src/assets/web/`) se recortaron del PDF; las del
+  diagrama de software y el mockup de marketing traen rótulos en español
+  también en la versión en inglés.
 
 ## Correr el proyecto
 
@@ -44,7 +62,7 @@ no hay que tocar código.
 
 **Qué se optimizó para este deploy:**
 
-- Fuentes servidas desde el propio dominio (`@fontsource-variable`), no desde
+- Fuentes (Montserrat y Manrope, las del diseño) servidas desde el propio dominio (`@fontsource-variable`), no desde
   Google Fonts: dos conexiones externas menos y caché inmutable en Netlify.
 - Íconos de redes incrustados como SVG (`src/assets/redes/`, de simpleicons.org,
   CC0) en vez de pedirlos a un CDN. La página no hace **ninguna** petición a
@@ -123,25 +141,26 @@ que te hagan por WhatsApp y respondas bien es una nota posible.
 
 | Qué                                        | Archivo                  |
 | ------------------------------------------ | ------------------------ |
-| Textos de todas las secciones              | `src/data/contenido.ts`  |
+| Textos de la home (ES y EN)                | `src/data/home.ts`       |
 | WhatsApp, correo, redes, secciones on/off  | `src/lib/config.ts`      |
 | Colores, tipografías, espaciados           | `src/styles/global.css`  |
 | Estructura de la página                    | `src/pages/index.astro`  |
 | Cada bloque visual                         | `src/components/*.astro` |
-| Preguntas frecuentes de la home            | `FAQ` en `src/data/contenido.ts` |
+| Preguntas frecuentes de la home            | `faq` en `src/data/home.ts` |
 | Notas del blog                             | `src/content/blog/*.md`  |
 | Capturas y fotos de proyectos              | `src/assets/`            |
 | Logo del header y footer                   | `src/assets/logo-ojos-publicitarios.png` |
 
-Cada sección del diseño es un componente con el mismo nombre: `Hero`, `Cifras`,
-`Servicios`, `Automatizacion`, `Criterio`, `Proceso`, `Equipo`, `Proyectos`,
-`Testimonios`, `Contacto`, `Footer`.
+Cada sección del diseño es un componente, en este orden: `Hero`, `Franja`,
+`Unico`, `Servicios`, `Software`, `Industrias`, `Marketing`, `Fotos`, `Cifras`,
+`Criterio`, `Equipo`, `Proyectos`, `Testimonios`, FAQ, `Cierre` (proceso y
+contacto) y `Footer`.
 
 ### Secciones que se pueden apagar
 
 En `src/lib/config.ts`, igual que los interruptores del diseño:
 
-- `MOSTRAR_POLITICA_IA` — bloque "Cómo trabajamos".
+- `MOSTRAR_POLITICA_IA` — bloque "Tecnología con criterio".
 - `MOSTRAR_EQUIPO` — bloque "Quiénes responden". **Hoy está en `false`**: la
   sección no se renderiza y el enlace desaparece del menú.
 - `MOSTRAR_TESTIMONIOS` — bloque de citas de clientes. **Hoy está en `false`**:
@@ -166,7 +185,7 @@ En `src/lib/config.ts`, igual que los interruptores del diseño:
 5. **Equipo**: si se enciende `MOSTRAR_EQUIPO`, completar `EQUIPO` con nombres,
    roles y retratos verticales (800×1000) en `public/equipo/`.
 6. **`public/og-image.jpg`** es un provisorio generado con la paleta de la marca,
-   pero con tipografía del sistema. Reemplazarlo por uno hecho en Space Grotesk.
+   pero con tipografía del sistema. Reemplazarlo por uno hecho en Montserrat.
 
 ## Estructura
 

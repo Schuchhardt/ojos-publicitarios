@@ -1,0 +1,104 @@
+---
+import { HOME, type Idioma } from '../data/home';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const c = HOME[Astro.props.idioma].industrias;
+---
+
+<div class="industrias">
+  <div class="contenedor fila" data-reveal>
+    <div class="rotulo-industrias">{c.rotulo}</div>
+    <ul>
+      {c.items.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .industrias {
+    background: #000;
+    color: #fff;
+    padding: 20px var(--pad-x);
+  }
+
+  .fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px clamp(24px, 3vw, 44px);
+  }
+
+  .rotulo-industrias {
+    font-family: var(--fuente-titulo);
+    font-size: 14px;
+    font-weight: 700;
+    padding-right: clamp(24px, 3vw, 44px);
+    border-right: 4px solid var(--celeste);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    gap: 10px 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    font-family: var(--fuente-titulo);
+    font-size: clamp(15px, 1.4vw, 18px);
+    font-weight: 700;
+  }
+
+  li + li::before {
+    content: '';
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--celeste);
+    margin: 0 clamp(16px, 2.6vw, 44px);
+  }
+
+  @media (max-width: 760px) {
+    .rotulo-industrias {
+      border-right: none;
+      border-left: 4px solid var(--celeste);
+      padding: 0 0 0 12px;
+      width: 100%;
+    }
+
+    ul {
+      justify-content: flex-start;
+    }
+
+    ul {
+      gap: 8px 20px;
+    }
+
+    li + li::before {
+      display: none;
+    }
+
+    li::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--celeste);
+      margin-left: 20px;
+    }
+
+    li:last-child::after {
+      display: none;
+    }
+  }
+</style>

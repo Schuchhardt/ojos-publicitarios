@@ -1,33 +1,79 @@
 ---
 import Logo from './Logo.astro';
-import { NAV } from '../lib/config';
+import { HOME, IDIOMAS, RUTA_HOME, type Idioma } from '../data/home';
+
+interface Props {
+  idioma?: Idioma;
+  /**
+   * Adónde lleva cada botón de idioma. Por defecto, la home de ese idioma: el
+   * blog está solo en español, así que desde ahí "EN" lleva a /en/.
+   */
+  alternativas?: Partial<Record<Idioma, string>>;
+}
+
+const { idioma = 'es', alternativas = {} } = Astro.props;
+const c = HOME[idioma];
+const home = RUTA_HOME[idioma];
+
+// Los anclas llevan la ruta de la home delante: desde el blog también sirven.
+const nav = c.nav.map((item) => ({
+  ...item,
+  href: item.href.startsWith('#') ? `${home}${item.href}` : item.href,
+}));
+
+const idiomas = IDIOMAS.map((codigo) => ({
+  codigo,
+  href: codigo === idioma ? home : (alternativas[codigo] ?? RUTA_HOME[codigo]),
+}));
 ---
 
 <header class="header" id="inicio">
-  <a href="/" class="marca" aria-label="Ojos Publicitarios — inicio">
-    <Logo variante="header" />
+  <a href={home} class="marca" aria-label="Ojos Publicitarios">
+    <Logo variante="header" bajada={c.marcaBajada} />
   </a>
 
-  <nav class="nav" aria-label="Secciones del sitio">
-    {NAV.map((item) => <a href={item.href}>{item.texto}</a>)}
+  <nav class="nav" aria-label={c.menu.abrir}>
+    {nav.map((item) => <a href={item.href}>{item.texto}</a>)}
   </nav>
 
   <div class="acciones">
-    <a href="/#contacto" class="cta" data-track="cta_header">Hablemos <span aria-hidden="true">↗</span></a>
+    <div class="idiomas" role="group" aria-label={c.idiomaEtiqueta}>
+      {
+        idiomas.map((item) => (
+          <a
+            href={item.href}
+            hreflang={item.codigo}
+            lang={item.codigo}
+            data-idioma={item.codigo}
+            aria-current={item.codigo === idioma ? 'true' : undefined}
+            class:list={['idioma', { activo: item.codigo === idioma }]}
+          >
+            {item.codigo.toUpperCase()}
+          </a>
+        ))
+      }
+    </div>
+
+    <a href={`${home}#contacto`} class="cta" data-track="cta_header">
+      {c.headerCta} <span aria-hidden="true">↗</span>
+    </a>
+
     <button
       type="button"
       class="menu"
-      aria-label="Abrir menú"
+      aria-label={c.menu.abrir}
       aria-expanded="false"
       aria-controls="menu-movil"
+      data-abrir={c.menu.abrir}
+      data-cerrar={c.menu.cerrar}
     >
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </button>
   </div>
 
-  <nav class="menu-movil" id="menu-movil" aria-label="Secciones del sitio" hidden>
-    {NAV.map((item) => <a href={item.href}>{item.texto}</a>)}
+  <nav class="menu-movil" id="menu-movil" aria-label={c.menu.abrir} hidden>
+    {nav.map((item) => <a href={item.href}>{item.texto}</a>)}
   </nav>
 </header>
 
@@ -40,42 +86,42 @@ import { NAV } from '../lib/config';
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding: 16px var(--pad-x);
-    background: rgba(6, 17, 26, 0.88);
+    padding: 18px var(--pad-x);
+    background: rgba(255, 255, 255, 0.94);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid transparent;
+    color: var(--claro-texto);
     transition:
       border-color 0.4s ease,
-      background 0.4s ease,
+      box-shadow 0.4s ease,
       padding 0.4s var(--curva);
   }
 
-  /* Al bajar, la cabecera se compacta y aparece su línea. */
+  /* Al bajar, la cabecera se compacta y aparece su sombra. */
   .header[data-scrolled] {
     padding-top: 11px;
     padding-bottom: 11px;
-    border-bottom-color: var(--linea);
-    background: rgba(6, 17, 26, 0.95);
+    border-bottom-color: var(--claro-linea);
+    box-shadow: 0 10px 30px -24px rgba(14, 20, 24, 0.45);
   }
 
   .marca {
     flex: none;
+    color: inherit;
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: clamp(14px, 2.4vw, 32px);
+    gap: clamp(14px, 2.4vw, 36px);
     font-size: 14px;
-  }
-
-  .nav a {
-    color: var(--texto-medio);
+    font-weight: 600;
   }
 
   .nav a {
     position: relative;
     padding-bottom: 3px;
+    color: var(--claro-texto);
   }
 
   /* Subrayado que crece desde el centro. */
@@ -85,8 +131,8 @@ import { NAV } from '../lib/config';
     left: 50%;
     right: 50%;
     bottom: 0;
-    height: 1px;
-    background: var(--acento);
+    height: 2px;
+    background: var(--celeste);
     transition:
       left 0.35s var(--curva),
       right 0.35s var(--curva);
@@ -94,7 +140,7 @@ import { NAV } from '../lib/config';
 
   .nav a:hover,
   .nav a[data-activo] {
-    color: var(--acento);
+    color: var(--acento-oscuro);
   }
 
   .nav a:hover::after,
@@ -110,27 +156,50 @@ import { NAV } from '../lib/config';
     flex: none;
   }
 
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 20px;
-    border-radius: var(--radio);
-    background: var(--acento);
-    color: var(--bg);
-    font-weight: 600;
-    font-size: 14px;
+  .idiomas {
+    display: flex;
+    border: 1px solid var(--claro-linea);
+    border-radius: 999px;
+    padding: 3px;
+  }
+
+  .idioma {
+    font-family: var(--fuente-titulo);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 5px 9px;
+    border-radius: 999px;
+    color: var(--claro-texto-suave);
+  }
+
+  .idioma:hover {
+    color: var(--claro-texto);
+  }
+
+  .idioma.activo {
+    background: var(--claro-texto);
+    color: #fff;
   }
 
   .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    padding: 12px 20px;
+    border-radius: var(--radio);
+    background: var(--claro-texto);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
     transition:
       background 0.3s ease,
       transform 0.3s var(--curva);
   }
 
   .cta:hover {
-    background: var(--acento-claro);
-    color: var(--bg);
+    background: #26323a;
+    color: #fff;
     transform: translateY(-1px);
   }
 
@@ -144,7 +213,7 @@ import { NAV } from '../lib/config';
     height: 40px;
     padding: 0;
     background: none;
-    border: 1px solid var(--linea-fuerte);
+    border: 1px solid var(--claro-linea);
     border-radius: var(--radio);
     cursor: pointer;
   }
@@ -154,8 +223,10 @@ import { NAV } from '../lib/config';
     width: 16px;
     height: 1.5px;
     margin: 0 auto;
-    background: var(--texto);
-    transition: transform 0.18s ease, opacity 0.18s ease;
+    background: var(--claro-texto);
+    transition:
+      transform 0.18s ease,
+      opacity 0.18s ease;
   }
 
   .menu-movil {
@@ -166,18 +237,20 @@ import { NAV } from '../lib/config';
     right: 0;
     flex-direction: column;
     padding: 8px var(--pad-x) 20px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--linea);
+    background: #fff;
+    border-bottom: 1px solid var(--claro-linea);
+    box-shadow: 0 24px 40px -30px rgba(14, 20, 24, 0.5);
   }
 
   .menu-movil a {
     padding: 14px 0;
     font-size: 15px;
-    color: var(--texto-medio);
-    border-bottom: 1px solid var(--linea);
+    font-weight: 600;
+    color: var(--claro-texto);
+    border-bottom: 1px solid var(--claro-linea);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1080px) {
     .nav {
       display: none;
     }
@@ -199,9 +272,17 @@ import { NAV } from '../lib/config';
     }
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 600px) {
+    .header {
+      gap: 12px;
+    }
+
     .cta {
-      padding: 11px 14px;
+      display: none;
+    }
+
+    .acciones {
+      gap: 8px;
     }
   }
 </style>
@@ -216,7 +297,7 @@ import { NAV } from '../lib/config';
       header.removeAttribute('data-abierto');
       menu.hidden = true;
       boton.setAttribute('aria-expanded', 'false');
-      boton.setAttribute('aria-label', 'Abrir menú');
+      boton.setAttribute('aria-label', boton.dataset.abrir ?? '');
     };
 
     boton.addEventListener('click', () => {
@@ -227,7 +308,7 @@ import { NAV } from '../lib/config';
         header.setAttribute('data-abierto', '');
         menu.hidden = false;
         boton.setAttribute('aria-expanded', 'true');
-        boton.setAttribute('aria-label', 'Cerrar menú');
+        boton.setAttribute('aria-label', boton.dataset.cerrar ?? '');
       }
     });
 
@@ -239,4 +320,15 @@ import { NAV } from '../lib/config';
       if (evento.key === 'Escape') cerrar();
     });
   }
+
+  // Elegir idioma a mano gana sobre la detección automática del navegador.
+  document.querySelectorAll<HTMLAnchorElement>('[data-idioma]').forEach((enlace) => {
+    enlace.addEventListener('click', () => {
+      try {
+        localStorage.setItem('op-idioma', enlace.dataset.idioma ?? '');
+      } catch {
+        // Sin almacenamiento (modo privado): la elección vale solo para este clic.
+      }
+    });
+  });
 </script>

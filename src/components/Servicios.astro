@@ -1,67 +1,154 @@
 ---
 import SpotlightCard from './react/SpotlightCard.tsx';
-import { SERVICIOS } from '../data/contenido';
+import { HOME, type Idioma } from '../data/home';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const c = HOME[Astro.props.idioma].web;
 ---
 
-<section id="servicios" class="seccion">
-  <div class="encabezado" data-reveal-grupo="90">
-    <h2 class="titulo-seccion">Una web a la altura de tu negocio.</h2>
-    <p class="texto-apoyo">
-      Si tu negocio todavía no tiene sitio ni redes, empezamos por ahí. No todos necesitan lo
-      mismo: encontramos el formato que mejor conecta tu marca con su próximo cliente.
-    </p>
-  </div>
+<section id="web" class="web">
+  <div class="contenedor">
+    <div class="encabezado" data-reveal-grupo="90">
+      <h2>{c.titulo.normal} <span>{c.titulo.acento}</span></h2>
+      <p>{c.bajada}</p>
+    </div>
 
-  <div class="rejilla">
-    {
-      SERVICIOS.map((servicio, i) => (
-        <SpotlightCard
-          client:visible
-          revealDelay={i * 110}
-          className={`svc-tarjeta${servicio.destacado ? ' destacada' : ''}`}
-          spotlightColor={
-            servicio.destacado ? 'rgba(0, 200, 230, 0.26)' : 'rgba(0, 200, 230, 0.16)'
-          }
-        >
-          <div class="svc-fila">
-            <span class="svc-numero">{servicio.numero}</span>
-            {servicio.destacado && servicio.etiqueta ? (
-              <span class="svc-insignia">{servicio.etiqueta}</span>
-            ) : (
-              <span class="svc-simbolo" aria-hidden="true">
-                {servicio.simbolo ?? '↗'}
-              </span>
-            )}
-          </div>
-
-          <h3>{servicio.titulo}</h3>
-          <div class="svc-bajada">{servicio.bajada}</div>
-          <p>{servicio.descripcion}</p>
-
-          <ul class="svc-lista">
-            {servicio.puntos.map((punto) => (
-              <li>
-                <span aria-hidden="true">✓</span> {punto}
-              </li>
-            ))}
-          </ul>
-
-          <a
-            class="svc-enlace"
-            href="#contacto"
-            data-track="cta_servicio"
-            data-track-label={servicio.titulo}
+    <div class="rejilla">
+      {
+        c.servicios.map((servicio, i) => (
+          <SpotlightCard
+            client:visible
+            revealDelay={i * 110}
+            className={`svc-tarjeta${servicio.destacado ? ' destacada' : ''}`}
+            spotlightColor={
+              servicio.destacado ? 'rgba(25, 191, 229, 0.26)' : 'rgba(25, 191, 229, 0.14)'
+            }
           >
-            {servicio.cta} <span aria-hidden="true">↗</span>
-          </a>
-        </SpotlightCard>
-      ))
-    }
+            <div class="svc-fila">
+              <span class="svc-numero">{servicio.numero}</span>
+              {servicio.destacado && servicio.etiqueta ? (
+                <span class="svc-insignia">{servicio.etiqueta}</span>
+              ) : (
+                <span class="svc-simbolo" aria-hidden="true">
+                  {servicio.simbolo ?? '↗'}
+                </span>
+              )}
+            </div>
+
+            <h3>{servicio.titulo}</h3>
+            <div class="svc-bajada">{servicio.bajada}</div>
+            <p>{servicio.descripcion}</p>
+
+            <ul class="svc-lista">
+              {servicio.puntos.map((punto) => (
+                <li>
+                  <span aria-hidden="true">✓</span> {punto}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              class="svc-enlace"
+              href="#contacto"
+              data-track="cta_servicio"
+              data-track-label={servicio.titulo}
+            >
+              <span class="svc-pildora">{servicio.cta}</span>
+              <span class="svc-flecha" aria-hidden="true">↗</span>
+            </a>
+          </SpotlightCard>
+        ))
+      }
+    </div>
+
+    <div class="en-cada" data-reveal>
+      <strong>{c.enCadaRotulo}</strong>
+      <ul>
+        {c.enCada.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
   </div>
 </section>
 
 <style>
+  .web {
+    position: relative;
+    padding: var(--pad-y) var(--pad-x);
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(25, 191, 229, 0.07), transparent 70%),
+      radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 4px 4px,
+      var(--bg);
+    color: var(--texto);
+  }
+
+  .encabezado {
+    margin-bottom: clamp(36px, 4vw, 56px);
+  }
+
+  h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(28px, 3.2vw, 44px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  h2 span {
+    color: var(--acento);
+  }
+
+  .encabezado p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--texto-medio);
+    margin: 0;
+    max-width: 42ch;
+    justify-self: end;
+  }
+
   .rejilla {
     --min-col: 290px;
+  }
+
+  .en-cada {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px 32px;
+    margin-top: 36px;
+    font-size: 14px;
+  }
+
+  .en-cada strong {
+    color: var(--texto);
+  }
+
+  .en-cada ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px clamp(24px, 6vw, 96px);
+    flex: 1;
+    max-width: 900px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: var(--texto-apagado);
+  }
+
+  @media (max-width: 700px) {
+    .encabezado p {
+      justify-self: start;
+    }
+
+    .en-cada ul {
+      justify-content: flex-start;
+    }
   }
 </style>

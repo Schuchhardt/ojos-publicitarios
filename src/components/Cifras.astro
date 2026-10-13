@@ -1,22 +1,19 @@
 ---
-import { CIFRAS } from '../data/contenido';
+import { HOME, type Idioma } from '../data/home';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const cifras = HOME[Astro.props.idioma].cifras;
 ---
 
-<section class="cifras" data-reveal-grupo="70">
+<section class="cifras tema-claro" data-reveal-grupo="70">
   {
-    CIFRAS.map((cifra) => (
+    cifras.map((cifra) => (
       <div class="cifra">
-        {cifra.pendiente ? (
-          <>
-            <div class="rotulo-pendiente">{cifra.rotulo}</div>
-            <div class="texto pendiente">{cifra.texto}</div>
-          </>
-        ) : (
-          <>
-            <div class:list={['valor', { destacada: cifra.destacada }]}>{cifra.valor}</div>
-            <div class="texto">{cifra.texto}</div>
-          </>
-        )}
+        <div class:list={['valor', { destacada: cifra.destacada }]}>{cifra.valor}</div>
+        <div class="texto">{cifra.texto}</div>
       </div>
     ))
   }
@@ -28,12 +25,12 @@ import { CIFRAS } from '../data/contenido';
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
     border-top: 1px solid var(--linea);
     border-bottom: 1px solid var(--linea);
-    background: var(--bg-alt);
+    background: #fff;
   }
 
   .cifra {
-    padding: 28px clamp(16px, 3vw, 40px);
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    padding: clamp(28px, 3vw, 40px) clamp(16px, 3vw, 40px);
+    border-right: 1px solid var(--linea);
   }
 
   .cifra:last-child {
@@ -42,14 +39,14 @@ import { CIFRAS } from '../data/contenido';
 
   .valor {
     font-family: var(--fuente-titulo);
-    font-size: 30px;
-    font-weight: 600;
+    font-size: clamp(30px, 3vw, 40px);
+    font-weight: 700;
     color: var(--texto);
     margin-bottom: 6px;
   }
 
   .valor.destacada {
-    color: var(--acento);
+    color: var(--celeste);
   }
 
   .texto {
@@ -58,15 +55,4 @@ import { CIFRAS } from '../data/contenido';
     line-height: 1.5;
   }
 
-  .texto.pendiente {
-    color: var(--texto-debil);
-  }
-
-  .rotulo-pendiente {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    color: var(--acento);
-    letter-spacing: 0.14em;
-    margin-bottom: 8px;
-  }
 </style>

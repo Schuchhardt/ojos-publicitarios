@@ -3,10 +3,10 @@ import Seo from '../components/Seo.astro';
 import Animaciones from '../components/Animaciones.astro';
 // Fuentes servidas desde el propio dominio: Astro las versiona y Netlify las
 // cachea para siempre. Evita dos conexiones extra a Google en cada visita.
-import '@fontsource-variable/space-grotesk/wght.css';
-import '@fontsource-variable/archivo/standard.css';
+import '@fontsource-variable/montserrat/wght.css';
+import '@fontsource-variable/manrope/wght.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
-import { SERVICIOS } from '../data/contenido';
+import { SERVICIOS, SERVICIOS_MARKETING, MODULOS_SOFTWARE } from '../data/contenido';
 import {
   CONTACTO_EMAIL,
   MARCA,
@@ -28,10 +28,45 @@ interface Props {
   publicado?: Date;
   actualizado?: Date;
   autor?: string;
+  lang?: 'es' | 'en';
+  /** Ruta de la misma página en cada idioma (hreflang). */
+  alternos?: Partial<Record<'es' | 'en', string>>;
+  /**
+   * Solo en la home en español: un visitante cuyo navegador no está en
+   * español va a /en/, salvo que ya haya elegido idioma a mano.
+   */
+  detectarIdioma?: boolean;
 }
 
-const { title, description, path, image, type, noindex, publicado, actualizado, autor } =
-  Astro.props;
+const {
+  title,
+  description,
+  path,
+  image,
+  type,
+  noindex,
+  publicado,
+  actualizado,
+  autor,
+  lang = 'es',
+  alternos,
+  detectarIdioma = false,
+} = Astro.props;
+
+// Ojo: dentro de un <script> de Astro el contenido es texto plano. Se inyecta
+// con set:html para que salga como código y no impreso tal cual. Los
+// rastreadores no se redirigen: así Google indexa las dos versiones.
+const scriptIdioma = `(function () {
+  try {
+    if (localStorage.getItem('op-idioma')) return;
+    if (/bot|crawl|spider|slurp|lighthouse|preview/i.test(navigator.userAgent)) return;
+    var idiomas = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+    for (var i = 0; i < idiomas.length; i++) {
+      if (String(idiomas[i]).toLowerCase().indexOf('es') === 0) return;
+    }
+    location.replace('/en/' + location.hash);
+  } catch (e) {}
+})();`;
 
 const contacto: Record<string, unknown>[] = [];
 if (TIENE_WHATSAPP) {
@@ -39,7 +74,7 @@ if (TIENE_WHATSAPP) {
     '@type': 'ContactPoint',
     contactType: 'ventas',
     telephone: WHATSAPP_DISPLAY,
-    availableLanguage: ['es'],
+    availableLanguage: ['es', 'en'],
   });
 }
 if (TIENE_EMAIL) {
@@ -58,19 +93,25 @@ const organizationJsonLd = {
   name: MARCA,
   slogan: TAGLINE,
   description:
-    'Estudio creativo y digital chileno: diseño de páginas web, tiendas online, identidad de marca y automatización de la atención a clientes.',
+    'Estudio creativo y digital chileno: diseño de páginas web y tiendas online, desarrollo de software a medida, marketing digital y automatización de la atención a clientes.',
   url: Astro.site?.toString(),
   logo,
   image: new URL('/og-image.jpg', Astro.site).toString(),
   ...(TIENE_EMAIL ? { email: CONTACTO_EMAIL } : {}),
   ...(TIENE_WHATSAPP ? { telephone: WHATSAPP_DISPLAY } : {}),
   areaServed: { '@type': 'Country', name: 'Chile' },
-  availableLanguage: { '@type': 'Language', name: 'Español' },
+  availableLanguage: [
+    { '@type': 'Language', name: 'Español' },
+    { '@type': 'Language', name: 'English' },
+  ],
   knowsAbout: [
     'Diseño de páginas web',
     'Landing pages',
     'Sitios corporativos',
     'Tiendas online',
+    'Desarrollo de software a medida',
+    ...MODULOS_SOFTWARE,
+    'Marketing digital',
     'Automatización de la atención por WhatsApp',
     'Identidad de marca',
     'Publicidad exterior',
@@ -78,12 +119,22 @@ const organizationJsonLd = {
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Servicios',
-    itemListElement: SERVICIOS.map((servicio) => ({
+    itemListElement: [
+      ...SERVICIOS.map((servicio) => ({ name: servicio.titulo, description: servicio.descripcion })),
+      {
+        name: 'Desarrollo de software a medida',
+        description:
+          'Aplicaciones y sistemas a medida para conectar, automatizar y simplificar la operación: CRM, WMS, TMS, paneles de gestión y apps móviles.',
+      },
+      ...SERVICIOS_MARKETING.map((servicio) => ({
+        name: servicio.titulo,
+        description: servicio.descripcion,
+      })),
+    ].map((servicio) => ({
       '@type': 'Offer',
       itemOffered: {
         '@type': 'Service',
-        name: servicio.titulo,
-        description: servicio.descripcion,
+        ...servicio,
         areaServed: { '@type': 'Country', name: 'Chile' },
       },
     })),
@@ -98,17 +149,18 @@ const sitioJsonLd = {
   '@id': new URL('/#sitio', Astro.site).href,
   name: MARCA,
   url: Astro.site?.toString(),
-  inLanguage: 'es-CL',
+  inLanguage: ['es-CL', 'en'],
   publisher: { '@id': new URL('/#negocio', Astro.site).href },
 };
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#06111a" />
+    <meta name="theme-color" content="#ffffff" />
+    {detectarIdioma && <script is:inline set:html={scriptIdioma} />}
 
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -123,6 +175,8 @@ const sitioJsonLd = {
       publicado={publicado}
       actualizado={actualizado}
       autor={autor}
+      lang={lang}
+      alternos={alternos}
     />
 
     <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />

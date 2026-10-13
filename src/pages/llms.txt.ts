@@ -1,6 +1,14 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
-import { SERVICIOS, AUTOMATIZACIONES, PROYECTOS, FAQ } from '../data/contenido';
+import {
+  SERVICIOS,
+  AUTOMATIZACIONES,
+  PROYECTOS,
+  FAQ,
+  MODULOS_SOFTWARE,
+  INDUSTRIAS,
+  SERVICIOS_MARKETING,
+} from '../data/contenido';
 import { MARCA, RESPUESTA_PROMESA, TIENE_EMAIL, CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_DISPLAY } from '../lib/config';
 
 /**
@@ -17,7 +25,7 @@ export const GET: APIRoute = async ({ site }) => {
   const lineas = [
     `# ${MARCA}`,
     '',
-    '> Estudio creativo y digital chileno. Diseñamos páginas web, sitios corporativos y tiendas online, y dejamos la atención a clientes funcionando sola. Trabajamos con negocios de todo Chile.',
+    '> Estudio creativo y digital chileno. Diseñamos páginas web, sitios corporativos y tiendas online, desarrollamos software a medida y hacemos marketing digital. Trabajamos con negocios de Chile y del extranjero, en español y en inglés.',
     '',
     '## Datos del negocio',
     '',
@@ -28,9 +36,21 @@ export const GET: APIRoute = async ({ site }) => {
     ...(TIENE_WHATSAPP ? [`- WhatsApp: ${WHATSAPP_DISPLAY}`] : []),
     ...(TIENE_EMAIL ? [`- Correo: ${CONTACTO_EMAIL}`] : []),
     '',
-    '## Servicios',
+    '## Diseño web',
     '',
     ...SERVICIOS.map((s) => `- **${s.titulo}** — ${s.bajada} ${s.descripcion}`),
+    '',
+    '## Desarrollo de software a medida',
+    '',
+    'Aplicaciones y sistemas a medida para conectar, automatizar y simplificar la operación.',
+    '',
+    ...MODULOS_SOFTWARE.map((m) => `- ${m}`),
+    '',
+    `Industrias: ${INDUSTRIAS.join(', ')}.`,
+    '',
+    '## Marketing digital',
+    '',
+    ...SERVICIOS_MARKETING.map((s) => `- **${s.titulo}** — ${s.descripcion}`),
     '',
     '## Qué dejamos funcionando solo',
     '',
@@ -46,6 +66,7 @@ export const GET: APIRoute = async ({ site }) => {
     '## Páginas',
     '',
     `- [Inicio](${url('/')}): servicios, proyectos y contacto.`,
+    `- [Home in English](${url('/en/')}): the same site, in English.`,
     `- [Blog](${url('/blog/')}): guías sobre diseño web y automatización.`,
     ...notas.map((n) => `- [${n.data.titulo}](${url(`/blog/${n.id}/`)}): ${n.data.descripcion}`),
     '',

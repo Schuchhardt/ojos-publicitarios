@@ -41,7 +41,7 @@ export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xnpndzjw';
  */
 export const CONTACTO_EMAIL: string = 'ojospublicitarios@gmail.com';
 
-/** Promesa de respuesta: se repite en varias secciones, así que vive acá. */
+/** Promesa de respuesta, en español (la de cada idioma vive en data/home.ts). */
 export const RESPUESTA_PROMESA = 'Te respondemos en menos de 12 horas, cualquier día.';
 
 export const TIENE_WHATSAPP = MOSTRAR_WHATSAPP && WHATSAPP_NUMERO !== '';
@@ -70,14 +70,3 @@ export const REDES: Red[] = [
   { nombre: 'TikTok', url: '', icono: 'tiktok' }, // TODO: perfil real
   { nombre: 'Facebook', url: '', icono: 'facebook' }, // TODO: perfil real
 ].filter((red) => red.url !== '');
-
-// ---------------------------------------------------------------------------
-// Navegación del header
-// ---------------------------------------------------------------------------
-export const NAV = [
-  { texto: 'Diseño web', href: '/#servicios' },
-  { texto: 'Qué incluye', href: '/#automatizacion' },
-  ...(MOSTRAR_POLITICA_IA ? [{ texto: 'Cómo trabajamos', href: '/#criterio' }] : []),
-  ...(MOSTRAR_EQUIPO ? [{ texto: 'Equipo', href: '/#equipo' }] : []),
-  { texto: 'Blog', href: '/blog/' },
-];

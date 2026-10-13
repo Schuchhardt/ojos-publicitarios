@@ -1,22 +1,27 @@
 ---
 import { Image } from 'astro:assets';
-import { PROYECTOS, PROYECTOS_PENDIENTES } from '../data/contenido';
+import { HOME, type Idioma } from '../data/home';
 import { cargarImagen } from '../lib/imagenes';
 
+interface Props {
+  idioma: Idioma;
+}
+
+const c = HOME[Astro.props.idioma].proyectos;
+
 const proyectos = await Promise.all(
-  PROYECTOS.map(async (proyecto) => ({
+  c.lista.map(async (proyecto) => ({
     ...proyecto,
     imagen: await cargarImagen(proyecto.imagen),
   }))
 );
 ---
 
-<section id="proyectos" class="seccion">
+<section id="proyectos" class="proyectos tema-claro">
+  <div class="contenedor">
   <div class="encabezado" data-reveal-grupo="90">
-    <h2 class="titulo-seccion">Proyectos entregados.</h2>
-    <p class="texto-apoyo">
-      Sitios funcionando hoy y marcas que ya están en la calle. Puedes entrar y verlos.
-    </p>
+    <h2 class="titulo-seccion">{c.titulo}</h2>
+    <p class="texto-apoyo">{c.bajada}</p>
   </div>
 
   <div class="rejilla" data-reveal-grupo="110">
@@ -26,7 +31,7 @@ const proyectos = await Promise.all(
           {proyecto.imagen && (
             <Image
               src={proyecto.imagen}
-              alt={`Proyecto ${proyecto.nombre}`}
+              alt={proyecto.nombre}
               widths={[420, 760, 1080]}
               sizes="(max-width: 900px) 100vw, 45vw"
               loading="lazy"
@@ -50,28 +55,23 @@ const proyectos = await Promise.all(
         </article>
       ))
     }
-
-    {
-      Array.from({ length: PROYECTOS_PENDIENTES }).map((_, i) => (
-        <div class="marcador pendiente">
-          <div class="marcador-titulo">
-            [ {['segundo', 'tercer', 'cuarto'][i] ?? 'siguiente'} proyecto ]
-          </div>
-          <div class="marcador-nota">agregar nombre, link, captura y una línea de resultado</div>
-        </div>
-      ))
-    }
+  </div>
   </div>
 </section>
 
 <style>
+  .proyectos {
+    padding: var(--pad-y) var(--pad-x);
+  }
+
   .rejilla {
-    --min-col: 340px;
+    --min-col: 260px;
     gap: clamp(20px, 2.6vw, 32px);
   }
 
   .tarjeta {
     border: 1px solid var(--linea-media);
+    border-radius: var(--radio-tarjeta);
     background: var(--panel);
     overflow: hidden;
     transition:
@@ -105,7 +105,8 @@ const proyectos = await Promise.all(
   }
 
   .rotulo-proyecto {
-    font-family: var(--fuente-mono);
+    font-family: var(--fuente-titulo);
+    font-weight: 700;
     font-size: 11px;
     letter-spacing: 0.14em;
     color: var(--acento);
@@ -114,7 +115,7 @@ const proyectos = await Promise.all(
   h3 {
     font-family: var(--fuente-titulo);
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 0;
   }
 
@@ -144,9 +145,5 @@ const proyectos = await Promise.all(
     .tarjeta:hover :global(img) {
       transform: none;
     }
-  }
-
-  .pendiente {
-    min-height: 280px;
   }
 </style>

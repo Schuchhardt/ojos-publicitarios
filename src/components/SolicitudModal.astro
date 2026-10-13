@@ -1,30 +1,43 @@
 ---
-import { TIPOS_DE_PROYECTO } from '../data/contenido';
-import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
+import { HOME, type Idioma } from '../data/home';
+import { FORMSPREE_ENDPOINT } from '../lib/config';
+
+interface Props {
+  idioma?: Idioma;
+}
+
+const { idioma = 'es' } = Astro.props;
+const t = HOME[idioma];
+const c = t.solicitud;
 ---
 
-<dialog class="solicitud" id="solicitud" aria-labelledby="solicitud-titulo">
-  <button type="button" class="cerrar" aria-label="Cerrar" data-cerrar>×</button>
+<dialog
+  class="solicitud"
+  id="solicitud"
+  aria-labelledby="solicitud-titulo"
+  data-error-nombre={c.errorNombre}
+  data-error-email={c.errorEmail}
+  data-enviando={c.enviando}
+>
+  <button type="button" class="cerrar" aria-label={c.cerrar} data-cerrar>×</button>
 
-  <div class="rotulo">CONVERSEMOS SOBRE TU IDEA</div>
-  <h2 id="solicitud-titulo">Tu proyecto,<br />en pocas palabras.</h2>
-  <p class="bajada" id="solicitud-bajada">
-    Cuéntanos qué necesitas. Te respondemos con un plan concreto: qué incluye, de qué nos
-    encargamos nosotros y cuánto cuesta.
-  </p>
+  <div class="rotulo">{c.rotulo}</div>
+  <h2 id="solicitud-titulo">{c.titulo}</h2>
+  <p class="bajada" id="solicitud-bajada">{c.bajada}</p>
 
   <div class="error" id="solicitud-error" role="alert" hidden>
-    <p>No pudimos enviar tu solicitud. Vuelve a intentarlo en unos segundos.</p>
+    <p>{c.error}</p>
   </div>
 
   <div class="exito" id="solicitud-exito" hidden>
     <div class="exito-marca" aria-hidden="true">✓</div>
-    <h3>Recibimos tu solicitud.</h3>
-    <p>{RESPUESTA_PROMESA}</p>
+    <h3>{c.exito}</h3>
+    <p>{t.respuestaPromesa}</p>
   </div>
 
   <form id="solicitud-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate>
-    <input type="hidden" name="_subject" value="Nueva solicitud — Ojos Publicitarios" />
+    <input type="hidden" name="_subject" value={c.asunto} />
+    <input type="hidden" name="idioma" value={idioma} />
     <!-- Honeypot anti-spam: Formspree descarta el envío si viene relleno. -->
     <input
       type="text"
@@ -36,31 +49,31 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
     />
 
     <label for="solicitud-nombre">
-      Tu nombre
+      {c.nombre}
       <input
         type="text"
         id="solicitud-nombre"
         name="nombre"
-        placeholder="¿Cómo te llamas?"
+        placeholder={c.nombrePh}
         autocomplete="name"
         required
       />
     </label>
 
     <label for="solicitud-email">
-      Tu correo
+      {c.email}
       <input
         type="email"
         id="solicitud-email"
         name="email"
-        placeholder="Para responderte"
+        placeholder={c.emailPh}
         autocomplete="email"
         required
       />
     </label>
 
     <label for="solicitud-telefono">
-      Teléfono o WhatsApp <span class="opcional">(opcional)</span>
+      {c.telefono} <span class="opcional">{c.opcional}</span>
       <input
         type="tel"
         id="solicitud-telefono"
@@ -71,39 +84,34 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
     </label>
 
     <label for="solicitud-empresa">
-      Empresa o marca <span class="opcional">(opcional)</span>
+      {c.empresa} <span class="opcional">{c.opcional}</span>
       <input
         type="text"
         id="solicitud-empresa"
         name="empresa"
-        placeholder="Nombre de tu negocio"
+        placeholder={c.empresaPh}
         autocomplete="organization"
       />
     </label>
 
     <label for="solicitud-tipo">
-      ¿Qué necesitas?
+      {c.tipo}
       <select id="solicitud-tipo" name="tipo">
-        {TIPOS_DE_PROYECTO.map((tipo) => <option value={tipo}>{tipo}</option>)}
+        {c.tipos.map((tipo) => <option value={tipo}>{tipo}</option>)}
       </select>
     </label>
 
     <label for="solicitud-idea">
-      Cuéntanos tu idea
-      <textarea
-        id="solicitud-idea"
-        name="idea"
-        rows="4"
-        placeholder="¿Qué vendes y qué te gustaría lograr?"></textarea>
+      {c.idea}
+      <textarea id="solicitud-idea" name="idea" rows="4" placeholder={c.ideaPh}></textarea>
     </label>
 
     <button type="submit" class="boton boton-primario" id="solicitud-enviar">
-      Enviar solicitud <span aria-hidden="true">↗</span>
+      {c.enviar} <span aria-hidden="true">↗</span>
     </button>
 
-    <p class="aviso">{RESPUESTA_PROMESA}</p>
+    <p class="aviso">{t.respuestaPromesa}</p>
   </form>
-
 </dialog>
 
 <style>
@@ -112,7 +120,7 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
     max-height: min(88vh, 820px);
     padding: clamp(24px, 4vw, 40px);
     border: 1px solid var(--acento-borde-suave);
-    border-radius: 4px;
+    border-radius: var(--radio-tarjeta);
     background: var(--panel-destacado);
     color: var(--texto);
     overflow: auto;
@@ -141,7 +149,8 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
   }
 
   .rotulo {
-    font-family: var(--fuente-mono);
+    font-family: var(--fuente-titulo);
+    font-weight: 700;
     font-size: 11px;
     letter-spacing: 0.18em;
     color: var(--acento);
@@ -152,7 +161,7 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
   h2 {
     font-family: var(--fuente-titulo);
     font-size: clamp(26px, 3.4vw, 34px);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.02em;
     margin: 0 0 14px;
@@ -287,8 +296,7 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
   }
 
   .aviso {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.7;
     color: var(--texto-debil);
     margin: 0;
@@ -361,11 +369,15 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
       error?.setAttribute('hidden', '');
 
       const fallo = primerError([
-        { el: nombre, ok: nombreValido(nombre?.value ?? ''), mensaje: 'Escribe tu nombre.' },
+        {
+          el: nombre,
+          ok: nombreValido(nombre?.value ?? ''),
+          mensaje: dialogo.dataset.errorNombre ?? '',
+        },
         {
           el: email,
           ok: emailValido(email?.value ?? ''),
-          mensaje: 'Revisa tu correo: no parece una dirección válida.',
+          mensaje: dialogo.dataset.errorEmail ?? '',
         },
       ]);
       if (fallo) {
@@ -376,7 +388,7 @@ import { FORMSPREE_ENDPOINT, RESPUESTA_PROMESA } from '../lib/config';
 
       if (enviar) {
         enviar.disabled = true;
-        enviar.textContent = 'Enviando…';
+        enviar.textContent = dialogo.dataset.enviando ?? '…';
       }
 
       try {

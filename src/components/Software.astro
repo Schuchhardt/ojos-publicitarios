@@ -1,0 +1,106 @@
+---
+import { Image } from 'astro:assets';
+import diagrama from '../assets/web/software.jpg';
+import { HOME, type Idioma } from '../data/home';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const c = HOME[Astro.props.idioma].software;
+---
+
+<section id="software" class="software">
+  <div class="contenedor rejilla-software">
+    <div class="imagen" data-reveal>
+      <Image
+        src={diagrama}
+        alt={c.alt}
+        widths={[480, 760, 1090]}
+        sizes="(max-width: 960px) 100vw, 55vw"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="texto" data-reveal style="--reveal-delay:120ms">
+      <div class="rotulo">{c.rotulo}</div>
+      <h2 class="titular">{c.titulo.normal} <span>{c.titulo.acento}</span></h2>
+      <p>{c.texto}</p>
+
+      <ul class="modulos">
+        {c.modulos.map((modulo) => <li>{modulo}</li>)}
+      </ul>
+
+      <a href="#contacto" class="boton boton-pildora" data-track="cta_software">
+        {c.cta} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .software {
+    background: var(--claro-bg);
+    color: var(--claro-texto);
+    padding: var(--pad-y) var(--pad-x);
+  }
+
+  .rejilla-software {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
+  }
+
+  .imagen :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .rotulo {
+    color: var(--claro-texto);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.24em;
+    margin-bottom: 26px;
+  }
+
+  .texto p {
+    font-size: clamp(16px, 1.25vw, 18px);
+    font-weight: 500;
+    line-height: 1.65;
+    color: var(--claro-texto-suave);
+    margin: 26px 0 22px;
+    max-width: 40ch;
+  }
+
+  .modulos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+  }
+
+  .modulos li {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 13px;
+    border: 1px solid #c9dbe3;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--claro-texto);
+  }
+
+  @media (max-width: 960px) {
+    .rejilla-software {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .texto {
+      order: -1;
+    }
+  }
+</style>
