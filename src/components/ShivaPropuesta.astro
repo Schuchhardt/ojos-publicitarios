@@ -1,0 +1,1610 @@
+---
+import { Image } from 'astro:assets';
+import PropuestaLayout from '../layouts/PropuestaLayout.astro';
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/playfair-display/wght-italic.css';
+import '@fontsource-variable/readex-pro';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/shiva.css';
+import {
+  FICHAS_NUTRICIONALES,
+  LIMITES_ALTO_EN,
+  LINEAS,
+  PEDIDO_MINIMO,
+  PRODUCTOS,
+  PROPUESTA,
+  RUTAS,
+  UNIDADES_CAJA,
+  clp,
+  precioMayoristaCaja,
+  precioMayoristaUnidad,
+  selloAltoEn,
+} from '../data/shiva';
+import { CONTACTO_EMAIL, TIENE_EMAIL, whatsappUrl } from '../lib/config';
+import logoBlanco from '../assets/shiva/shiva-logo-blanco.png';
+import cajaPedido from '../assets/shiva/fotos/caja-pedido.jpg';
+import logoOjos from '../assets/logo-ojos-publicitarios.png';
+
+const p = PROPUESTA;
+
+// Un ejemplo por línea para mostrar cómo queda el precio en cada canal.
+const ejemplos = LINEAS.map((linea) => {
+  const muestra = PRODUCTOS.find((producto) => producto.linea === linea.id)!;
+  return {
+    linea: linea.nombre,
+    publico: muestra.precio,
+    unidad: precioMayoristaUnidad(muestra.precio),
+    caja: precioMayoristaCaja(muestra.precio),
+  };
+});
+
+const fichas = FICHAS_NUTRICIONALES.map((ficha) => ({ ...ficha, ...selloAltoEn(ficha) }));
+// Calorías y sodio en enteros; azúcares y grasas con un decimal, como en una tabla nutricional.
+const formatoValor = (valor: number, decimales = 0) =>
+  valor.toLocaleString('es-CL', { maximumFractionDigits: decimales });
+
+const totalUnicos = p.inversion.unicos.reduce((total, item) => total + item.monto, 0);
+const totalTrimestre = totalUnicos + p.inversion.mensual.monto * p.inversion.mensual.mesesMinimos;
+
+const mensajeWhatsapp =
+  'Hola, revisamos la propuesta de lanzamiento de Shiva en Chile y queremos conversar.';
+---
+
+<PropuestaLayout
+  title="Propuesta — Shiva llega a Chile | Ojos Publicitarios"
+  description="Propuesta de lanzamiento de Shiva en Chile: tienda online shivacocina.cl, canal mayorista y redes @shivacocina.cl."
+  cliente="Shiva Chile"
+  etiqueta="Propuesta de lanzamiento"
+  nota="En ámbar: lo que falta confirmar"
+  fondo="#0f0f0e"
+>
+  <div class="shiva propuesta">
+    <!-- Portada ------------------------------------------------------- -->
+    <header class="portada shiva-oscuro">
+      <div class="portada-barra">
+        <Image src={logoBlanco} alt="Shiva" width={124} densities={[1, 2]} loading="eager" />
+        <span>Propuesta de Ojos Publicitarios</span>
+      </div>
+      <div class="portada-grilla">
+        <div class="portada-texto">
+          <div class="shiva-rotulo">Propuesta · {p.fecha}</div>
+          <h1>Shiva<br />llega a <span class="shiva-serif">Chile.</span></h1>
+          <p class="shiva-bajada">
+            Tienda propia en shivacocina.cl, un canal para que tiendas y distribuidores compren solos, y
+            las redes de @shivacocina.cl desde la primera publicación. Todo pensado para un mismo
+            lanzamiento.
+          </p>
+          <div class="botones">
+            <a href={RUTAS.tienda} class="shiva-boton shiva-boton-oro">Ver la demo de la tienda ↗</a>
+            <a href="#inversion" class="shiva-boton shiva-boton-borde">Ir a la inversión</a>
+          </div>
+        </div>
+        <div class="portada-foto">
+          <Image
+            src={cajaPedido}
+            alt="Caja abierta con paquetes de Shiva listos para despachar"
+            widths={[600, 1000]}
+            sizes="(max-width: 900px) 100vw, 42vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+      <nav class="indice" aria-label="Contenido de la propuesta">
+        {
+          p.frentes.map((frente) => (
+            <a href="#frentes">
+              <span>{frente.numero}</span>
+              {frente.titulo}
+            </a>
+          ))
+        }
+        <a href="#pendientes"><span>!</span>Antes de vender</a>
+      </nav>
+    </header>
+
+    <!-- Punto de partida ---------------------------------------------- -->
+    <section class="shiva-seccion">
+      <div class="shiva-ancho dos-columnas">
+        <div>
+          <div class="shiva-rotulo">El punto de partida</div>
+          <h2 class="shiva-h2">Lo difícil <span class="shiva-serif">ya está hecho.</span></h2>
+          <p class="shiva-bajada">
+            En Argentina Shiva ya resolvió producto, empaque, fotos y una tienda que vende, con
+            suscripción incluida. En Chile parte de cero en lo que no cruza la cordillera: nadie conoce
+            la marca, los precios van en pesos chilenos con IVA, el empaque necesita la etiqueta chilena
+            y una tienda que compra al por mayor pide factura.
+          </p>
+        </div>
+        <dl class="cifras">
+          <div>
+            <dt>9</dt>
+            <dd>Sabores en tres líneas: crackers, tostaditas y cookies.</dd>
+          </div>
+          <div>
+            <dt>4</dt>
+            <dd>Sellos en el pack: sin gluten, apto vegano, Kosher Parve y apto APLV.</dd>
+          </div>
+          <div>
+            <dt>BPM</dt>
+            <dd>Fábrica certificada en inocuidad alimentaria por IRAM.</dd>
+          </div>
+          <div>
+            <dt>−10 %</dt>
+            <dd>Suscripción que ya funciona: clientes que vuelven a comprar solos.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Localización -------------------------------------------------- -->
+    <section class="shiva-seccion shiva-papel">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Al cruzar la cordillera</div>
+            <h2 class="shiva-h2">Lo que cambia <span class="shiva-serif">en Chile.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            No es traducir: es que la marca suene de acá. Esto ya está aplicado en la demo de la tienda.
+          </p>
+        </div>
+        <div class="tabla-envoltorio">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th scope="col">En Argentina</th>
+                <th scope="col">En Chile</th>
+                <th scope="col">Por qué</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                p.localizacion.map((fila) => (
+                  <tr>
+                    <td class="tachado">{fila.argentina}</td>
+                    <td class="destacado">{fila.chile}</td>
+                    <td>{fila.nota}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tres frentes -------------------------------------------------- -->
+    <section class="shiva-seccion shiva-oscuro" id="frentes">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">La propuesta</div>
+            <h2 class="shiva-h2">Tres frentes, <span class="shiva-serif">un lanzamiento.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            La tienda vende, el canal mayorista pone a Shiva en el mesón de otros, y las redes llevan a
+            la gente a los dos.
+          </p>
+        </div>
+        <div class="frentes">
+          {
+            p.frentes.map((frente, i) => (
+              <article class="frente">
+                <span class="frente-numero">{frente.numero}</span>
+                <h3>{frente.titulo}</h3>
+                <p class="frente-bajada">{frente.bajada}</p>
+                <ul>
+                  {frente.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+                {i === 0 && (
+                  <a href={RUTAS.tienda} class="frente-enlace">
+                    Ver la demo de la tienda ↗
+                  </a>
+                )}
+                {i === 1 && (
+                  <a href={`${RUTAS.tienda}#mayoristas`} class="frente-enlace">
+                    Ver el canal mayorista en la demo ↗
+                  </a>
+                )}
+                {i === 2 && (
+                  <a href={`${RUTAS.tienda}#redes`} class="frente-enlace">
+                    Ver @shivacocina.cl en la demo ↗
+                  </a>
+                )}
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Plataforma ---------------------------------------------------- -->
+    <section class="shiva-seccion">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Plataforma</div>
+            <h2 class="shiva-h2">Tiendanube, <span class="shiva-serif">otra vez.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            Recomendamos una segunda tienda en Tiendanube Chile, separada de la argentina: otra moneda,
+            otro inventario y otra facturación, pero la misma forma de trabajar.
+          </p>
+        </div>
+        <div class="razones">
+          {
+            p.plataforma.razones.map((razon, i) => (
+              <article>
+                <span class="razon-numero">0{i + 1}</span>
+                <h3>{razon.titulo}</h3>
+                <p>{razon.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+        <div class="notas-plataforma">
+          <p><strong>¿Y Shopify?</strong> {p.plataforma.alternativa}</p>
+          <p><strong>El límite.</strong> {p.plataforma.limite}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flujo mayorista ----------------------------------------------- -->
+    <section class="shiva-seccion shiva-papel">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Canal mayorista</div>
+            <h2 class="shiva-h2">Así compra <span class="shiva-serif">una tienda.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            Sin cotizaciones por WhatsApp: la tienda se registra una vez y desde ahí compra sola, con
+            precio neto y factura.
+          </p>
+        </div>
+        <ol class="flujo">
+          {
+            p.flujoMayorista.map((paso, i) => (
+              <li>
+                <span class="flujo-numero">{i + 1}</span>
+                <h3>{paso.titulo}</h3>
+                <p>{paso.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="precios-ejemplo">
+          <div class="precios-cabeza">
+            <h3>Cómo queda el precio</h3>
+            <span class="shiva-pendiente">Precios referenciales, por confirmar con el costo en Chile</span>
+          </div>
+          <div class="tabla-envoltorio">
+            <table class="tabla">
+              <thead>
+                <tr>
+                  <th scope="col">Línea</th>
+                  <th scope="col">Público (con IVA)</th>
+                  <th scope="col">Mayorista neto c/u</th>
+                  <th scope="col">Caja de {UNIDADES_CAJA} (neto)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  ejemplos.map((fila) => (
+                    <tr>
+                      <td class="destacado">{fila.linea}</td>
+                      <td>{clp(fila.publico)}</td>
+                      <td>{clp(fila.unidad)}</td>
+                      <td>{clp(fila.caja)} + IVA</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+          <p class="precios-nota">
+            La tienda gana un 35 % al vender al precio sugerido. Pedido mínimo de {clp(PEDIDO_MINIMO)} +
+            IVA, combinando sabores. Distribuidores y cadenas, por cotización.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Redes --------------------------------------------------------- -->
+    <section class="shiva-seccion shiva-oscuro">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Redes · Instagram y TikTok</div>
+            <h2 class="shiva-h2 sin-mayusculas">@shivacocina.cl <span class="shiva-serif">desde cero.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            Una cuenta nueva no se lanza el día que abre la tienda: se calienta un mes antes, para que el
+            día uno ya haya gente esperando.
+          </p>
+        </div>
+
+        <div class="etapas">
+          {
+            p.etapasRedes.map((etapa) => (
+              <article>
+                <span class="etapa-tiempo">{etapa.tiempo}</span>
+                <h3>{etapa.titulo}</h3>
+                <ul>
+                  {etapa.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+
+        <h3 class="subtitulo">Pilares de contenido</h3>
+        <div class="pilares">
+          {
+            p.pilares.map((pilar) => (
+              <article>
+                <h4>{pilar.titulo}</h4>
+                <p>{pilar.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+        <p class="tono">
+          <span class="shiva-serif">Tono:</span> cercano y directo, en chileno neutro. Sin voseo y sin
+          modismos forzados. El público es adulto, de 25 a 45 años: es quien compra y, como se ve más
+          abajo, el único al que se le puede hablar.
+        </p>
+      </div>
+    </section>
+
+    <!-- Sellos -------------------------------------------------------- -->
+    <section class="shiva-seccion sellos" id="sellos">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Ley 20.606 · Etiquetado de alimentos</div>
+            <h2 class="shiva-h2">La etiqueta <span class="shiva-serif">cambia el plan.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            En Chile un alimento sólido lleva un sello negro “ALTO EN” por cada nutriente que pase el
+            límite por 100 g. Con la ficha nutricional que Shiva publica, hicimos la cuenta.
+          </p>
+        </div>
+
+        <div class="fichas">
+          {
+            fichas.map((ficha) => (
+              <article class="ficha">
+                <h3>{ficha.producto}</h3>
+                <dl>
+                  <div>
+                    <dt>Calorías</dt>
+                    <dd class:list={{ excede: ficha.valores.calorias > LIMITES_ALTO_EN.calorias }}>
+                      {formatoValor(ficha.valores.calorias)} kcal
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Sodio</dt>
+                    <dd class:list={{ excede: ficha.valores.sodio > LIMITES_ALTO_EN.sodio }}>
+                      {formatoValor(ficha.valores.sodio)} mg
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Azúcares</dt>
+                    <dd class:list={{ excede: ficha.valores.azucares > LIMITES_ALTO_EN.azucares }}>
+                      {formatoValor(ficha.valores.azucares, 1)} g
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Grasas saturadas</dt>
+                    <dd
+                      class:list={{
+                        excede: ficha.valores.grasasSaturadas > LIMITES_ALTO_EN.grasasSaturadas,
+                      }}
+                    >
+                      {formatoValor(ficha.valores.grasasSaturadas, 1)} g
+                    </dd>
+                  </div>
+                </dl>
+                <div class="ficha-sellos">
+                  {ficha.sellos.map((sello) => (
+                    <span class="shiva-sello">
+                      Alto en
+                      <b>{sello}</b>
+                      <small>Ministerio de Salud</small>
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))
+          }
+          <aside class="limites">
+            <h3>Límites por 100 g</h3>
+            <ul>
+              <li><span>Calorías</span><strong>{LIMITES_ALTO_EN.calorias} kcal</strong></li>
+              <li><span>Sodio</span><strong>{LIMITES_ALTO_EN.sodio} mg</strong></li>
+              <li><span>Azúcares totales</span><strong>{LIMITES_ALTO_EN.azucares} g</strong></li>
+              <li><span>Grasas saturadas</span><strong>{LIMITES_ALTO_EN.grasasSaturadas} g</strong></li>
+            </ul>
+            <p>
+              Toda la línea ronda las 410 kcal por 100 g, así que lo más probable es que cada producto
+              lleve al menos “ALTO EN CALORÍAS”.
+            </p>
+          </aside>
+        </div>
+
+        <div class="consecuencias">
+          <article>
+            <h3>El empaque</h3>
+            <p>
+              Necesita un rótulo chileno con los sellos y los datos del importador. Los octógonos
+              argentinos (“EXCESO EN”) no sirven acá.
+            </p>
+          </article>
+          <article>
+            <h3>La comunicación</h3>
+            <p>
+              Un producto “ALTO EN” no se puede publicitar a menores de 14 años ni con regalos o juegos
+              para niños. El Combo Recreo, el Memotest y el e-book Cookids quedan fuera del lanzamiento.
+            </p>
+          </article>
+          <article>
+            <h3>La tienda</h3>
+            <p>
+              Cada ficha muestra sus sellos y la tabla nutricional chilena. Mejor ser claros: el público
+              de Shiva lee etiquetas.
+            </p>
+          </article>
+        </div>
+        <p class="sellos-nota">
+          <span class="shiva-pendiente"
+            >Cálculo propio con la porción de 30 g publicada. Confirmar con el análisis de laboratorio y
+            un asesor regulatorio.</span
+          >
+        </p>
+      </div>
+    </section>
+
+    <!-- Pendientes ---------------------------------------------------- -->
+    <section class="shiva-seccion shiva-papel" id="pendientes">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Antes de vender</div>
+            <h2 class="shiva-h2">Lo que resuelve <span class="shiva-serif">Shiva.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            La tienda puede estar lista en cinco semanas, pero no se vende sin producto nacionalizado en
+            Santiago. Esto corre en paralelo y marca la fecha real de lanzamiento.
+          </p>
+        </div>
+        <ol class="pendientes">
+          {
+            p.pendientes.map((item, i) => (
+              <li>
+                <div class="pendiente-cabeza">
+                  <span class="pendiente-numero">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="shiva-pendiente">Por confirmar</span>
+                </div>
+                <h3>{item.titulo}</h3>
+                <p>{item.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Hoja de ruta -------------------------------------------------- -->
+    <section class="shiva-seccion shiva-oscuro">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Hoja de ruta</div>
+            <h2 class="shiva-h2">Ocho semanas <span class="shiva-serif">al lanzamiento.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            Contadas desde el kickoff. La semana 8 se mueve si el stock no está en Santiago a tiempo.
+          </p>
+        </div>
+        <ol class="ruta">
+          {
+            p.hojaDeRuta.map((etapa) => (
+              <li>
+                <span class="ruta-semanas">{etapa.semanas}</span>
+                <h3>{etapa.titulo}</h3>
+                <p>{etapa.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Inversión ----------------------------------------------------- -->
+    <section class="shiva-seccion" id="inversion">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Inversión</div>
+            <h2 class="shiva-h2">Lo que <span class="shiva-serif">cuesta.</span></h2>
+          </div>
+          <span class="shiva-pendiente">Valores referenciales en CLP + IVA, para conversar</span>
+        </div>
+
+        <div class="inversion">
+          <div class="inversion-tabla">
+            {
+              p.inversion.unicos.map((item) => (
+                <div class="inversion-fila">
+                  <div>
+                    <span class="inversion-tipo">Pago único</span>
+                    <h3>{item.concepto}</h3>
+                    <p>{item.detalle}</p>
+                  </div>
+                  <strong>{clp(item.monto)}</strong>
+                </div>
+              ))
+            }
+            <div class="inversion-fila">
+              <div>
+                <span class="inversion-tipo">
+                  Mensual · mínimo {p.inversion.mensual.mesesMinimos} meses
+                </span>
+                <h3>{p.inversion.mensual.concepto}</h3>
+                <p>{p.inversion.mensual.detalle}</p>
+              </div>
+              <strong>{clp(p.inversion.mensual.monto)}<small>/mes</small></strong>
+            </div>
+            <div class="inversion-total">
+              <span>
+                Primer trimestre (implementación + {p.inversion.mensual.mesesMinimos} meses de redes)
+              </span>
+              <strong>{clp(totalTrimestre)} + IVA</strong>
+            </div>
+            <p class="inversion-pago">{p.inversion.pago}</p>
+          </div>
+
+          <aside class="terceros">
+            <h3>No incluye</h3>
+            <ul>
+              {p.inversion.terceros.map((item) => <li>{item}</li>)}
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Medición ------------------------------------------------------ -->
+    <section class="shiva-seccion shiva-papel">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Medición</div>
+            <h2 class="shiva-h2">Qué <span class="shiva-serif">miramos.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            Un informe al mes con estos números, y las metas se fijan juntos después del primer mes de
+            ventas, con datos reales de Chile.
+          </p>
+        </div>
+        <div class="medicion">
+          {
+            p.medicion.map((bloque) => (
+              <article>
+                <h3>{bloque.area}</h3>
+                <ul>
+                  {bloque.metricas.map((m) => (
+                    <li>{m}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Próximos pasos ------------------------------------------------ -->
+    <section class="shiva-seccion shiva-oscuro cierre">
+      <div class="shiva-ancho cierre-grilla">
+        <div>
+          <div class="shiva-rotulo">Próximos pasos</div>
+          <h2 class="shiva-h2">¿Partimos?</h2>
+          <ol class="pasos">
+            {p.pasos.map((paso) => <li>{paso}</li>)}
+          </ol>
+        </div>
+        <div class="cierre-contacto">
+          <a href={whatsappUrl(mensajeWhatsapp)} class="shiva-boton shiva-boton-oro" target="_blank" rel="noopener">
+            Conversemos por WhatsApp
+          </a>
+          <a href={RUTAS.tienda} class="shiva-boton shiva-boton-borde">Ver la demo de la tienda</a>
+          {TIENE_EMAIL && <a href={`mailto:${CONTACTO_EMAIL}`} class="cierre-correo">{CONTACTO_EMAIL}</a>}
+          <div class="firma">
+            <Image src={logoOjos} alt="" width={52} densities={[1, 2]} loading="lazy" />
+            <span>Una propuesta de<br /><strong>Ojos Publicitarios</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</PropuestaLayout>
+
+<style>
+  /* Portada ----------------------------------------------------------- */
+  .portada {
+    padding: 22px var(--pad-x) 0;
+  }
+
+  .portada-barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--linea-oscura);
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(243, 239, 230, 0.7);
+  }
+
+  .portada-barra img {
+    width: 124px;
+    height: auto;
+  }
+
+  .portada-grilla {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: center;
+    max-width: var(--ancho);
+    margin: 0 auto;
+    padding: clamp(48px, 7vw, 96px) 0;
+  }
+
+  .portada h1 {
+    font-size: clamp(60px, 9.4vw, 148px);
+    line-height: 0.88;
+    margin-bottom: 30px;
+  }
+
+  .portada h1 .shiva-serif {
+    color: var(--oro-claro);
+  }
+
+  .botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 34px;
+  }
+
+  .portada-foto {
+    aspect-ratio: 4 / 4.6;
+    overflow: hidden;
+  }
+
+  .portada-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .indice {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: var(--ancho);
+    margin: 0 auto;
+    border-top: 1px solid var(--linea-oscura);
+  }
+
+  .indice a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 22px 18px 24px 0;
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-size: 19px;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--hueso);
+  }
+
+  .indice a:hover {
+    color: var(--oro-claro);
+  }
+
+  .indice span {
+    font-family: var(--fuente-mono);
+    font-stretch: normal;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--oro-claro);
+  }
+
+  /* Comunes ------------------------------------------------------------ */
+  .encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px 56px;
+    margin-bottom: 44px;
+  }
+
+  .encabezado h2.shiva-h2 {
+    margin-bottom: 0;
+  }
+
+  .encabezado .shiva-bajada {
+    max-width: 46ch;
+  }
+
+  .sin-mayusculas {
+    text-transform: none !important;
+  }
+
+  .dos-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px 80px;
+    align-items: center;
+  }
+
+  /* Cifras ------------------------------------------------------------- */
+  .cifras {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+    border-top: 1px solid var(--linea);
+    border-left: 1px solid var(--linea);
+  }
+
+  .cifras div {
+    padding: 26px 24px;
+    border-right: 1px solid var(--linea);
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .cifras dt {
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-size: clamp(44px, 5vw, 64px);
+    font-weight: 850;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .cifras dd {
+    margin: 0;
+    font-size: 15px;
+    color: var(--texto);
+  }
+
+  /* Tablas ------------------------------------------------------------- */
+  .tabla-envoltorio {
+    overflow-x: auto;
+  }
+
+  .tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15.5px;
+  }
+
+  .tabla th {
+    padding: 0 18px 12px 0;
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--oliva);
+    border-bottom: 2px solid var(--tinta);
+  }
+
+  .tabla td {
+    padding: 15px 18px 15px 0;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: top;
+    color: var(--texto);
+  }
+
+  .tabla .tachado {
+    color: var(--texto-tenue);
+    text-decoration: line-through;
+    text-decoration-color: rgba(122, 88, 32, 0.6);
+  }
+
+  .tabla .destacado {
+    color: var(--tinta);
+    font-weight: 500;
+  }
+
+  /* Frentes ------------------------------------------------------------ */
+  .frentes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .frente {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 28px 28px;
+    border: 1px solid var(--linea-oscura);
+    background: var(--carbon);
+  }
+
+  .frente-numero {
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    color: var(--oro-claro);
+    margin-bottom: 18px;
+  }
+
+  .frente h3 {
+    font-size: 34px;
+    margin-bottom: 12px;
+  }
+
+  .frente-bajada {
+    color: rgba(243, 239, 230, 0.76);
+    font-size: 15.5px;
+    margin-bottom: 22px !important;
+  }
+
+  .frente ul,
+  .etapas ul,
+  .terceros ul,
+  .medicion ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .frente li {
+    position: relative;
+    padding: 11px 0 11px 22px;
+    border-top: 1px solid var(--linea-oscura);
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(243, 239, 230, 0.88);
+  }
+
+  .frente li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 19px;
+    width: 9px;
+    height: 1px;
+    background: var(--oro);
+  }
+
+  .frente-enlace {
+    margin-top: auto;
+    padding-top: 22px;
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--oro-claro) !important;
+  }
+
+  .frente-enlace:hover {
+    text-decoration: underline !important;
+    text-underline-offset: 4px;
+  }
+
+  /* Plataforma ---------------------------------------------------------- */
+  .razones {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+    margin-bottom: 40px;
+  }
+
+  .razones article {
+    padding-top: 18px;
+    border-top: 2px solid var(--tinta);
+  }
+
+  .razon-numero {
+    font-family: var(--fuente-mono);
+    font-size: 12.5px;
+    color: var(--bronce);
+  }
+
+  .razones h3 {
+    font-size: 30px;
+    margin: 10px 0 12px;
+  }
+
+  .razones p {
+    color: var(--texto);
+    font-size: 15.5px;
+  }
+
+  .notas-plataforma {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .notas-plataforma p {
+    padding: 20px 22px;
+    background: var(--papel);
+    border: 1px solid var(--linea);
+    font-size: 15px;
+    color: var(--texto);
+  }
+
+  .notas-plataforma strong {
+    color: var(--tinta);
+  }
+
+  /* Flujo mayorista ----------------------------------------------------- */
+  .flujo {
+    list-style: none;
+    margin: 0 0 56px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    counter-reset: flujo;
+  }
+
+  .flujo li {
+    position: relative;
+    padding-top: 58px;
+  }
+
+  .flujo li::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 44px;
+    right: -18px;
+    height: 1px;
+    background: var(--linea);
+  }
+
+  .flujo li:last-child::before {
+    display: none;
+  }
+
+  .flujo-numero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--negro);
+    color: var(--oro-claro);
+    font-family: var(--fuente-mono);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .flujo h3 {
+    font-size: 23px;
+    margin-bottom: 8px;
+  }
+
+  .flujo p {
+    font-size: 14.5px;
+    color: var(--texto);
+  }
+
+  .precios-ejemplo {
+    padding: clamp(24px, 3vw, 36px);
+    background: var(--hueso);
+    border: 1px solid var(--linea);
+  }
+
+  .precios-cabeza {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    margin-bottom: 20px;
+  }
+
+  .precios-cabeza h3 {
+    font-size: 26px;
+  }
+
+  /* En pantallas angostas la tabla se desliza en vez de apretarse. */
+  .precios-ejemplo .tabla {
+    min-width: 560px;
+  }
+
+  .precios-nota {
+    margin-top: 16px !important;
+    font-size: 14.5px;
+    color: var(--texto);
+  }
+
+  /* Redes --------------------------------------------------------------- */
+  .etapas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 56px;
+  }
+
+  .etapas article {
+    padding: 26px 26px 24px;
+    border-top: 3px solid var(--oro);
+    background: var(--carbon);
+  }
+
+  .etapa-tiempo {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--oro-claro);
+  }
+
+  .etapas h3 {
+    font-size: 36px;
+    margin: 10px 0 16px;
+  }
+
+  .etapas li {
+    padding: 9px 0;
+    border-top: 1px solid var(--linea-oscura);
+    font-size: 15px;
+    color: rgba(243, 239, 230, 0.86);
+  }
+
+  .subtitulo {
+    font-size: 28px;
+    margin-bottom: 22px;
+  }
+
+  .pilares {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+
+  .pilares article {
+    padding-top: 16px;
+    border-top: 1px solid var(--oro);
+  }
+
+  .pilares h4 {
+    font-size: 21px;
+    margin-bottom: 10px;
+  }
+
+  .pilares p {
+    font-size: 14.5px;
+    color: rgba(243, 239, 230, 0.76);
+  }
+
+  .tono {
+    max-width: 78ch;
+    font-size: 16.5px;
+    color: rgba(243, 239, 230, 0.86);
+  }
+
+  .tono .shiva-serif {
+    color: var(--oro-claro);
+    font-size: 1.15em;
+  }
+
+  /* Sellos -------------------------------------------------------------- */
+  .fichas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.9fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .ficha,
+  .limites {
+    padding: 26px;
+    border: 1px solid var(--linea);
+    background: var(--papel);
+  }
+
+  .ficha h3,
+  .limites h3 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .ficha dl {
+    margin: 0 0 20px;
+  }
+
+  .ficha dl div,
+  .limites li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--linea);
+    font-size: 15px;
+  }
+
+  .ficha dt {
+    color: var(--texto);
+  }
+
+  .ficha dd {
+    margin: 0;
+    font-weight: 400;
+    color: var(--texto-tenue);
+  }
+
+  .ficha dd.excede {
+    color: var(--tinta);
+    font-weight: 600;
+  }
+
+  .ficha dd.excede::after {
+    content: ' ▲';
+    font-size: 0.75em;
+  }
+
+  .ficha-sellos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .limites {
+    background: var(--negro);
+    color: var(--hueso);
+    border-color: var(--negro);
+  }
+
+  .limites ul {
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+  }
+
+  .limites li {
+    border-color: var(--linea-oscura);
+  }
+
+  .limites strong {
+    color: var(--oro-claro);
+    font-weight: 500;
+  }
+
+  .limites p {
+    font-size: 14.5px;
+    color: rgba(243, 239, 230, 0.78);
+  }
+
+  .consecuencias {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+    margin-bottom: 28px;
+  }
+
+  .consecuencias article {
+    padding-top: 16px;
+    border-top: 2px solid var(--tinta);
+  }
+
+  .consecuencias h3 {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .consecuencias p {
+    font-size: 15.5px;
+    color: var(--texto);
+  }
+
+  /* Pendientes ---------------------------------------------------------- */
+  .pendientes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .pendientes li {
+    padding: 24px;
+    background: var(--hueso);
+    border: 1px solid var(--linea);
+  }
+
+  .pendiente-cabeza {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .pendiente-numero {
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    color: var(--bronce);
+  }
+
+  .pendientes h3 {
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+
+  .pendientes p {
+    font-size: 15px;
+    color: var(--texto);
+  }
+
+  /* Hoja de ruta -------------------------------------------------------- */
+  .ruta {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--linea-oscura);
+  }
+
+  .ruta li {
+    position: relative;
+    padding: 30px 22px 6px 0;
+  }
+
+  .ruta li::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--oro);
+  }
+
+  .ruta li:nth-child(4)::before {
+    width: 15px;
+    height: 15px;
+    top: -8px;
+    box-shadow: 0 0 0 5px rgba(201, 154, 78, 0.25);
+  }
+
+  .ruta-semanas {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--oro-claro);
+  }
+
+  .ruta h3 {
+    font-size: 27px;
+    margin: 10px 0 10px;
+  }
+
+  .ruta p {
+    font-size: 14.5px;
+    color: rgba(243, 239, 230, 0.78);
+  }
+
+  /* Inversión ----------------------------------------------------------- */
+  .inversion {
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .inversion-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .inversion-fila:first-child {
+    border-top: 2px solid var(--tinta);
+  }
+
+  .inversion-tipo {
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oliva);
+  }
+
+  .inversion-fila h3 {
+    font-size: 26px;
+    margin: 8px 0 8px;
+  }
+
+  .inversion-fila p {
+    font-size: 15px;
+    color: var(--texto);
+    max-width: 52ch;
+  }
+
+  .inversion-fila strong,
+  .inversion-total strong {
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-size: clamp(28px, 2.8vw, 38px);
+    font-weight: 850;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .inversion-fila small {
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--texto-tenue);
+  }
+
+  .inversion-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-top: 18px;
+    padding: 22px 24px;
+    background: var(--negro);
+    color: var(--hueso);
+  }
+
+  .inversion-total span {
+    font-size: 15px;
+    color: rgba(243, 239, 230, 0.8);
+  }
+
+  .inversion-total strong {
+    color: var(--oro-claro);
+  }
+
+  .inversion-pago {
+    margin-top: 14px !important;
+    font-size: 14.5px;
+    color: var(--texto);
+  }
+
+  .terceros {
+    padding: 26px;
+    background: var(--papel);
+    border: 1px solid var(--linea);
+  }
+
+  .terceros h3 {
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+
+  .terceros li {
+    padding: 11px 0;
+    border-top: 1px solid var(--linea);
+    font-size: 15px;
+    color: var(--texto);
+  }
+
+  /* Medición ------------------------------------------------------------ */
+  .medicion {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+  }
+
+  .medicion article {
+    padding-top: 16px;
+    border-top: 2px solid var(--tinta);
+  }
+
+  .medicion h3 {
+    font-size: 30px;
+    margin-bottom: 12px;
+  }
+
+  .medicion li {
+    padding: 9px 0;
+    border-bottom: 1px solid var(--linea);
+    font-size: 15.5px;
+    color: var(--texto);
+  }
+
+  /* Cierre -------------------------------------------------------------- */
+  .cierre-grilla {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 56px;
+    align-items: end;
+  }
+
+  .pasos {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: paso;
+  }
+
+  .pasos li {
+    counter-increment: paso;
+    display: flex;
+    gap: 18px;
+    padding: 14px 0;
+    border-top: 1px solid var(--linea-oscura);
+    font-size: 17px;
+    color: rgba(243, 239, 230, 0.9);
+  }
+
+  .pasos li::before {
+    content: counter(paso, decimal-leading-zero);
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    color: var(--oro-claro);
+    padding-top: 4px;
+  }
+
+  .cierre-contacto {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cierre-correo {
+    margin-top: 6px;
+    font-size: 15px;
+    color: rgba(243, 239, 230, 0.75) !important;
+    text-align: center;
+  }
+
+  .firma {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--linea-oscura);
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: rgba(243, 239, 230, 0.7);
+  }
+
+  .firma img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+  }
+
+  .firma strong {
+    color: var(--hueso);
+  }
+
+  /* Responsive ---------------------------------------------------------- */
+  @media (max-width: 1080px) {
+    .frentes,
+    .etapas {
+      grid-template-columns: 1fr;
+    }
+
+    .pilares {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .flujo {
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: 32px;
+    }
+
+    .flujo li::before {
+      display: none;
+    }
+
+    .fichas {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .limites {
+      grid-column: 1 / -1;
+    }
+
+    .pendientes {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ruta {
+      grid-template-columns: 1fr;
+      border-top: 0;
+      border-left: 1px solid var(--linea-oscura);
+    }
+
+    .ruta li {
+      padding: 0 0 30px 28px;
+    }
+
+    .ruta li::before {
+      top: 4px;
+      left: -6px;
+    }
+
+    .ruta li:nth-child(4)::before {
+      top: 2px;
+      left: -8px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .portada-grilla,
+    .dos-columnas,
+    .inversion,
+    .cierre-grilla {
+      grid-template-columns: 1fr;
+    }
+
+    .indice {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .razones,
+    .consecuencias,
+    .medicion,
+    .notas-plataforma {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .portada-barra span {
+      display: none;
+    }
+
+    .cifras,
+    .flujo,
+    .fichas,
+    .pendientes,
+    .pilares {
+      grid-template-columns: 1fr;
+    }
+
+    .inversion-fila {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .inversion-total {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,1901 @@
+---
+import { Image } from 'astro:assets';
+import PropuestaLayout from '../layouts/PropuestaLayout.astro';
+// Titulares gruesos y algo angostos, como los de las piezas de Shiva: Archivo
+// con eje de ancho. La cursiva serif es la del remate (“La mesa se arma sola.”).
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/playfair-display/wght-italic.css';
+import '@fontsource-variable/readex-pro';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/shiva.css';
+import {
+  CERTIFICACIONES,
+  DESPACHO_GRATIS_DESDE,
+  LINEAS,
+  PACKS,
+  PEDIDO_MINIMO,
+  PRODUCTOS,
+  RESENAS,
+  RUTAS,
+  TIPOS_NEGOCIO,
+  UNIDADES_CAJA,
+  clp,
+  precioMayoristaCaja,
+  precioMayoristaUnidad,
+  precioSueltoPack,
+  precioSuscripcion,
+  producto,
+  unidadesPack,
+} from '../data/shiva';
+import { cargarImagen } from '../lib/imagenes';
+import logoBlanco from '../assets/shiva/shiva-logo-blanco.png';
+import despensa from '../assets/shiva/fotos/despensa.jpg';
+import cajaPedido from '../assets/shiva/fotos/caja-pedido.jpg';
+import tostaditasMesa from '../assets/shiva/fotos/tostaditas-mesa.jpg';
+import ingredientesMediterraneas from '../assets/shiva/fotos/ingredientes-mediterraneas.webp';
+import ingredientesCookies from '../assets/shiva/fotos/ingredientes-cookies.webp';
+import ingredientesSarraceno from '../assets/shiva/fotos/ingredientes-sarraceno.webp';
+import porcionPimenton from '../assets/shiva/fotos/porcion-pimenton.webp';
+
+const productos = await Promise.all(
+  PRODUCTOS.map(async (p) => ({
+    ...p,
+    foto: await cargarImagen(p.imagen),
+    linea: LINEAS.find((l) => l.id === p.linea)?.nombre ?? '',
+    lineaId: p.linea,
+    suscripcion: precioSuscripcion(p.precio),
+    caja: precioMayoristaCaja(p.precio),
+    unidadNeta: precioMayoristaUnidad(p.precio),
+  }))
+);
+
+const fotosProducto = Object.fromEntries(productos.map((p) => [p.id, p.foto]));
+
+const packs = PACKS.map((pack) => {
+  const suelto = precioSueltoPack(pack);
+  return {
+    ...pack,
+    unidades: unidadesPack(pack),
+    suelto,
+    ahorro: Math.round((1 - pack.precio / suelto) * 100),
+    fotos: Object.keys(pack.contenido)
+      .slice(0, 3)
+      .map((id) => ({ foto: fotosProducto[id], nombre: producto(id).nombre })),
+  };
+});
+
+const instagram = [
+  { src: despensa, alt: 'Paquete de crackers Mix de Semillas en una despensa' },
+  { src: tostaditasMesa, alt: 'Tostaditas Limón y Jalapeño sobre la mesa' },
+  { src: ingredientesMediterraneas, alt: 'Ingredientes de las crackers Mediterráneas' },
+  { src: porcionPimenton, alt: 'Lo que aporta una porción de crackers Pimentón Ahumado' },
+  { src: ingredientesCookies, alt: 'Ingredientes de las cookies' },
+  { src: ingredientesSarraceno, alt: 'Ingredientes de las tostaditas de trigo sarraceno' },
+];
+
+const nav = [
+  { texto: 'Tienda', href: '#tienda' },
+  { texto: 'Packs', href: '#packs' },
+  { texto: 'Suscripción', href: '#suscripcion' },
+  { texto: 'Mayoristas', href: '#mayoristas' },
+  { texto: 'Nuestra cocina', href: '#cocina' },
+];
+---
+
+<PropuestaLayout
+  title="Shiva Chile — tienda online | Demo de Ojos Publicitarios"
+  description="Demo de la tienda shivacocina.cl: venta por unidad, packs, suscripción y canal mayorista para el lanzamiento de Shiva en Chile."
+  cliente="Shiva · shivacocina.cl"
+  etiqueta="Demo de tienda"
+  nota="Precios referenciales en CLP · fotos de Shiva Argentina"
+  fondo="#0f0f0e"
+>
+  <div
+    class="shiva tienda"
+    data-modo="unidad"
+    data-despacho={DESPACHO_GRATIS_DESDE}
+    data-minimo={PEDIDO_MINIMO}
+  >
+    <div class="aviso">
+      <span>Shiva llegó a Chile</span>
+      <span class="aviso-sep" aria-hidden="true">/</span>
+      <span>Despacho gratis en Santiago desde {clp(DESPACHO_GRATIS_DESDE)}</span>
+      <a href={RUTAS.propuesta} class="aviso-propuesta">Ver la propuesta ↗</a>
+    </div>
+
+    <!-- Cabecera ------------------------------------------------------ -->
+    <header class="cabecera shiva-oscuro">
+      <a href="#inicio" class="marca" aria-label="Shiva, ir al inicio">
+        <Image src={logoBlanco} alt="" width={118} densities={[1, 2]} loading="eager" />
+      </a>
+      <nav class="nav" aria-label="Secciones">
+        {nav.map((item) => <a href={item.href}>{item.texto}</a>)}
+      </nav>
+      <div class="acciones">
+        <div class="modo" role="group" aria-label="Tipo de compra">
+          <button type="button" data-modo-boton="unidad" aria-pressed="true">Unidad</button>
+          <button type="button" data-modo-boton="mayorista" aria-pressed="false">Mayorista</button>
+        </div>
+        <button type="button" class="carro-icono" data-abrir-carro aria-label="Ver el carro">
+          <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+            <path
+              d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.6 8H6.1"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+            <circle cx="9.5" cy="19.5" r="1.3" fill="currentColor"></circle>
+            <circle cx="17" cy="19.5" r="1.3" fill="currentColor"></circle>
+          </svg>
+          <span class="carro-cantidad" data-carro-cantidad>0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Portada ------------------------------------------------------- -->
+    <section class="portada shiva-oscuro" id="inicio">
+      <div class="portada-texto">
+        <div class="shiva-rotulo">Sin gluten · Plant-based · Kosher</div>
+        <h1>
+          El snack<br />del futuro<br /><span class="shiva-serif">llegó a Chile.</span>
+        </h1>
+        <p class="shiva-bajada">
+          Crackers, tostaditas y cookies con masa madre, hechas de forma artesanal con ingredientes
+          que conoces. Sin conservantes, veganas y aptas para personas con APLV.
+        </p>
+        <div class="portada-botones">
+          <a href="#tienda" class="shiva-boton shiva-boton-oro">Comprar ahora</a>
+          <a href="#mayoristas" class="shiva-boton shiva-boton-borde">Vender Shiva en mi tienda</a>
+        </div>
+      </div>
+      <div class="portada-foto">
+        <Image
+          src={despensa}
+          alt="Mano sacando un paquete de crackers Shiva Mix de Semillas de una despensa"
+          widths={[600, 900, 1300]}
+          sizes="(max-width: 860px) 100vw, 45vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <!-- Certificaciones ----------------------------------------------- -->
+    <ul class="certificaciones" aria-label="Certificaciones">
+      {
+        CERTIFICACIONES.map((c) => (
+          <li>
+            <strong>{c.titulo}</strong>
+            <span>{c.texto}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Tienda -------------------------------------------------------- -->
+    <section class="shiva-seccion" id="tienda">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">La tienda · 9 sabores · 100 g</div>
+            <h2 class="shiva-h2">Elige tu <span class="shiva-serif">favorito.</span></h2>
+          </div>
+          <div class="filtros" role="group" aria-label="Filtrar por línea">
+            <button type="button" data-filtro="todo" aria-pressed="true">Todo</button>
+            {
+              LINEAS.map((l) => (
+                <button type="button" data-filtro={l.id} aria-pressed="false">
+                  {l.nombre}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="aviso-mayorista" data-solo="mayorista">
+          <strong>Estás viendo la tabla mayorista.</strong> Precios netos por caja de {UNIDADES_CAJA},
+          con pedido mínimo de {clp(PEDIDO_MINIMO)} + IVA. En la tienda real solo los ve una cuenta
+          aprobada, al iniciar sesión.
+        </div>
+
+        <p class="nota-sellos">
+          <span class="shiva-pendiente"
+            >Cada ficha mostrará los sellos “ALTO EN” de la etiqueta chilena y la tabla nutricional</span
+          >
+        </p>
+
+        <ul class="grilla">
+          {
+            productos.map((p) => (
+              <li class="producto" data-linea={p.lineaId}>
+                <div class="producto-foto">
+                  {p.foto && (
+                    <Image
+                      src={p.foto}
+                      alt={`${p.linea} Shiva ${p.nombre}, paquete de 100 g`}
+                      widths={[360, 560, 800]}
+                      sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+                      loading="lazy"
+                    />
+                  )}
+                </div>
+                <div class="producto-cuerpo">
+                  <div class="producto-linea">{p.linea}</div>
+                  <h3>{p.nombre}</h3>
+                  <p>{p.texto}</p>
+                  <div class="producto-pie">
+                    <div class="precio" data-solo="unidad">
+                      <span class="precio-valor">{clp(p.precio)}</span>
+                      <span class="precio-sub">{clp(p.suscripcion)} con suscripción</span>
+                    </div>
+                    <div class="precio" data-solo="mayorista">
+                      <span class="precio-valor">
+                        {clp(p.caja)} <small>+ IVA</small>
+                      </span>
+                      <span class="precio-sub">
+                        Caja de {UNIDADES_CAJA} · {clp(p.unidadNeta)} neto c/u · venta sugerida{' '}
+                        {clp(p.precio)}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      class="agregar"
+                      data-agregar
+                      data-nombre={p.nombre}
+                      data-unidad={p.precio}
+                      data-caja={p.caja}
+                    >
+                      <span data-solo="unidad">Agregar</span>
+                      <span data-solo="mayorista">Agregar caja</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Packs --------------------------------------------------------- -->
+    <section class="shiva-seccion shiva-papel" id="packs" data-solo="unidad">
+      <div class="shiva-ancho">
+        <div class="encabezado">
+          <div>
+            <div class="shiva-rotulo">Packs</div>
+            <h2 class="shiva-h2">La mesa se <span class="shiva-serif">arma sola.</span></h2>
+          </div>
+          <p class="shiva-bajada">
+            Para el picoteo, la once y la despensa. Más paquetes, mejor precio, y todos llegan con un
+            regalo de la marca.
+          </p>
+        </div>
+
+        <div class="packs">
+          {
+            packs.map((pack) => (
+              <article class="pack">
+                <div class="pack-fotos" aria-hidden="true">
+                  {pack.fotos.map(
+                    (f) =>
+                      f.foto && <Image src={f.foto} alt="" width={260} densities={[1, 2]} loading="lazy" />
+                  )}
+                </div>
+                <div class="pack-cuerpo">
+                  <div class="pack-cabeza">
+                    <h3>{pack.nombre}</h3>
+                    <span class="pack-unidades">{pack.unidades} paquetes</span>
+                  </div>
+                  <p>{pack.bajada}</p>
+                  <div class="producto-pie">
+                    <div class="precio">
+                      <span class="precio-valor">{clp(pack.precio)}</span>
+                      <span class="precio-sub">
+                        <s>{clp(pack.suelto)}</s> · ahorras {pack.ahorro} %
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      class="agregar"
+                      data-agregar
+                      data-nombre={pack.nombre}
+                      data-unidad={pack.precio}
+                      data-caja={pack.precio}
+                    >
+                      Agregar
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Suscripción --------------------------------------------------- -->
+    <section class="shiva-seccion shiva-oscuro suscripcion" id="suscripcion" data-solo="unidad">
+      <div class="shiva-ancho suscripcion-grilla">
+        <div>
+          <div class="shiva-rotulo">Suscripción</div>
+          <h2 class="shiva-h2">Que nunca <span class="shiva-serif">falten.</span></h2>
+          <p class="shiva-bajada">
+            Suscríbete y paga 10 % menos en cada envío. Es la misma suscripción que ya usan los
+            clientes de Shiva en Argentina, ahora con despacho en Chile.
+          </p>
+        </div>
+        <ol class="pasos">
+          <li>
+            <span class="paso-numero">01</span>
+            <div>
+              <h3>Elige tus sabores</h3>
+              <p>Arma tu caja con los que más te gustan, o deja que te sorprendamos.</p>
+            </div>
+          </li>
+          <li>
+            <span class="paso-numero">02</span>
+            <div>
+              <h3>Elige cada cuánto</h3>
+              <p>Cada 30 o cada 60 días, directo a tu casa.</p>
+            </div>
+          </li>
+          <li>
+            <span class="paso-numero">03</span>
+            <div>
+              <h3>Pausa cuando quieras</h3>
+              <p>Sin permanencia: cambias, pausas o cancelas desde tu cuenta.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Mayoristas ---------------------------------------------------- -->
+    <section class="shiva-seccion mayoristas" id="mayoristas">
+      <div class="shiva-ancho mayoristas-grilla">
+        <div class="mayoristas-info">
+          <div class="shiva-rotulo">Mayoristas</div>
+          <h2 class="shiva-h2">Vende Shiva <span class="shiva-serif">en tu tienda.</span></h2>
+          <p class="shiva-bajada">
+            Para tiendas saludables, almacenes, cafeterías y gimnasios. Te registras con el RUT de tu
+            empresa, aprobamos tu cuenta y compras online, con precios netos y factura.
+          </p>
+
+          <div class="condiciones-cabeza">
+            <span class="shiva-pendiente">Condiciones referenciales, por confirmar</span>
+          </div>
+          <dl class="condiciones">
+            <div>
+              <dt>Formato</dt>
+              <dd>Caja de {UNIDADES_CAJA} paquetes del mismo sabor, lista para el mesón.</dd>
+            </div>
+            <div>
+              <dt>Precio</dt>
+              <dd>Neto, con 35 % de margen sobre el precio de venta sugerido.</dd>
+            </div>
+            <div>
+              <dt>Pedido mínimo</dt>
+              <dd>{clp(PEDIDO_MINIMO)} + IVA, combinando sabores.</dd>
+            </div>
+            <div>
+              <dt>Pago</dt>
+              <dd>Transferencia o Webpay, con factura electrónica.</dd>
+            </div>
+            <div>
+              <dt>Despacho</dt>
+              <dd>Santiago en 48 h hábiles. Regiones por courier.</dd>
+            </div>
+            <div>
+              <dt>Apoyo</dt>
+              <dd>Exhibidor de mesón, degustación de lanzamiento y tu tienda en nuestras redes.</dd>
+            </div>
+          </dl>
+
+          <button type="button" class="shiva-boton shiva-boton-negro" data-ver-mayorista>
+            Ver la tabla mayorista
+          </button>
+
+          <div class="mayoristas-foto">
+            <Image
+              src={cajaPedido}
+              alt="Caja abierta llena de paquetes de Shiva lista para despacho"
+              widths={[500, 800]}
+              sizes="(max-width: 900px) 100vw, 45vw"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        <div class="formulario-caja">
+          <form class="formulario" id="shiva-form" novalidate>
+            <h3>Solicita tu cuenta mayorista</h3>
+            <p class="formulario-bajada">Te respondemos en 24 horas hábiles.</p>
+            <div class="campos">
+              <label>
+                <span>Razón social *</span>
+                <input name="razon" required autocomplete="organization" />
+              </label>
+              <label>
+                <span>RUT de la empresa *</span>
+                <input name="rut" required placeholder="76.123.456-7" />
+              </label>
+              <label>
+                <span>Tipo de negocio *</span>
+                <select name="tipo" required>
+                  <option value="">Elige una opción</option>
+                  {TIPOS_NEGOCIO.map((t) => <option>{t}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>Comuna *</span>
+                <input name="comuna" required placeholder="Providencia" />
+              </label>
+              <label>
+                <span>Tu nombre *</span>
+                <input name="nombre" required autocomplete="name" />
+              </label>
+              <label>
+                <span>Correo *</span>
+                <input name="correo" type="email" required autocomplete="email" />
+              </label>
+              <label>
+                <span>WhatsApp</span>
+                <input name="whatsapp" type="tel" autocomplete="tel" placeholder="+56 9" />
+              </label>
+              <label>
+                <span>Cajas al mes</span>
+                <select name="volumen">
+                  <option>De 1 a 5</option>
+                  <option>De 6 a 15</option>
+                  <option>De 16 a 40</option>
+                  <option>Más de 40</option>
+                </select>
+              </label>
+            </div>
+            <button type="submit" class="shiva-boton shiva-boton-oro enviar">Solicitar cuenta</button>
+            <p class="formulario-nota">
+              ¿Distribuidor o cadena? Escríbenos y te cotizamos por volumen.
+            </p>
+          </form>
+          <div class="formulario-ok" id="shiva-ok" hidden>
+            <div class="shiva-rotulo">Solicitud recibida</div>
+            <h3>¡Gracias! Ya estás en la fila.</h3>
+            <p>
+              Revisamos tu RUT y te escribimos en menos de 24 horas hábiles con el acceso a la tabla
+              mayorista.
+            </p>
+            <p class="formulario-nota">Demo: el formulario no envía datos a ninguna parte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nuestra cocina ------------------------------------------------ -->
+    <section class="shiva-seccion shiva-oscuro cocina" id="cocina">
+      <div class="shiva-ancho cocina-grilla">
+        <div class="cocina-foto">
+          <Image
+            src={ingredientesMediterraneas}
+            alt="Los ingredientes de las crackers Mediterráneas: harina de arroz, aceitunas, albahaca, semillas y aceite de oliva"
+            widths={[500, 800]}
+            sizes="(max-width: 900px) 100vw, 45vw"
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <div class="shiva-rotulo">Nuestra cocina</div>
+          <blockquote class="cita">
+            Creemos en lo artesanal <span class="shiva-serif">cuando suma</span> y en lo industrial{' '}
+            <span class="shiva-serif">cuando no traiciona.</span>
+          </blockquote>
+          <ul class="cocina-puntos">
+            <li>
+              <strong>Masa madre</strong>
+              <span>De harina de arroz, en las crackers y las tostaditas.</span>
+            </li>
+            <li>
+              <strong>Ingredientes que conoces</strong>
+              <span>Sin conservantes ni aditivos artificiales.</span>
+            </li>
+            <li>
+              <strong>Fábrica certificada</strong>
+              <span>Buenas Prácticas de Manufactura, certificadas por IRAM.</span>
+            </li>
+          </ul>
+          <p class="merken">
+            <span class="shiva-serif">Dato:</span> las Mediterráneas y las de Carbón Vegetal ya llevaban
+            merkén antes de llegar a Chile.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reseñas ------------------------------------------------------- -->
+    <section class="shiva-seccion resenas">
+      <div class="shiva-ancho resenas-grilla">
+        <div>
+          <div class="shiva-rotulo">Reseñas</div>
+          <h2 class="resenas-titulo shiva-serif">Lo que nos mandan.</h2>
+          <p class="shiva-bajada">Mensajes reales de clientes en Argentina, mientras llegamos.</p>
+        </div>
+        <ul class="burbujas">
+          {
+            RESENAS.map((r) => (
+              <li>
+                <p>{r.texto}</p>
+                <span>{r.origen} · Argentina</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Instagram ----------------------------------------------------- -->
+    <section class="shiva-seccion shiva-papel instagram" id="redes">
+      <div class="shiva-ancho">
+        <div class="instagram-cabeza">
+          <div>
+            <div class="shiva-rotulo">Instagram · TikTok</div>
+            <h2 class="shiva-h2">@shivacocina.cl</h2>
+          </div>
+          <a href="#inicio" class="shiva-boton shiva-boton-negro">Síguenos</a>
+        </div>
+        <ul class="instagram-grilla">
+          {
+            instagram.map((foto) => (
+              <li>
+                <Image
+                  src={foto.src}
+                  alt={foto.alt}
+                  widths={[300, 500]}
+                  sizes="(max-width: 700px) 50vw, 17vw"
+                  loading="lazy"
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Pie ----------------------------------------------------------- -->
+    <footer class="pie shiva-oscuro">
+      <div class="shiva-ancho pie-grilla">
+        <div class="pie-marca">
+          <Image src={logoBlanco} alt="Shiva" width={150} densities={[1, 2]} loading="lazy" />
+          <p>Plant based / Gluten free. Ahora en Chile.</p>
+        </div>
+        <div>
+          <h4>Tienda</h4>
+          <a href="#tienda">Crackers</a>
+          <a href="#tienda">Tostaditas</a>
+          <a href="#tienda">Cookies</a>
+          <a href="#packs">Packs</a>
+        </div>
+        <div>
+          <h4>Ayuda</h4>
+          <a href="#inicio">Despachos</a>
+          <a href="#inicio">Cambios y devoluciones</a>
+          <a href="#inicio">Preguntas frecuentes</a>
+          <a href="#inicio">Términos y condiciones</a>
+        </div>
+        <div>
+          <h4>Mayoristas</h4>
+          <a href="#mayoristas">Solicitar cuenta</a>
+          <a href="#mayoristas">Ingresar</a>
+          <span class="shiva-pendiente">WhatsApp y correo en Chile</span>
+        </div>
+      </div>
+      <div class="shiva-ancho pie-legal">
+        <span>Webpay · Mercado Pago · Transferencia</span>
+        <span>
+          Importa y distribuye en Chile: <span class="shiva-pendiente">razón social y RUT del importador</span>
+        </span>
+      </div>
+    </footer>
+
+    <!-- Carro --------------------------------------------------------- -->
+    <aside class="carro" id="carro" aria-label="Carro" aria-live="polite" hidden>
+      <div class="carro-fila">
+        <strong data-carro-titulo>Tu carro</strong>
+        <button type="button" class="carro-cerrar" data-cerrar-carro aria-label="Cerrar el carro">×</button>
+      </div>
+      <div class="carro-ultimo" data-carro-ultimo></div>
+      <div class="carro-total">
+        <span data-carro-detalle></span>
+        <strong data-carro-total></strong>
+      </div>
+      <div class="carro-barra"><span data-carro-progreso></span></div>
+      <p class="carro-meta" data-carro-meta></p>
+      <button type="button" class="shiva-boton shiva-boton-oro" data-carro-pagar>Ir a pagar</button>
+      <p class="carro-demo" data-carro-demo hidden>
+        En la tienda real aquí sigue el pago con Webpay, Mercado Pago o transferencia.
+      </p>
+    </aside>
+  </div>
+</PropuestaLayout>
+
+<style>
+  /* Unidad o mayorista: el mismo catálogo, otro precio --------------- */
+  .tienda[data-modo='unidad'] [data-solo='mayorista'],
+  .tienda[data-modo='mayorista'] [data-solo='unidad'] {
+    display: none !important;
+  }
+
+  /* Que la cabecera fija no tape el título al saltar a una sección. */
+  .tienda section[id] {
+    scroll-margin-top: 68px;
+  }
+
+  .aviso {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px 14px;
+    padding: 9px var(--pad-x);
+    background: var(--oro);
+    color: var(--negro);
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .aviso-sep {
+    opacity: 0.5;
+  }
+
+  .aviso-propuesta {
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+  }
+
+  /* Cabecera ---------------------------------------------------------- */
+  .cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px var(--pad-x);
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+
+  .marca img {
+    width: 118px;
+    height: auto;
+  }
+
+  .nav {
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav a {
+    color: rgba(243, 239, 230, 0.8);
+  }
+
+  .nav a:hover {
+    color: var(--oro-claro);
+  }
+
+  .acciones {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .modo {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--linea-oscura);
+    border-radius: 999px;
+  }
+
+  .modo button {
+    border: 0;
+    border-radius: 999px;
+    padding: 7px 14px;
+    background: none;
+    color: rgba(243, 239, 230, 0.75);
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .modo button[aria-pressed='true'] {
+    background: var(--oro);
+    color: var(--negro);
+  }
+
+  .carro-icono {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--linea-oscura);
+    border-radius: 50%;
+    background: none;
+    color: var(--hueso);
+    cursor: pointer;
+  }
+
+  .carro-cantidad {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--oro);
+    color: var(--negro);
+    font-family: var(--fuente-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: center;
+  }
+
+  /* Portada ----------------------------------------------------------- */
+  .portada {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    min-height: min(860px, calc(100vh - 110px));
+  }
+
+  .portada-texto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(56px, 7vw, 110px) var(--pad-x);
+  }
+
+  .portada h1 {
+    font-size: clamp(54px, 8.4vw, 132px);
+    line-height: 0.9;
+    margin-bottom: 30px;
+  }
+
+  .portada h1 .shiva-serif {
+    color: var(--oro-claro);
+    font-size: 0.82em;
+  }
+
+  .portada-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .portada-foto {
+    position: relative;
+    min-height: 420px;
+  }
+
+  .portada-foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 45%;
+  }
+
+  /* Certificaciones --------------------------------------------------- */
+  .certificaciones {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: var(--carbon);
+    color: var(--hueso);
+  }
+
+  .certificaciones li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 22px 24px;
+    border-left: 1px solid var(--linea-oscura);
+  }
+
+  .certificaciones li:first-child {
+    border-left: 0;
+  }
+
+  .certificaciones strong {
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-size: 19px;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .certificaciones span {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--oro-claro);
+  }
+
+  /* Encabezado de sección --------------------------------------------- */
+  .encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px 48px;
+    margin-bottom: 36px;
+  }
+
+  .encabezado h2.shiva-h2 {
+    margin-bottom: 0;
+  }
+
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filtros button {
+    padding: 9px 16px;
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--texto);
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .filtros button:hover {
+    border-color: var(--tinta);
+  }
+
+  .filtros button[aria-pressed='true'] {
+    background: var(--negro);
+    border-color: var(--negro);
+    color: var(--hueso);
+  }
+
+  .aviso-mayorista {
+    margin-bottom: 18px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--oro);
+    background: var(--negro);
+    color: rgba(243, 239, 230, 0.86);
+    font-size: 15px;
+  }
+
+  .aviso-mayorista strong {
+    color: var(--oro-claro);
+  }
+
+  .nota-sellos {
+    margin-bottom: 26px;
+  }
+
+  /* Grilla de productos ----------------------------------------------- */
+  .grilla {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+
+  .producto {
+    display: flex;
+    flex-direction: column;
+    background: var(--papel);
+    border: 1px solid var(--linea);
+  }
+
+  .producto-foto {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--arena);
+  }
+
+  .producto-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .producto:hover .producto-foto img {
+    transform: scale(1.04);
+  }
+
+  .producto-cuerpo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 22px 22px 24px;
+  }
+
+  .producto-linea {
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oliva);
+    margin-bottom: 8px;
+  }
+
+  .producto h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .producto p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto);
+    margin-bottom: 20px;
+  }
+
+  .producto-pie {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--linea);
+  }
+
+  .precio {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .precio-valor {
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .precio-valor small {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--texto-tenue);
+  }
+
+  .precio-sub {
+    font-size: 12.5px;
+    color: var(--texto-tenue);
+    line-height: 1.4;
+  }
+
+  .agregar {
+    flex: none;
+    padding: 11px 16px;
+    border: 1px solid var(--negro);
+    border-radius: 2px;
+    background: var(--negro);
+    color: var(--hueso);
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .agregar:hover {
+    background: var(--oro);
+    border-color: var(--oro);
+    color: var(--negro);
+  }
+
+  .agregar.listo {
+    background: var(--oro);
+    border-color: var(--oro);
+    color: var(--negro);
+  }
+
+  /* Packs ------------------------------------------------------------- */
+  .packs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+
+  .pack {
+    display: flex;
+    flex-direction: column;
+    background: var(--hueso);
+    border: 1px solid var(--linea);
+  }
+
+  .pack-fotos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 230px;
+    background: var(--negro);
+    overflow: hidden;
+  }
+
+  .pack-fotos img {
+    width: 42%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 3px solid var(--negro);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  .pack-fotos img:nth-child(1) {
+    transform: rotate(-8deg) translateX(18%);
+  }
+
+  .pack-fotos img:nth-child(2) {
+    position: relative;
+    z-index: 1;
+    transform: translateY(-4%);
+  }
+
+  .pack-fotos img:nth-child(3) {
+    transform: rotate(8deg) translateX(-18%);
+  }
+
+  .pack-cuerpo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 24px;
+  }
+
+  .pack-cabeza {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .pack h3 {
+    font-size: 30px;
+  }
+
+  .pack-unidades {
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--oliva);
+    white-space: nowrap;
+  }
+
+  .pack p {
+    font-size: 15px;
+    color: var(--texto);
+    margin-bottom: 20px;
+  }
+
+  .pack s {
+    text-decoration-thickness: 1px;
+  }
+
+  /* Suscripción ------------------------------------------------------- */
+  .suscripcion-grilla {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 80px;
+    align-items: center;
+  }
+
+  .pasos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pasos li {
+    display: flex;
+    gap: 24px;
+    padding: 26px 0;
+    border-top: 1px solid var(--linea-oscura);
+  }
+
+  .pasos li:last-child {
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+
+  .paso-numero {
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    color: var(--oro-claro);
+    padding-top: 6px;
+  }
+
+  .pasos h3 {
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+
+  .pasos p {
+    color: rgba(243, 239, 230, 0.78);
+    font-size: 15.5px;
+  }
+
+  /* Mayoristas -------------------------------------------------------- */
+  .mayoristas-grilla {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .condiciones-cabeza {
+    margin: 34px 0 12px;
+  }
+
+  .condiciones {
+    margin: 0 0 30px;
+    border-top: 1px solid var(--linea);
+  }
+
+  .condiciones div {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .condiciones dt {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oliva);
+    padding-top: 3px;
+  }
+
+  .condiciones dd {
+    margin: 0;
+    font-size: 15.5px;
+    color: var(--tinta);
+  }
+
+  .mayoristas-foto {
+    margin-top: 40px;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .mayoristas-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .formulario-caja {
+    position: sticky;
+    top: 96px;
+    padding: clamp(26px, 3vw, 40px);
+    background: var(--negro);
+    color: var(--hueso);
+  }
+
+  .formulario h3,
+  .formulario-ok h3 {
+    font-size: clamp(28px, 2.6vw, 36px);
+    margin-bottom: 8px;
+  }
+
+  .formulario-bajada {
+    color: rgba(243, 239, 230, 0.7);
+    font-size: 15px;
+    margin-bottom: 24px !important;
+  }
+
+  .campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .campos label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .campos span {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oro-claro);
+  }
+
+  .campos input,
+  .campos select {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--hueso);
+    font-family: var(--fuente-texto);
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+  .campos select option {
+    color: var(--tinta);
+  }
+
+  .campos input::placeholder {
+    color: rgba(243, 239, 230, 0.4);
+  }
+
+  .campos input:focus,
+  .campos select:focus {
+    outline: none;
+    border-color: var(--oro);
+    background: rgba(201, 154, 78, 0.08);
+  }
+
+  .enviar {
+    width: 100%;
+    margin-top: 22px;
+  }
+
+  .formulario-nota {
+    margin-top: 14px !important;
+    font-size: 13.5px;
+    color: rgba(243, 239, 230, 0.62);
+  }
+
+  .formulario-ok p {
+    color: rgba(243, 239, 230, 0.82);
+  }
+
+  /* Nuestra cocina ---------------------------------------------------- */
+  .cocina-grilla {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .cocina-foto {
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .cocina-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cita {
+    margin: 0 0 36px;
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-weight: 850;
+    font-size: clamp(34px, 4.2vw, 58px);
+    line-height: 1;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .cita .shiva-serif {
+    color: var(--oro-claro);
+  }
+
+  .cocina-puntos {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .cocina-puntos li {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 14px;
+    border-top: 1px solid var(--oro);
+  }
+
+  .cocina-puntos strong {
+    font-weight: 500;
+  }
+
+  .cocina-puntos span {
+    font-size: 14.5px;
+    color: rgba(243, 239, 230, 0.74);
+  }
+
+  .merken {
+    font-size: 17px;
+    color: rgba(243, 239, 230, 0.86);
+  }
+
+  .merken .shiva-serif {
+    color: var(--oro-claro);
+    font-size: 1.15em;
+  }
+
+  /* Reseñas ----------------------------------------------------------- */
+  .resenas-grilla {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .resenas-titulo {
+    font-size: clamp(46px, 6vw, 84px);
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+
+  .burbujas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .burbujas li {
+    max-width: 520px;
+    padding: 18px 22px;
+    border-radius: 22px;
+    background: var(--papel);
+    border: 1px solid var(--linea);
+  }
+
+  .burbujas li:nth-child(2) {
+    align-self: flex-end;
+  }
+
+  .burbujas p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+
+  .burbujas span {
+    display: block;
+    margin-top: 8px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-tenue);
+  }
+
+  /* Instagram --------------------------------------------------------- */
+  .instagram-cabeza {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .instagram-cabeza h2.shiva-h2 {
+    margin-bottom: 0;
+    text-transform: none;
+  }
+
+  .instagram-grilla {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+
+  .instagram-grilla li {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--arena);
+  }
+
+  .instagram-grilla img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Pie --------------------------------------------------------------- */
+  .pie {
+    padding: 64px var(--pad-x) 32px;
+  }
+
+  .pie-grilla {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: 36px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+
+  .pie-marca img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 14px;
+  }
+
+  .pie-marca p {
+    color: rgba(243, 239, 230, 0.7);
+    font-size: 14.5px;
+  }
+
+  .pie h4 {
+    font-family: var(--fuente-mono);
+    font-stretch: normal;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--oro-claro);
+    margin-bottom: 14px;
+  }
+
+  .pie-grilla > div:not(.pie-marca) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 14.5px;
+  }
+
+  .pie-grilla a {
+    color: rgba(243, 239, 230, 0.8);
+  }
+
+  .pie-grilla a:hover {
+    color: var(--oro-claro);
+  }
+
+  .pie-legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding-top: 22px;
+    font-size: 13px;
+    color: rgba(243, 239, 230, 0.6);
+  }
+
+  /* Carro flotante ---------------------------------------------------- */
+  .carro {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 40;
+    width: min(340px, calc(100vw - 40px));
+    padding: 18px 20px 20px;
+    background: var(--negro);
+    color: var(--hueso);
+    border: 1px solid var(--oro);
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.35);
+  }
+
+  .carro-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .carro-fila strong {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--oro-claro);
+  }
+
+  .carro-cerrar {
+    border: 0;
+    background: none;
+    color: rgba(243, 239, 230, 0.7);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .carro-ultimo {
+    font-size: 13.5px;
+    color: rgba(243, 239, 230, 0.7);
+    margin-bottom: 10px;
+  }
+
+  .carro-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 14px;
+  }
+
+  .carro-total strong {
+    font-family: var(--fuente-display);
+    font-stretch: 84%;
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  .carro-barra {
+    height: 5px;
+    margin: 12px 0 8px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  .carro-barra span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--oro);
+    transition: width 0.3s ease;
+  }
+
+  .carro-meta {
+    font-size: 13px;
+    color: rgba(243, 239, 230, 0.78);
+    margin-bottom: 14px !important;
+  }
+
+  .carro .shiva-boton {
+    width: 100%;
+  }
+
+  .carro .shiva-boton:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .carro-demo {
+    margin-top: 10px !important;
+    font-size: 12.5px;
+    color: rgba(243, 239, 230, 0.62);
+  }
+
+  /* Responsive -------------------------------------------------------- */
+  @media (max-width: 1080px) {
+    .nav {
+      display: none;
+    }
+
+    .certificaciones {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .certificaciones li:nth-child(4) {
+      border-left: 0;
+    }
+
+    .certificaciones li:nth-child(n + 4) {
+      border-top: 1px solid var(--linea-oscura);
+    }
+
+    .grilla,
+    .packs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cocina-puntos {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .portada {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .portada-foto {
+      min-height: 0;
+      aspect-ratio: 4 / 4.2;
+    }
+
+    .suscripcion-grilla,
+    .mayoristas-grilla,
+    .cocina-grilla,
+    .resenas-grilla {
+      grid-template-columns: 1fr;
+    }
+
+    .formulario-caja {
+      position: static;
+    }
+
+    .instagram-grilla {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pie-grilla {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .pie-marca {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cabecera {
+      gap: 12px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .marca img {
+      width: 92px;
+    }
+
+    .modo button {
+      padding: 7px 10px;
+      font-size: 10.5px;
+    }
+
+    .certificaciones {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .certificaciones li {
+      padding: 16px 18px;
+    }
+
+    .certificaciones li:nth-child(n) {
+      border-left: 0;
+      border-top: 1px solid var(--linea-oscura);
+    }
+
+    .certificaciones li:nth-child(even) {
+      border-left: 1px solid var(--linea-oscura);
+    }
+
+    .certificaciones li:nth-child(-n + 2) {
+      border-top: 0;
+    }
+
+    .packs {
+      grid-template-columns: 1fr;
+    }
+
+    /* En el celular, dos por fila como en cualquier tienda: foto, nombre y precio. */
+    .grilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .producto-cuerpo {
+      padding: 14px 14px 16px;
+    }
+
+    .producto h3 {
+      font-size: 17px;
+      overflow-wrap: anywhere;
+    }
+
+    .producto p {
+      display: none;
+    }
+
+    .producto-pie {
+      flex-direction: column;
+      align-items: stretch;
+      padding-top: 12px;
+    }
+
+    .producto .precio-valor {
+      font-size: 22px;
+    }
+
+    .agregar {
+      width: 100%;
+    }
+
+    .campos {
+      grid-template-columns: 1fr;
+    }
+
+    .condiciones div {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+
+    .burbujas li:nth-child(2) {
+      align-self: auto;
+    }
+
+    .carro {
+      right: 12px;
+      bottom: 12px;
+      width: calc(100vw - 24px);
+    }
+  }
+</style>
+
+<script>
+  type Modo = 'unidad' | 'mayorista';
+
+  const raiz = document.querySelector<HTMLElement>('.tienda');
+
+  if (raiz) {
+    const DESPACHO_GRATIS = Number(raiz.dataset.despacho);
+    const PEDIDO_MINIMO = Number(raiz.dataset.minimo);
+    const formato = (monto: number) => `$${Math.round(monto).toLocaleString('es-CL')}`;
+
+    // Un carro por modo: el público y el mayorista no se mezclan.
+    const carros: Record<Modo, { cantidad: number; total: number }> = {
+      unidad: { cantidad: 0, total: 0 },
+      mayorista: { cantidad: 0, total: 0 },
+    };
+    const ultimo: Record<Modo, string> = { unidad: '', mayorista: '' };
+
+    const carro = document.getElementById('carro');
+    const $ = <T extends HTMLElement>(selector: string) => raiz.querySelector<T>(selector);
+
+    const modoActual = () => (raiz.dataset.modo as Modo) ?? 'unidad';
+
+    function pintarCarro(abrir = false) {
+      const modo = modoActual();
+      const { cantidad, total } = carros[modo];
+      const mayorista = modo === 'mayorista';
+
+      const contador = $('[data-carro-cantidad]');
+      if (contador) contador.textContent = String(cantidad);
+
+      if (!carro) return;
+      if (cantidad === 0) {
+        carro.hidden = true;
+        return;
+      }
+      if (abrir) carro.hidden = false;
+
+      const meta = mayorista ? PEDIDO_MINIMO : DESPACHO_GRATIS;
+      const falta = Math.max(0, meta - total);
+
+      $('[data-carro-titulo]')!.textContent = mayorista ? 'Pedido mayorista' : 'Tu carro';
+      $('[data-carro-ultimo]')!.textContent = ultimo[modo] ? `Agregaste: ${ultimo[modo]}` : '';
+      $('[data-carro-detalle]')!.textContent = mayorista
+        ? `${cantidad} ${cantidad === 1 ? 'caja' : 'cajas'} · neto`
+        : `${cantidad} ${cantidad === 1 ? 'producto' : 'productos'}`;
+      $('[data-carro-total]')!.textContent = mayorista ? `${formato(total)} + IVA` : formato(total);
+      $<HTMLElement>('[data-carro-progreso]')!.style.width = `${Math.min(100, (total / meta) * 100)}%`;
+      $('[data-carro-meta]')!.textContent = mayorista
+        ? falta > 0
+          ? `Te faltan ${formato(falta)} para el pedido mínimo de ${formato(PEDIDO_MINIMO)} + IVA.`
+          : 'Llegaste al pedido mínimo. Puedes pagar con transferencia o Webpay.'
+        : falta > 0
+          ? `Te faltan ${formato(falta)} para el despacho gratis en Santiago.`
+          : 'Tienes despacho gratis en Santiago.';
+
+      const pagar = $<HTMLButtonElement>('[data-carro-pagar]');
+      if (pagar) pagar.disabled = mayorista && falta > 0;
+      $('[data-carro-demo]')!.hidden = true;
+    }
+
+    // Unidad o mayorista
+    function cambiarModo(modo: Modo) {
+      raiz!.dataset.modo = modo;
+      raiz!.querySelectorAll<HTMLButtonElement>('[data-modo-boton]').forEach((boton) => {
+        boton.setAttribute('aria-pressed', String(boton.dataset.modoBoton === modo));
+      });
+      pintarCarro();
+    }
+
+    raiz.querySelectorAll<HTMLButtonElement>('[data-modo-boton]').forEach((boton) => {
+      boton.addEventListener('click', () => cambiarModo(boton.dataset.modoBoton as Modo));
+    });
+
+    $('[data-ver-mayorista]')?.addEventListener('click', () => {
+      cambiarModo('mayorista');
+      document.getElementById('tienda')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Filtro por línea
+    const botonesFiltro = raiz.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+    botonesFiltro.forEach((boton) => {
+      boton.addEventListener('click', () => {
+        const filtro = boton.dataset.filtro;
+        botonesFiltro.forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
+        raiz.querySelectorAll<HTMLElement>('.producto').forEach((producto) => {
+          producto.hidden = filtro !== 'todo' && producto.dataset.linea !== filtro;
+        });
+      });
+    });
+
+    // Agregar al carro
+    raiz.querySelectorAll<HTMLButtonElement>('[data-agregar]').forEach((boton) => {
+      boton.addEventListener('click', () => {
+        const modo = modoActual();
+        const precio = Number(modo === 'mayorista' ? boton.dataset.caja : boton.dataset.unidad);
+        carros[modo].cantidad += 1;
+        carros[modo].total += precio;
+        ultimo[modo] = boton.dataset.nombre ?? '';
+        boton.classList.add('listo');
+        setTimeout(() => boton.classList.remove('listo'), 700);
+        pintarCarro(true);
+      });
+    });
+
+    $('[data-abrir-carro]')?.addEventListener('click', () => {
+      if (carros[modoActual()].cantidad > 0) pintarCarro(true);
+      else document.getElementById('tienda')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    $('[data-cerrar-carro]')?.addEventListener('click', () => {
+      if (carro) carro.hidden = true;
+    });
+
+    $('[data-carro-pagar]')?.addEventListener('click', () => {
+      $('[data-carro-demo]')!.hidden = false;
+    });
+
+    // Demo: el formulario no envía a ninguna parte, solo muestra la confirmación.
+    const form = document.getElementById('shiva-form') as HTMLFormElement | null;
+    const ok = document.getElementById('shiva-ok');
+
+    form?.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      const obligatorios = form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required]');
+      for (const campo of obligatorios) {
+        if (!campo.checkValidity()) {
+          campo.focus();
+          campo.reportValidity();
+          return;
+        }
+      }
+      form.hidden = true;
+      ok?.removeAttribute('hidden');
+    });
+  }
+</script>
