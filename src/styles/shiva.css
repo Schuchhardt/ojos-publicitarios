@@ -1,0 +1,286 @@
+/* ---------------------------------------------------------------------------
+   Paleta y tipografías de la propuesta para Shiva. Es la marca del cliente, no
+   la nuestra: sale de su empaque (negro con filo dorado) y de las piezas de su
+   tienda argentina (fondo hueso, titulares gruesos en mayúscula, una serif en
+   cursiva para el remate y una mono para los rótulos).
+
+   El dorado del empaque sirve sobre negro; sobre hueso no llega a 4.5:1, así
+   que el texto en claro usa el bronce.
+--------------------------------------------------------------------------- */
+.shiva {
+  --negro: #0f0f0e;
+  --carbon: #1b1a18;
+  --hueso: #f3efe6;
+  --papel: #faf8f3;
+  --arena: #e8e1d2;
+  --tinta: #151412;
+  --texto: #46423a;
+  --texto-tenue: #6a665c;
+  --linea: #dcd4c3;
+  --linea-oscura: rgba(255, 255, 255, 0.15);
+
+  /* Dorado del filo del empaque: relleno y texto sobre negro */
+  --oro: #c99a4e;
+  --oro-claro: #e3c088;
+  /* El mismo tono, oscurecido para texto sobre hueso */
+  --bronce: #7a5820;
+  --oliva: #5e5830;
+
+  /* Lo que falta confirmar se marca en ámbar */
+  --ambar: #ffd166;
+  --ambar-fondo: #fff0c2;
+  --ambar-texto: #5a4200;
+
+  --fuente-display: 'Archivo Variable', 'Arial Narrow', Arial, sans-serif;
+  --fuente-serif: 'Playfair Display Variable', Georgia, serif;
+  --fuente-texto: 'Readex Pro Variable', system-ui, sans-serif;
+  --fuente-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --pad-x: clamp(20px, 5vw, 72px);
+  --pad-y: clamp(64px, 8vw, 116px);
+  --ancho: 1240px;
+
+  background: var(--hueso);
+  color: var(--tinta);
+  font-family: var(--fuente-texto);
+  font-size: 16.5px;
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* El layout de propuestas no alcanza a estos elementos con su box-sizing. */
+.shiva *,
+.shiva *::before,
+.shiva *::after {
+  box-sizing: border-box;
+}
+
+.shiva h1,
+.shiva h2,
+.shiva h3,
+.shiva h4 {
+  font-family: var(--fuente-display);
+  font-stretch: 84%;
+  font-weight: 850;
+  letter-spacing: -0.01em;
+  line-height: 0.98;
+  text-transform: uppercase;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.shiva p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.shiva a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shiva img {
+  max-width: 100%;
+  display: block;
+}
+
+.shiva strong {
+  font-weight: 500;
+}
+
+.shiva [hidden] {
+  display: none !important;
+}
+
+.shiva ::selection {
+  background: var(--oro);
+  color: var(--negro);
+}
+
+.shiva :focus-visible {
+  outline: 2px solid var(--bronce);
+  outline-offset: 3px;
+}
+
+.shiva-oscuro :focus-visible {
+  outline-color: var(--oro-claro);
+}
+
+/* Bloques -------------------------------------------------------------- */
+.shiva-seccion {
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.shiva-ancho {
+  max-width: var(--ancho);
+  margin: 0 auto;
+}
+
+.shiva-oscuro {
+  background: var(--negro);
+  color: var(--hueso);
+}
+
+.shiva-papel {
+  background: var(--papel);
+}
+
+/* Rótulo de sección, en mono como en las piezas de la marca */
+.shiva-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--oliva);
+  margin-bottom: 20px;
+}
+
+.shiva-oscuro .shiva-rotulo {
+  color: var(--oro-claro);
+}
+
+/* Con .shiva delante para ganarle al margin: 0 de los titulares. */
+.shiva .shiva-h2 {
+  font-size: clamp(38px, 5.4vw, 76px);
+  margin-bottom: 22px;
+}
+
+/* El remate en cursiva serif, como “La mesa se arma sola.” Va con .shiva
+   delante para ganarle a los titulares, que son de la otra familia. */
+.shiva .shiva-serif {
+  font-family: var(--fuente-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-stretch: normal;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+.shiva-bajada {
+  font-size: clamp(16px, 1.3vw, 18.5px);
+  line-height: 1.7;
+  color: var(--texto);
+  max-width: 60ch;
+}
+
+.shiva-oscuro .shiva-bajada {
+  color: rgba(243, 239, 230, 0.82);
+}
+
+/* Botones -------------------------------------------------------------- */
+.shiva-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 26px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.shiva .shiva-boton-negro {
+  background: var(--negro);
+  color: var(--hueso);
+}
+
+.shiva .shiva-boton-negro:hover {
+  background: var(--carbon);
+  color: var(--oro-claro);
+}
+
+.shiva .shiva-boton-oro {
+  background: var(--oro);
+  color: var(--negro);
+}
+
+.shiva .shiva-boton-oro:hover {
+  background: var(--oro-claro);
+}
+
+.shiva .shiva-boton-borde {
+  border-color: currentColor;
+}
+
+.shiva .shiva-boton-borde:hover {
+  background: rgba(201, 154, 78, 0.16);
+}
+
+/* Pendiente: lo que hay que confirmar con Shiva antes de publicar --------- */
+.shiva-pendiente {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 9px;
+  border: 1px dashed #b98a00;
+  border-radius: 3px;
+  background: var(--ambar-fondo);
+  color: var(--ambar-texto);
+  font-family: var(--fuente-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+.shiva-pendiente::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e0a800;
+  flex: none;
+}
+
+/* Sello “ALTO EN”: octágono negro con borde blanco, como lo pide el Minsal. */
+.shiva-sello {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 6px;
+  background: #000;
+  color: #fff;
+  clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 8.5px;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+  flex: none;
+}
+
+.shiva-sello b {
+  font-size: 10.5px;
+}
+
+.shiva-sello small {
+  font-size: 5px;
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiva *,
+  .shiva *::before,
+  .shiva *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -202,8 +202,34 @@ del cliente, no la nuestra— en `src/styles/ludrimar.css`, y el logo entregado
 vive recortado en `src/assets/ludrimar/` en cuatro versiones (color, blanco,
 solo la marca y lockup horizontal).
 
-Los datos que faltan van marcados en ámbar con la clase `lud-pendiente`, para
-que en la reunión se vea de inmediato qué falta confirmar.
+### Shiva (`/propuestas/shiva/`)
+
+Propuesta de lanzamiento en Chile para Shiva, marca argentina de crackers,
+tostaditas y cookies sin gluten (hoy en shivacocina.com). Son dos páginas:
+
+- `/propuestas/shiva/`: la propuesta. Punto de partida, qué cambia en Chile,
+  los tres frentes (tienda, canal mayorista y redes @shivacocina.cl),
+  plataforma, sellos “ALTO EN” de la Ley 20.606, lo que tiene que resolver
+  Shiva, hoja de ruta, inversión y próximos pasos.
+- `/propuestas/shiva/tienda/`: demo navegable de shivacocina.cl. El selector
+  Unidad / Mayorista cambia los precios de todo el catálogo (al público con
+  IVA, o neto por caja de 12) y el carro avisa cuánto falta para el despacho
+  gratis o para el pedido mínimo. El formulario de cuenta mayorista no envía
+  nada.
+
+Todo el contenido vive en `src/data/shiva.ts`: productos, precios en CLP, packs,
+margen mayorista, pedido mínimo e inversión. Los precios, el margen, el mínimo
+y los montos de la inversión son **referenciales**; al cambiarlos ahí, la tienda,
+la tabla de precios y el total del trimestre se recalculan solos. Los sellos se
+calculan con la ficha nutricional que Shiva publica (`FICHAS_NUTRICIONALES`).
+
+La gráfica es la de Shiva (`src/styles/shiva.css`): negro y hueso del empaque,
+Archivo para los titulares, Playfair Display en cursiva para el remate, Readex
+Pro para el texto y JetBrains Mono para los rótulos. Las fotos y el logo están
+bajados de su tienda argentina en `src/assets/shiva/`.
+
+Lo que falta confirmar con el cliente va en ámbar, con la clase `shiva-pendiente`,
+para que en la reunión se vea de inmediato.
 
 ## Proyectos
 

@@ -8,6 +8,10 @@ interface Props {
   /** Texto de la barra de propuesta. Vacío = sin barra (índice de propuestas). */
   cliente?: string;
   nota?: string;
+  /** Qué se propone, al inicio de la barra. */
+  etiqueta?: string;
+  /** Color de la barra del navegador y del fondo al estirar la página. */
+  fondo?: string;
   /** Idioma del contenido de la propuesta. */
   lang?: string;
   /**
@@ -22,6 +26,8 @@ const {
   description,
   cliente,
   nota,
+  etiqueta = 'Propuesta de sitio',
+  fondo = '#0c2339',
   lang = 'es',
   detectarIdioma = false,
 } = Astro.props;
@@ -43,7 +49,7 @@ const scriptIdioma = `(function () {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0c2339" />
+    <meta name="theme-color" content={fondo} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <!-- Propuesta privada: fuera de buscadores y de sus resúmenes. -->
@@ -57,7 +63,6 @@ const scriptIdioma = `(function () {
       }
       body {
         margin: 0;
-        background: #0c2339;
       }
       * {
         box-sizing: border-box;
@@ -69,14 +74,14 @@ const scriptIdioma = `(function () {
       }
     </style>
   </head>
-  <body>
+  <body style={`background: ${fondo}`}>
     <slot />
     {
       cliente && (
         <div class="barra">
           <div class="barra-izq">
             <span class="punto" aria-hidden="true" />
-            <strong>Propuesta de sitio</strong>
+            <strong>{etiqueta}</strong>
             <span class="barra-sep" aria-hidden="true">·</span>
             <span>{cliente}</span>
           </div>
