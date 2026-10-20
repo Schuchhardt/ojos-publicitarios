@@ -540,11 +540,24 @@ const mensajeWhatsapp =
               ))
             }
             <div class="inversion-total">
-              <span>
-                Primer trimestre: implementación + {p.inversion.mesesTotal} meses de redes y mantención
-              </span>
+              <span>Primer trimestre: implementación + {p.inversion.mesesTotal} meses de redes</span>
               <strong>{clp(totalTrimestre)} + IVA</strong>
             </div>
+            {
+              p.inversion.opcionales.map((item) => (
+                <div class="inversion-fila inversion-opcional">
+                  <div>
+                    <span class="inversion-tipo">Opcional · mensual</span>
+                    <h3>{item.concepto}</h3>
+                    <p>{item.detalle}</p>
+                  </div>
+                  <strong>
+                    {clp(item.monto)}
+                    <small>/mes</small>
+                  </strong>
+                </div>
+              ))
+            }
             <p class="inversion-pago">{p.inversion.pago}</p>
           </div>
 
@@ -1329,6 +1342,14 @@ const mensajeWhatsapp =
 
   .inversion-total strong {
     color: var(--oro-claro);
+  }
+
+  /* Lo opcional va después del total, separado y sin sumar. */
+  .inversion-opcional {
+    margin-top: 18px;
+    padding: 22px 24px;
+    border: 1px dashed var(--linea) !important;
+    background: var(--papel);
   }
 
   .inversion-pago {

@@ -220,8 +220,8 @@ tostaditas y cookies sin gluten (hoy en shivacocina.com). Son dos páginas:
 
 Todo el contenido vive en `src/data/shiva.ts`: productos, precios en CLP, packs,
 margen mayorista, pedido mínimo e inversión. La inversión es un pago único por
-la tienda y el canal mayorista, más dos mensualidades (redes, y mantención con
-blog). Los precios de los productos, el margen y el mínimo son
+la tienda y el canal mayorista, más la mensualidad de redes. La mantención con
+blog va aparte, como opcional, y no entra en el total. Los precios de los productos, el margen y el mínimo son
 **referenciales**. Al cambiar cualquiera de estos valores ahí, la tienda, la
 tabla de precios y el total del trimestre se recalculan solos. Los sellos se
 calculan con la ficha nutricional que Shiva publica (`FICHAS_NUTRICIONALES`).

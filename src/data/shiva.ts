@@ -328,7 +328,7 @@ export const PROPUESTA = {
         'Pagos con Webpay (tarjetas y Redcompra), Mercado Pago y transferencia.',
         'Despacho por comuna: Santiago y regiones, con despacho gratis desde un monto.',
         'Suscripción con 10 % de descuento, cada 30 o 60 días.',
-        'Blog con recetas y guías, optimizado para Google y para los buscadores con IA (SEO y AEO).',
+        'Blog con recetas y guías, optimizado para Google y para los buscadores con IA (SEO y AEO), con la mantención opcional.',
         'Medición de visitas y ventas, y catálogo conectado a Meta para anuncios.',
       ],
     },
@@ -465,7 +465,7 @@ export const PROPUESTA = {
     {
       semanas: 'Mes 3 en adelante',
       titulo: 'Ritmo',
-      texto: 'Redes y blog cada mes, campañas por temporada y nuevos puntos de venta.',
+      texto: 'Redes cada mes, campañas por temporada y nuevos puntos de venta.',
     },
   ],
 
@@ -486,15 +486,18 @@ export const PROPUESTA = {
         monto: 590000,
         mesesMinimos: 3,
       },
+    ] as { concepto: string; detalle: string; monto: number; mesesMinimos?: number }[],
+    /** Meses de las mensualidades que suma el total de referencia. */
+    mesesTotal: 3,
+    /** Se ofrecen aparte: no entran en el total. */
+    opcionales: [
       {
         concepto: 'Mantención y blog',
         detalle:
           'Mantención y cambios en la página, y el blog optimizado para Google y para los buscadores con IA (SEO y AEO).',
         monto: 150000,
       },
-    ] as { concepto: string; detalle: string; monto: number; mesesMinimos?: number }[],
-    /** Meses que suma el total de referencia. */
-    mesesTotal: 3,
+    ],
     terceros: [
       'Comisiones de Webpay y Mercado Pago por cada venta.',
       'Dominio .cl en NIC Chile.',
