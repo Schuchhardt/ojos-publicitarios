@@ -323,12 +323,13 @@ export const PROPUESTA = {
       titulo: 'Tienda shivacocina.cl',
       bajada: 'Venta al público, con la identidad de Shiva y hablada en chileno.',
       items: [
-        'Tienda en Tiendanube Chile con diseño propio sobre la gráfica de Shiva.',
+        'Tienda con diseño propio sobre la gráfica de Shiva, pensada primero para el celular.',
         'Catálogo de los nueve sabores y tres packs, con ficha completa: ingredientes, tabla nutricional y sellos.',
         'Pagos con Webpay (tarjetas y Redcompra), Mercado Pago y transferencia.',
         'Despacho por comuna: Santiago y regiones, con despacho gratis desde un monto.',
         'Suscripción con 10 % de descuento, cada 30 o 60 días.',
-        'Google Analytics 4, Meta Pixel y catálogo conectado a Meta para anuncios.',
+        'Blog con recetas y guías, optimizado para Google y para los buscadores con IA (SEO y AEO).',
+        'Medición de visitas y ventas, y catálogo conectado a Meta para anuncios.',
       ],
     },
     {
@@ -345,42 +346,19 @@ export const PROPUESTA = {
     },
     {
       numero: '03',
-      titulo: 'Redes y lanzamiento',
-      bajada: '@shivacocina.cl en Instagram y TikTok, desde la primera publicación.',
+      titulo: 'Redes y creadores',
+      bajada: '@shivacocina.cl en Instagram y TikTok, y los creadores de contenido que hablan de Shiva.',
       items: [
         'Cuentas nuevas con biografía, destacadas y link directo a la tienda.',
         'Campaña de lanzamiento en tres etapas: expectativa, apertura y ritmo.',
         '12 publicaciones al mes (reels y carruseles) e historias tres veces por semana.',
         'Respuesta a comentarios y mensajes en días hábiles.',
-        'Selección y coordinación de 8 a 10 creadores chilenos: sin gluten, vegano y picoteo.',
+        'Gestión de 8 a 10 creadores de contenido chilenos (sin gluten, vegano y picoteo): selección, brief, envío de producto y seguimiento de lo que publican y venden.',
         'Campañas en Meta Ads (la pauta va aparte) e informe mensual.',
       ],
     },
   ],
 
-  plataforma: {
-    razones: [
-      {
-        titulo: 'Shiva ya la usa',
-        texto:
-          'La tienda argentina corre en Tiendanube. El equipo ya sabe operarla y las fotos, fichas y textos se reaprovechan.',
-      },
-      {
-        titulo: 'Mayorista de fábrica',
-        texto:
-          'Tabla de precios para clientes registrados, autorregistro, pedido mínimo solo para mayoristas y un solo inventario. Desde el plan Impulso.',
-      },
-      {
-        titulo: 'Opera en Chile',
-        texto:
-          'Llegó en 2024, cobra en pesos chilenos, trae Mercado Pago y suma Webpay con una app de su tienda de aplicaciones.',
-      },
-    ],
-    alternativa:
-      'Shopify tiene más apps, pero la venta mayorista con precios por empresa es de Shopify Plus (unos US$2.000 al mes) y Webpay no tiene una integración directa estable. Para nueve productos no se justifica.',
-    limite:
-      'Lo que Tiendanube no hace sola: emitir la factura del SII. Se conecta con el sistema que use el importador.',
-  },
 
   flujoMayorista: [
     { titulo: 'Se registra', texto: 'La tienda llena el formulario con su RUT, giro y comuna.' },
@@ -487,41 +465,50 @@ export const PROPUESTA = {
     {
       semanas: 'Mes 3 en adelante',
       titulo: 'Ritmo',
-      texto: 'Redes mensuales, campañas por temporada y nuevos puntos de venta cada mes.',
+      texto: 'Redes y blog cada mes, campañas por temporada y nuevos puntos de venta.',
     },
   ],
 
-  // Valores referenciales en CLP, más IVA. Se ajustan acá.
+  // Valores en CLP, más IVA. Se ajustan acá y los totales se recalculan.
   inversion: {
     unicos: [
       {
         concepto: 'Tienda shivacocina.cl + canal mayorista',
         detalle: 'Diseño, catálogo, pagos, despacho, cuenta mayorista, suscripción, medición y capacitación.',
-        monto: 1290000,
-      },
-      {
-        concepto: 'Lanzamiento en redes',
-        detalle: 'Cuentas, línea gráfica para redes, campaña de expectativa y brief de creadores.',
-        monto: 490000,
+        monto: 2190000,
       },
     ],
-    mensual: {
-      concepto: 'Redes @shivacocina.cl',
-      detalle: '12 publicaciones, historias, comunidad, creadores, gestión de pauta e informe.',
-      monto: 590000,
-      mesesMinimos: 3,
-    },
+    mensuales: [
+      {
+        concepto: 'Redes @shivacocina.cl + creadores de contenido',
+        detalle:
+          'Campaña de lanzamiento, 12 publicaciones al mes, historias, comunidad, gestión de creadores de contenido, pauta e informe.',
+        monto: 690000,
+        mesesMinimos: 3,
+      },
+      {
+        concepto: 'Mantención y blog',
+        detalle:
+          'Mantención y cambios en la página, y el blog optimizado para Google y para los buscadores con IA (SEO y AEO).',
+        monto: 150000,
+      },
+    ] as { concepto: string; detalle: string; monto: number; mesesMinimos?: number }[],
+    /** Meses que suma el total de referencia. */
+    mesesTotal: 3,
     terceros: [
-      'Plan de Tiendanube (Impulso o superior) y comisiones de pago.',
+      'Comisiones de Webpay y Mercado Pago por cada venta.',
       'Dominio .cl en NIC Chile.',
       'Pauta en Meta: sugerimos partir con $300.000 al mes.',
       'Producto para creadores, degustaciones y despachos de muestras.',
     ],
-    pago: '50 % al iniciar y 50 % al lanzamiento. Las redes se facturan mes a mes.',
+    pago: '50 % al iniciar y 50 % al lanzamiento. Las mensualidades se facturan mes a mes.',
   },
 
   medicion: [
-    { area: 'Tienda', metricas: ['Conversión', 'Ticket promedio', 'Pedidos con suscripción', 'Recompra a 60 días'] },
+    {
+      area: 'Tienda y blog',
+      metricas: ['Conversión y ticket promedio', 'Pedidos con suscripción', 'Recompra a 60 días', 'Visitas desde Google y buscadores con IA'],
+    },
     { area: 'Mayoristas', metricas: ['Tiendas activas', 'Pedido promedio', 'Recompra mensual', 'Comunas cubiertas'] },
     { area: 'Redes', metricas: ['Seguidores en Chile', 'Guardados y compartidos', 'Costo por compra', 'Ventas por creador'] },
   ],

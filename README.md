@@ -208,9 +208,10 @@ Propuesta de lanzamiento en Chile para Shiva, marca argentina de crackers,
 tostaditas y cookies sin gluten (hoy en shivacocina.com). Son dos páginas:
 
 - `/propuestas/shiva/`: la propuesta. Punto de partida, qué cambia en Chile,
-  los tres frentes (tienda, canal mayorista y redes @shivacocina.cl),
-  plataforma, sellos “ALTO EN” de la Ley 20.606, lo que tiene que resolver
-  Shiva, hoja de ruta, inversión y próximos pasos.
+  los tres frentes (tienda con blog, canal mayorista y redes @shivacocina.cl),
+  sellos “ALTO EN” de la Ley 20.606, lo que tiene que resolver Shiva, hoja de
+  ruta, inversión y próximos pasos. No nombra la plataforma de la tienda: el
+  stack no es parte de lo que se le vende al cliente.
 - `/propuestas/shiva/tienda/`: demo navegable de shivacocina.cl. El selector
   Unidad / Mayorista cambia los precios de todo el catálogo (al público con
   IVA, o neto por caja de 12) y el carro avisa cuánto falta para el despacho
@@ -218,9 +219,11 @@ tostaditas y cookies sin gluten (hoy en shivacocina.com). Son dos páginas:
   nada.
 
 Todo el contenido vive en `src/data/shiva.ts`: productos, precios en CLP, packs,
-margen mayorista, pedido mínimo e inversión. Los precios, el margen, el mínimo
-y los montos de la inversión son **referenciales**; al cambiarlos ahí, la tienda,
-la tabla de precios y el total del trimestre se recalculan solos. Los sellos se
+margen mayorista, pedido mínimo e inversión. La inversión es un pago único por
+la tienda y el canal mayorista, más dos mensualidades (redes, y mantención con
+blog). Los precios de los productos, el margen y el mínimo son
+**referenciales**. Al cambiar cualquiera de estos valores ahí, la tienda, la
+tabla de precios y el total del trimestre se recalculan solos. Los sellos se
 calculan con la ficha nutricional que Shiva publica (`FICHAS_NUTRICIONALES`).
 
 La gráfica es la de Shiva (`src/styles/shiva.css`): negro y hueso del empaque,
