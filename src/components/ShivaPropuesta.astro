@@ -44,7 +44,8 @@ const formatoValor = (valor: number, decimales = 0) =>
   valor.toLocaleString('es-CL', { maximumFractionDigits: decimales });
 
 const totalUnicos = p.inversion.unicos.reduce((total, item) => total + item.monto, 0);
-const totalTrimestre = totalUnicos + p.inversion.mensual.monto * p.inversion.mensual.mesesMinimos;
+const totalMensual = p.inversion.mensuales.reduce((total, item) => total + item.monto, 0);
+const totalTrimestre = totalUnicos + totalMensual * p.inversion.mesesTotal;
 
 const mensajeWhatsapp =
   'Hola, revisamos la propuesta de lanzamiento de Shiva en Chile y queremos conversar.';
@@ -217,37 +218,6 @@ const mensajeWhatsapp =
               </article>
             ))
           }
-        </div>
-      </div>
-    </section>
-
-    <!-- Plataforma ---------------------------------------------------- -->
-    <section class="shiva-seccion">
-      <div class="shiva-ancho">
-        <div class="encabezado">
-          <div>
-            <div class="shiva-rotulo">Plataforma</div>
-            <h2 class="shiva-h2">Tiendanube, <span class="shiva-serif">otra vez.</span></h2>
-          </div>
-          <p class="shiva-bajada">
-            Recomendamos una segunda tienda en Tiendanube Chile, separada de la argentina: otra moneda,
-            otro inventario y otra facturación, pero la misma forma de trabajar.
-          </p>
-        </div>
-        <div class="razones">
-          {
-            p.plataforma.razones.map((razon, i) => (
-              <article>
-                <span class="razon-numero">0{i + 1}</span>
-                <h3>{razon.titulo}</h3>
-                <p>{razon.texto}</p>
-              </article>
-            ))
-          }
-        </div>
-        <div class="notas-plataforma">
-          <p><strong>¿Y Shopify?</strong> {p.plataforma.alternativa}</p>
-          <p><strong>El límite.</strong> {p.plataforma.limite}</p>
         </div>
       </div>
     </section>
@@ -535,7 +505,7 @@ const mensajeWhatsapp =
             <div class="shiva-rotulo">Inversión</div>
             <h2 class="shiva-h2">Lo que <span class="shiva-serif">cuesta.</span></h2>
           </div>
-          <span class="shiva-pendiente">Valores referenciales en CLP + IVA, para conversar</span>
+          <span class="inversion-moneda">Valores en CLP + IVA</span>
         </div>
 
         <div class="inversion">
@@ -552,19 +522,26 @@ const mensajeWhatsapp =
                 </div>
               ))
             }
-            <div class="inversion-fila">
-              <div>
-                <span class="inversion-tipo">
-                  Mensual · mínimo {p.inversion.mensual.mesesMinimos} meses
-                </span>
-                <h3>{p.inversion.mensual.concepto}</h3>
-                <p>{p.inversion.mensual.detalle}</p>
-              </div>
-              <strong>{clp(p.inversion.mensual.monto)}<small>/mes</small></strong>
-            </div>
+            {
+              p.inversion.mensuales.map((item) => (
+                <div class="inversion-fila">
+                  <div>
+                    <span class="inversion-tipo">
+                      Mensual{item.mesesMinimos && ` · mínimo ${item.mesesMinimos} meses`}
+                    </span>
+                    <h3>{item.concepto}</h3>
+                    <p>{item.detalle}</p>
+                  </div>
+                  <strong>
+                    {clp(item.monto)}
+                    <small>/mes</small>
+                  </strong>
+                </div>
+              ))
+            }
             <div class="inversion-total">
               <span>
-                Primer trimestre (implementación + {p.inversion.mensual.mesesMinimos} meses de redes)
+                Primer trimestre: implementación + {p.inversion.mesesTotal} meses de redes y mantención
               </span>
               <strong>{clp(totalTrimestre)} + IVA</strong>
             </div>
@@ -909,53 +886,6 @@ const mensajeWhatsapp =
   .frente-enlace:hover {
     text-decoration: underline !important;
     text-underline-offset: 4px;
-  }
-
-  /* Plataforma ---------------------------------------------------------- */
-  .razones {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 36px;
-    margin-bottom: 40px;
-  }
-
-  .razones article {
-    padding-top: 18px;
-    border-top: 2px solid var(--tinta);
-  }
-
-  .razon-numero {
-    font-family: var(--fuente-mono);
-    font-size: 12.5px;
-    color: var(--bronce);
-  }
-
-  .razones h3 {
-    font-size: 30px;
-    margin: 10px 0 12px;
-  }
-
-  .razones p {
-    color: var(--texto);
-    font-size: 15.5px;
-  }
-
-  .notas-plataforma {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  .notas-plataforma p {
-    padding: 20px 22px;
-    background: var(--papel);
-    border: 1px solid var(--linea);
-    font-size: 15px;
-    color: var(--texto);
-  }
-
-  .notas-plataforma strong {
-    color: var(--tinta);
   }
 
   /* Flujo mayorista ----------------------------------------------------- */
@@ -1317,6 +1247,14 @@ const mensajeWhatsapp =
   }
 
   /* Inversión ----------------------------------------------------------- */
+  .inversion-moneda {
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oliva);
+  }
+
   .inversion {
     display: grid;
     grid-template-columns: 1.5fr 0.8fr;
@@ -1575,10 +1513,8 @@ const mensajeWhatsapp =
       grid-template-columns: 1fr 1fr;
     }
 
-    .razones,
     .consecuencias,
-    .medicion,
-    .notas-plataforma {
+    .medicion {
       grid-template-columns: 1fr;
       gap: 24px;
     }
