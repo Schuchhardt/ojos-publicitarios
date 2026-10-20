@@ -475,7 +475,7 @@ export const PROPUESTA = {
       {
         concepto: 'Tienda shivacocina.cl + canal mayorista',
         detalle: 'Diseño, catálogo, pagos, despacho, cuenta mayorista, suscripción, medición y capacitación.',
-        monto: 2190000,
+        monto: 1890000,
       },
     ],
     mensuales: [
@@ -483,7 +483,7 @@ export const PROPUESTA = {
         concepto: 'Redes @shivacocina.cl + creadores de contenido',
         detalle:
           'Campaña de lanzamiento, 12 publicaciones al mes, historias, comunidad, gestión de creadores de contenido, pauta e informe.',
-        monto: 690000,
+        monto: 590000,
         mesesMinimos: 3,
       },
       {
