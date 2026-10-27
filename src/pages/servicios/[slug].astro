@@ -1,0 +1,88 @@
+---
+import { getImage } from 'astro:assets';
+import OjosLayout from '../../layouts/OjosLayout.astro';
+import OjosServicio from '../../components/ojos/OjosServicio';
+import { ARCHIVOS_IMAGEN, rutaServicio } from '../../data/ojos';
+import { SERVICIOS_OJOS } from '../../data/servicios';
+import { cargarImagen, imagenesOjos } from '../../lib/imagenes';
+import { faqJsonLd, idNegocio, migasJsonLd } from '../../lib/jsonld';
+
+export function getStaticPaths() {
+  return SERVICIOS_OJOS.map((servicio) => ({ params: { slug: servicio.slug }, props: { servicio } }));
+}
+
+const { servicio } = Astro.props;
+const es = servicio.copy.es;
+const imagenes = await imagenesOjos();
+const url = new URL(rutaServicio(servicio.slug), Astro.site).href;
+
+// Open Graph en JPG: no todas las redes muestran WebP.
+const foto = await cargarImagen(ARCHIVOS_IMAGEN[servicio.img]);
+const og = foto ? (await getImage({ src: foto, format: 'jpg', width: 1200, quality: 82 })).src : undefined;
+const absoluta = (ruta: string) => new URL(ruta, Astro.site).href;
+
+const servicioJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${url}#servicio`,
+  name: es.nombre,
+  serviceType: servicio.seo.tipo,
+  description: es.corto.a,
+  url,
+  ...(og ? { image: absoluta(og) } : {}),
+  provider: { '@id': idNegocio(Astro.site) },
+  areaServed: { '@type': 'Country', name: 'Chile' },
+  availableLanguage: ['es', 'en'],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: es.nombre,
+    itemListElement: es.formatos.map((formato) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: formato.t, description: formato.d },
+    })),
+  },
+};
+
+const paginaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': url,
+  url,
+  name: servicio.seo.title,
+  description: servicio.seo.description,
+  inLanguage: 'es-CL',
+  isPartOf: { '@id': new URL('/#sitio', Astro.site).href },
+  about: { '@id': `${url}#servicio` },
+  ...(og ? { primaryImageOfPage: absoluta(og) } : {}),
+};
+
+const videoJsonLd = servicio.video && {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: `${es.historiaA} ${es.historiaB}`,
+  description: es.mediaAlt,
+  thumbnailUrl: absoluta(imagenes[servicio.video.poster]),
+  contentUrl: absoluta(servicio.video.src),
+  uploadDate: servicio.video.subido,
+  duration: servicio.video.duracion,
+  inLanguage: 'es-CL',
+  publisher: { '@id': idNegocio(Astro.site) },
+};
+
+const faq = faqJsonLd(es.faq.map((item) => ({ pregunta: item.q, respuesta: item.a })));
+const migas = migasJsonLd([
+  { nombre: 'Inicio', url: new URL('/', Astro.site).href },
+  { nombre: es.nombre, url },
+]);
+---
+
+<OjosLayout title={servicio.seo.title} description={servicio.seo.description} path={rutaServicio(servicio.slug)} image={og}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(paginaJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(servicioJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faq)} />
+    <script type="application/ld+json" set:html={JSON.stringify(migas)} />
+    {videoJsonLd && <script type="application/ld+json" set:html={JSON.stringify(videoJsonLd)} />}
+  </Fragment>
+  <OjosServicio client:load slug={servicio.slug} imagenes={imagenes} />
+</OjosLayout>

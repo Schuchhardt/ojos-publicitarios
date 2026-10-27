@@ -5,6 +5,11 @@ export type Idioma = 'es' | 'en';
 
 /** Claves de las imágenes; cada página las resuelve a URLs optimizadas. */
 export type ClaveImagen =
+  | 'web'
+  | 'app'
+  | 'mkt'
+  | 'webPoster'
+  | 'appPoster'
   | 'forma'
   | 'software'
   | 'marketing'
@@ -14,6 +19,11 @@ export type ClaveImagen =
   | 'ko';
 
 export const ARCHIVOS_IMAGEN: Record<ClaveImagen, string> = {
+  web: 'servicios/diseno-web.jpg',
+  app: 'servicios/software.jpg',
+  mkt: 'servicios/marketing.jpg',
+  webPoster: 'servicios/diseno-web-video.jpg',
+  appPoster: 'servicios/software-video.jpg',
   forma: 'web/forma.jpg',
   software: 'web/software.jpg',
   marketing: 'web/marketing.jpg',
@@ -25,6 +35,13 @@ export const ARCHIVOS_IMAGEN: Record<ClaveImagen, string> = {
 
 export type Imagenes = Record<ClaveImagen, string>;
 
+/** Páginas de servicio, en /servicios/<slug>/ (contenido en servicios.ts). */
+export type SlugServicio = 'diseno-web' | 'desarrollo-de-software' | 'marketing-digital';
+
+export function rutaServicio(slug: SlugServicio): string {
+  return `/servicios/${slug}/`;
+}
+
 interface Item {
   t: string;
   s: string;
@@ -33,7 +50,10 @@ interface Item {
 
 interface Servicio {
   title: string;
+  slug: SlugServicio;
   img: ClaveImagen;
+  /** Enlace a la página del servicio. */
+  more: string;
   lead: string;
   tagsLabel: string;
   tags: string[];
@@ -105,6 +125,7 @@ export interface CopyHome {
   sentT: string;
   sentD: string;
   footTag: string;
+  footSvc: string;
   eyeLabel: string;
 }
 
@@ -138,7 +159,9 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
     services: [
       {
         title: 'Diseño web',
-        img: 'forma',
+        slug: 'diseno-web',
+        img: 'web',
+        more: 'Todo sobre diseño web →',
         lead: 'Landing pages, sitios corporativos y tiendas online hechos a la medida de tu marca y tus objetivos.',
         tagsLabel: 'En cada proyecto',
         tags: ['Adaptable a móviles', 'Navegación intuitiva', 'Identidad propia', 'Enfoque comercial'],
@@ -151,7 +174,9 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
       },
       {
         title: 'Software',
-        img: 'software',
+        slug: 'desarrollo-de-software',
+        img: 'app',
+        more: 'Todo sobre software a medida →',
         lead: 'Ingenieros de software que convierten tu forma de trabajar en aplicaciones y sistemas que conectan, automatizan y simplifican tu operación.',
         tagsLabel: 'Industrias',
         tags: ['Logística', 'Comercio', 'Minería', 'Seguridad', 'Salud'],
@@ -166,7 +191,9 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
       },
       {
         title: 'Marketing',
-        img: 'marketing',
+        slug: 'marketing-digital',
+        img: 'mkt',
+        more: 'Todo sobre marketing digital →',
         lead: 'Creatividad y estrategia para hacer crecer tu comunidad, llevar visitas a tu web y transformar el interés en oportunidades.',
         tagsLabel: 'Canales',
         tags: ['Meta', 'Google', 'Instagram', 'Email'],
@@ -262,6 +289,7 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
     sentT: 'Recibimos tu solicitud.',
     sentD: 'Te respondemos en menos de 12 horas.',
     footTag: 'Diseño con visión. Comunicación con propósito.',
+    footSvc: 'Servicios',
     eyeLabel: 'Cambiar color',
   },
   en: {
@@ -293,7 +321,9 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
     services: [
       {
         title: 'Web design',
-        img: 'forma',
+        slug: 'diseno-web',
+        img: 'web',
+        more: 'All about web design →',
         lead: 'Landing pages, corporate sites and online stores built around your brand and your goals.',
         tagsLabel: 'In every project',
         tags: ['Mobile-first', 'Intuitive navigation', 'Own identity', 'Sales focus'],
@@ -306,7 +336,9 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
       },
       {
         title: 'Software',
-        img: 'software',
+        slug: 'desarrollo-de-software',
+        img: 'app',
+        more: 'All about custom software →',
         lead: 'Software engineers who turn the way you work into apps and systems that connect, automate and simplify your operation.',
         tagsLabel: 'Industries',
         tags: ['Logistics', 'Retail', 'Mining', 'Security', 'Health'],
@@ -321,7 +353,9 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
       },
       {
         title: 'Marketing',
-        img: 'marketing',
+        slug: 'marketing-digital',
+        img: 'mkt',
+        more: 'All about digital marketing →',
         lead: 'Creativity and strategy to grow your community, drive visits to your site and turn interest into opportunities.',
         tagsLabel: 'Channels',
         tags: ['Meta', 'Google', 'Instagram', 'Email'],
@@ -417,6 +451,7 @@ export const HOME_OJOS: Record<Idioma, CopyHome> = {
     sentT: 'Request received.',
     sentD: "We'll reply in under 12 hours.",
     footTag: 'Design with vision. Communication with purpose.',
+    footSvc: 'Services',
     eyeLabel: 'Switch color',
   },
 };

@@ -9,6 +9,8 @@ import {
   INDUSTRIAS,
   SERVICIOS_MARKETING,
 } from '../data/contenido';
+import { SERVICIOS_OJOS } from '../data/servicios';
+import { rutaServicio } from '../data/ojos';
 import { MARCA, RESPUESTA_PROMESA, TIENE_EMAIL, CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_DISPLAY } from '../lib/config';
 
 /**
@@ -36,6 +38,16 @@ export const GET: APIRoute = async ({ site }) => {
     ...(TIENE_WHATSAPP ? [`- WhatsApp: ${WHATSAPP_DISPLAY}`] : []),
     ...(TIENE_EMAIL ? [`- Correo: ${CONTACTO_EMAIL}`] : []),
     '',
+    '## Servicios',
+    '',
+    ...SERVICIOS_OJOS.flatMap((s) => [
+      `### [${s.copy.es.nombre}](${url(rutaServicio(s.slug))})`,
+      '',
+      `**${s.copy.es.corto.q}** ${s.copy.es.corto.a}`,
+      '',
+      ...s.copy.es.formatos.map((f) => `- **${f.t}** — ${f.d}`),
+      '',
+    ]),
     '## Diseño web',
     '',
     ...SERVICIOS.map((s) => `- **${s.titulo}** — ${s.bajada} ${s.descripcion}`),
@@ -66,6 +78,7 @@ export const GET: APIRoute = async ({ site }) => {
     '## Páginas',
     '',
     `- [Inicio](${url('/')}): servicios, proyectos y contacto.`,
+    ...SERVICIOS_OJOS.map((s) => `- [${s.copy.es.nombre}](${url(rutaServicio(s.slug))}): ${s.seo.description}`),
     `- [Blog](${url('/blog/')}): guías sobre diseño web y automatización.`,
     ...notas.map((n) => `- [${n.data.titulo}](${url(`/blog/${n.id}/`)}): ${n.data.descripcion}`),
     '',

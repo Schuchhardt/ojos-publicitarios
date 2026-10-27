@@ -45,6 +45,12 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# Videos de los servicios: pesan, así que se guardan una semana.
+[[headers]]
+  for = "/videos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
 [[headers]]
   for = "/*"
   [headers.values]
