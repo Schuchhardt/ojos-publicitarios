@@ -1,0 +1,71 @@
+# Blog automático: cada mañana escribe una nota nueva, en inglés y en español,
+# la sube a main y Netlify la publica sola. Ver scripts/blog/generar.ts.
+name: Blog diario
+
+on:
+  schedule:
+    # 12:00 UTC = 8:00 en la costa este de EE.UU. y 9:00 en Chile.
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+    inputs:
+      keyword:
+        description: 'Keyword en inglés (vacío = la elige el script)'
+        required: false
+      forzar:
+        description: 'Escribir otra nota aunque ya haya una de hoy'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blog-diario
+  cancel-in-progress: false
+
+jobs:
+  nota:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Escribir la nota
+        id: nota
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          BLOG_MODELO: ${{ vars.BLOG_MODELO }}
+          OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL }}
+          KEYWORD: ${{ inputs.keyword }}
+          FORZAR: ${{ inputs.forzar }}
+        run: |
+          args=()
+          [ -n "$KEYWORD" ] && args+=(--keyword "$KEYWORD")
+          [ "$FORZAR" = "true" ] && args+=(--forzar)
+          npm run blog:generar -- "${args[@]}"
+
+      # Si la nota rompe el build, no se sube: mejor un día sin nota que el
+      # sitio caído. GitHub avisa por correo cuando el workflow falla.
+      - name: Comprobar que el sitio compila
+        if: steps.nota.outputs.titulo != ''
+        run: npm run build
+
+      - name: Publicar
+        if: steps.nota.outputs.titulo != ''
+        env:
+          TITULO: ${{ steps.nota.outputs.titulo }}
+        run: |
+          git config user.name "blog-automatico[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/blog src/assets/blog
+          git commit -m "blog: $TITULO"
+          git push

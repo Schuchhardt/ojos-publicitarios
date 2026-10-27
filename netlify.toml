@@ -11,6 +11,8 @@
 
 # El home en inglés ya no tiene ruta propia: el home cambia de idioma en el
 # navegador y ?lang=en lo abre en inglés. /ojos fue la URL de prueba del home.
+# El blog en inglés (/en/blog/) sí existe: Netlify sirve primero los archivos
+# que existen, así que esta regla no lo toca. No ponerle force = true.
 [[redirects]]
   from = "/en/*"
   to = "/?lang=en"

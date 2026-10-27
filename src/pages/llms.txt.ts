@@ -1,4 +1,3 @@
-import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 import {
   SERVICIOS,
@@ -11,6 +10,7 @@ import {
 } from '../data/contenido';
 import { SERVICIOS_OJOS } from '../data/servicios';
 import { rutaServicio } from '../data/ojos';
+import { notasDe, rutaNota } from '../data/blog';
 import { MARCA, RESPUESTA_PROMESA, TIENE_EMAIL, CONTACTO_EMAIL, TIENE_WHATSAPP, WHATSAPP_DISPLAY } from '../lib/config';
 
 /**
@@ -20,9 +20,8 @@ import { MARCA, RESPUESTA_PROMESA, TIENE_EMAIL, CONTACTO_EMAIL, TIENE_WHATSAPP, 
  */
 export const GET: APIRoute = async ({ site }) => {
   const url = (ruta: string) => new URL(ruta, site).href;
-  const notas = (await getCollection('blog')).sort(
-    (a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf()
-  );
+  const notas = await notasDe('es');
+  const notasEn = await notasDe('en');
 
   const lineas = [
     `# ${MARCA}`,
@@ -80,7 +79,9 @@ export const GET: APIRoute = async ({ site }) => {
     `- [Inicio](${url('/')}): servicios, proyectos y contacto.`,
     ...SERVICIOS_OJOS.map((s) => `- [${s.copy.es.nombre}](${url(rutaServicio(s.slug))}): ${s.seo.description}`),
     `- [Blog](${url('/blog/')}): guías sobre diseño web y automatización.`,
-    ...notas.map((n) => `- [${n.data.titulo}](${url(`/blog/${n.id}/`)}): ${n.data.descripcion}`),
+    ...notas.map((n) => `- [${n.data.titulo}](${url(rutaNota(n))}): ${n.data.descripcion}`),
+    `- [Blog in English](${url('/en/blog/')}): guides for businesses going digital.`,
+    ...notasEn.map((n) => `- [${n.data.titulo}](${url(rutaNota(n))}): ${n.data.descripcion}`),
     '',
   ];
 
