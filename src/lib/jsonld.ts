@@ -38,6 +38,7 @@ interface Articulo {
   fecha: Date;
   actualizado?: Date;
   autor: string;
+  idioma?: 'es' | 'en';
   site: URL | undefined;
 }
 
@@ -50,7 +51,7 @@ export function articuloJsonLd(a: Articulo) {
     image: a.imagen,
     datePublished: a.fecha.toISOString(),
     dateModified: (a.actualizado ?? a.fecha).toISOString(),
-    inLanguage: 'es-CL',
+    inLanguage: a.idioma === 'en' ? 'en-US' : 'es',
     author: { '@type': 'Organization', name: a.autor, '@id': idNegocio(a.site) },
     publisher: { '@id': idNegocio(a.site) },
     mainEntityOfPage: { '@type': 'WebPage', '@id': a.url },

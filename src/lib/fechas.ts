@@ -1,13 +1,11 @@
-const FORMATO = new Intl.DateTimeFormat('es-CL', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
+const FORMATOS = {
+  es: new Intl.DateTimeFormat('es-CL', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
+  en: new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
+};
 
-/** "22 de septiembre de 2026" */
-export function fechaLarga(fecha: Date): string {
-  return FORMATO.format(fecha);
+/** "22 de septiembre de 2026" o "September 22, 2026". */
+export function fechaLarga(fecha: Date, idioma: 'es' | 'en' = 'es'): string {
+  return FORMATOS[idioma].format(fecha);
 }
 
 /** "2026-09-22", para el atributo datetime de <time>. */

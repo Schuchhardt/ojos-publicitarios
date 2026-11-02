@@ -1,0 +1,7 @@
+---
+// /en/* redirige al home en inglés (netlify.toml), pero Netlify sirve primero
+// los archivos que existen: el blog en inglés queda fuera de esa regla.
+import ListadoBlog from '../../../components/blog/ListadoBlog.astro';
+---
+
+<ListadoBlog idioma="en" />

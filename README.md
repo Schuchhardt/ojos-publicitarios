@@ -26,8 +26,9 @@ backend, base de datos ni funciones.
   inglés. `/?lang=en` y `/?lang=es` fuerzan un idioma.
 - El HTML que leen los buscadores es el español. `/en/` ya no existe: redirige
   con 301 a `/?lang=en`.
-- El blog y el 404 siguen solo en español, con el diseño anterior
-  (`BaseLayout`, `Header`, `Footer` y los textos de `src/data/home.ts`).
+- El blog tiene una URL por idioma (`/blog/` y `/en/blog/`, enlazadas con
+  hreflang) y usa el diseño anterior (`BaseLayout`, `Header`, `Footer`). El 404
+  sigue solo en español.
 
 ## Correr el proyecto
 
@@ -52,7 +53,8 @@ Node 22 o superior (Astro exige >= 22.12).
 | Publish dir     | `dist`          |
 | Node            | 22              |
 
-No hay variables de entorno que configurar.
+No hay variables de entorno que configurar en Netlify. El blog automático usa
+secretos de GitHub (ver Blog automático).
 
 **Dominio.** Mientras no esté conectado el dominio final, Netlify entrega el
 suyo y el sitio lo usa solo: `astro.config.mjs` lee `URL` (producción) y
@@ -99,15 +101,22 @@ Formspree; conviene mandar una prueba después del primer deploy.
 
 ## Blog
 
-Tres notas estáticas en `src/content/blog/*.md`, con Markdown y frontmatter. Para
-agregar otra basta crear un archivo nuevo: la portada del blog, el sitemap y
-`llms.txt` la toman solos.
+Notas en Markdown: las en español en `src/content/blog/*.md` (se publican en
+`/blog/<archivo>/`) y las en inglés en `src/content/blog/en/*.md`
+(`/en/blog/<archivo>/`). La portada del blog, el sitemap y `llms.txt` las toman
+solas. Textos fijos de cada idioma (migas, cierre con los botones de cotizar y
+contactar) en `src/data/blog.ts`.
 
 ```yaml
 ---
 titulo: 'Título de la nota'
 descripcion: 'Meta description, entre 120 y 160 caracteres.'
 fecha: 2026-09-22
+idioma: es                # es (por defecto) o en
+clave: '2026-09-22'       # la misma en las dos versiones: las enlaza con hreflang
+keyword: 'búsqueda a la que apunta'
+imagen: '../../assets/blog/portada.jpg'   # opcional, relativa al .md
+imagenAlt: 'Qué se ve en la foto'
 respuestaCorta: 'La respuesta directa, en 2 o 3 líneas. Sale destacada arriba.'
 tags: ['diseño web']
 faq:
@@ -118,6 +127,58 @@ faq:
 
 `respuestaCorta` y `faq` no son decoración: son lo que un buscador con IA cita
 como respuesta. Conviene que cada una se lea sola, sin el resto del artículo.
+
+### Blog automático
+
+Todos los días a las 12:00 UTC, `.github/workflows/blog-diario.yml` escribe
+una nota nueva en inglés y en español, la sube a `main` y Netlify la publica.
+El lector es el dueño de una pyme, idealmente en EE.UU., que se está llevando su
+negocio a lo digital: necesita página web, manejo de redes o automatizar tareas.
+
+1. **Keywords** (`scripts/blog/keywords.ts`): consulta el autocompletado de
+   Google para EE.UU., en inglés y en español, con las semillas de
+   `scripts/blog/temas.ts` (6 por idioma al día, rotando) y prefijos de pregunta.
+   Descarta las atadas a otro país y las ya usadas en una nota.
+2. **Redacción** (`scripts/blog/redactar.ts`): Claude Sonnet 5.5 elige la keyword
+   con más intención de compra y escribe las dos versiones —no una traducción—
+   con título, descripción, respuesta corta, FAQ, enlaces internos a los
+   servicios y un cierre que invita a cotizar y a contactar.
+3. **Imágenes** (`scripts/blog/imagenes.ts`): portada generada con OpenAI
+   (queda en `src/assets/blog/`) e imagen interna de Unsplash, con crédito al
+   fotógrafo. Las reglas de la API de Unsplash exigen enlazar la foto desde su
+   servidor, sin descargarla, y avisar cada uso: el script hace las dos cosas.
+   Sin clave de Unsplash, OpenAI genera también la interna; sin clave de
+   OpenAI, la nota sale sin portada.
+4. **Publicación**: si `npm run build` pasa, commit a `main`. Si algo falla no
+   se publica nada y GitHub avisa por correo. Una sola nota por día: correrlo
+   de nuevo el mismo día no hace nada, salvo con `--forzar`.
+
+**Secretos del repositorio** (Settings → Secrets and variables → Actions):
+
+| Secreto             | Para qué                     | Obligatorio            |
+| ------------------- | ---------------------------- | ---------------------- |
+| `ANTHROPIC_API_KEY` | Escribir la nota             | Sí                     |
+| `OPENAI_API_KEY`      | Portada generada con IA          | Muy recomendable       |
+| `UNSPLASH_ACCESS_KEY` | Imagen interna (gratis)          | Opcional               |
+
+Variables opcionales (Settings → Secrets and variables → Actions → Variables):
+`BLOG_MODELO` cambia el modelo que escribe (por defecto `claude-sonnet-5-5`,
+~US$0,15 por nota; `claude-opus-5-5` escribe algo mejor a ~US$0,30;
+`claude-haiku-5-5` cuesta ~US$0,01 pero queda más genérico) y
+`OPENAI_IMAGE_MODEL` el de imagen (por defecto `gpt-image-2`).
+
+**Correrlo a mano**: desde la pestaña Actions → "Blog diario" → Run workflow
+(se puede fijar la keyword), o en local con las claves exportadas:
+
+```bash
+npm run blog:generar                          # nota del día
+npm run blog:generar -- --keyword "how much does a small business website cost"
+npm run blog:generar -- --forzar              # otra nota aunque ya haya una hoy
+```
+
+Para orientar los temas, editar `SEMILLAS`, `BUYER_PERSONA` y `ESTUDIO` en
+`scripts/blog/temas.ts`. Lo que está en `ESTUDIO` es lo único que Claude puede
+afirmar del estudio: no inventa precios, clientes ni cifras.
 
 ## SEO y AEO
 
@@ -153,7 +214,8 @@ que te hagan por WhatsApp y respondas bien es una nota posible.
 | Home                                       | `src/components/ojos/OjosHome.tsx` |
 | Página de cada proyecto                    | `src/components/ojos/OjosCaso.tsx` |
 | Colores de las dos paletas                 | `src/styles/ojos.css`           |
-| Notas del blog                             | `src/content/blog/*.md`         |
+| Notas del blog                             | `src/content/blog/*.md` (`en/` para inglés) |
+| Temas y lector del blog automático         | `scripts/blog/temas.ts`         |
 | Header, footer y textos del blog           | `src/components/`, `src/data/home.ts` |
 | Fotos de proyectos                         | `src/assets/proyectos/`         |
 
@@ -175,7 +237,7 @@ src/
 ├── assets/            capturas e íconos que Astro optimiza y versiona
 ├── components/ojos/   home y casos (React)
 ├── components/        header, footer y piezas del blog y las propuestas
-├── content/blog/      las notas, en markdown
+├── content/blog/      las notas, en markdown (en/ para inglés)
 ├── content.config.ts  el esquema de una nota
 ├── data/ojos.ts       texto de la home y los casos, en ES y EN
 ├── data/home.ts       texto del header y footer del blog
@@ -184,6 +246,7 @@ src/
 ├── pages/             index, proyectos/, 404, blog/, robots.txt, llms.txt
 ├── styles/ojos.css    tokens y paletas de la home
 └── styles/global.css  estilos del blog
+scripts/blog/          blog automático: keywords, redacción e imágenes
 ```
 
 `design/` guarda el diseño original y el material del cliente; no entra al build

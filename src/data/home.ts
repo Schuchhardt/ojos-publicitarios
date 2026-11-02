@@ -606,7 +606,7 @@ const en: ContenidoHome = {
     { texto: 'Work', href: '#proyectos' },
     { texto: 'How we work', href: '#proceso' },
     { texto: 'FAQ', href: '#faq' },
-    { texto: 'Blog', href: '/blog/' },
+    { texto: 'Blog', href: '/en/blog/' },
   ],
   headerCta: "Let's talk",
   menu: { abrir: 'Open menu', cerrar: 'Close menu' },

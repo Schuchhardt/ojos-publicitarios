@@ -1,0 +1,216 @@
+---
+// Portada del blog de un idioma: /blog/ o /en/blog/.
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../Header.astro';
+import Footer from '../Footer.astro';
+import { fechaISO, fechaLarga, minutosDeLectura } from '../../lib/fechas';
+import { migasJsonLd } from '../../lib/jsonld';
+import { MARCA } from '../../lib/config';
+import { RUTA_HOME, type Idioma } from '../../data/home';
+import { RUTA_BLOG, TEXTOS_BLOG, notasDe, rutaNota } from '../../data/blog';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = TEXTOS_BLOG[idioma];
+const notas = await notasDe(idioma);
+
+const migas = migasJsonLd([
+  { nombre: t.inicio, url: new URL(RUTA_HOME[idioma], Astro.site).href },
+  { nombre: t.blog, url: new URL(RUTA_BLOG[idioma], Astro.site).href },
+]);
+
+const listado = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: `${t.blog} ${MARCA}`,
+  description: t.listado.descripcion,
+  url: new URL(RUTA_BLOG[idioma], Astro.site).href,
+  inLanguage: idioma === 'en' ? 'en-US' : 'es',
+  blogPost: notas.map((nota) => ({
+    '@type': 'BlogPosting',
+    headline: nota.data.titulo,
+    description: nota.data.descripcion,
+    datePublished: nota.data.fecha.toISOString(),
+    url: new URL(rutaNota(nota), Astro.site).href,
+  })),
+};
+---
+
+<BaseLayout
+  title={t.listado.titulo}
+  description={t.listado.descripcion}
+  path={RUTA_BLOG[idioma]}
+  lang={idioma}
+  alternos={RUTA_BLOG}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(migas)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(listado)} />
+
+  <Header idioma={idioma} alternativas={RUTA_BLOG} />
+  <main>
+    <section class="seccion">
+      <nav class="migas" aria-label={t.migasEtiqueta}>
+        <a href={RUTA_HOME[idioma]}>{t.inicio}</a> <span aria-hidden="true">/</span>
+        <span>{t.blog}</span>
+      </nav>
+
+      <div class="rotulo">{t.listado.rotulo}</div>
+      <h1>{t.listado.h1[0]}<br />{t.listado.h1[1]}</h1>
+      <p class="bajada">{t.listado.bajada}</p>
+
+      <div class="lista" data-reveal-grupo="90">
+        {
+          notas.map((nota) => (
+            <article class:list={['nota', { 'con-imagen': nota.data.imagen }]}>
+              {nota.data.imagen && (
+                <a href={rutaNota(nota)} class="miniatura" tabindex="-1" aria-hidden="true">
+                  <Image src={nota.data.imagen} alt="" widths={[320, 640]} sizes="(max-width: 700px) 100vw, 280px" />
+                </a>
+              )}
+              <div class="texto">
+                <div class="meta">
+                  <time datetime={fechaISO(nota.data.fecha)}>
+                    {fechaLarga(nota.data.fecha, idioma)}
+                  </time>
+                  <span aria-hidden="true">·</span>
+                  <span>
+                    {minutosDeLectura(nota.body ?? '')} {t.minLectura}
+                  </span>
+                </div>
+                <h2>
+                  <a href={rutaNota(nota)}>{nota.data.titulo}</a>
+                </h2>
+                <p>{nota.data.descripcion}</p>
+                <a class="seguir" href={rutaNota(nota)}>
+                  {t.listado.leer} <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer idioma={idioma} />
+</BaseLayout>
+
+<style>
+  .migas {
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+
+  .migas a {
+    color: var(--texto-debil);
+  }
+
+  .migas a:hover {
+    color: var(--acento);
+  }
+
+  h1 {
+    font-family: var(--fuente-titulo);
+    font-weight: 600;
+    font-size: clamp(32px, 4.2vw, 54px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+  }
+
+  .bajada {
+    font-size: clamp(16px, 1.3vw, 19px);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    margin: 0 0 56px;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  .lista {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--linea-media);
+  }
+
+  .nota {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--linea-media);
+    display: grid;
+    gap: 20px 32px;
+  }
+
+  .nota.con-imagen {
+    grid-template-columns: 280px minmax(0, 78ch);
+  }
+
+  .miniatura img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .texto {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 78ch;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--texto-debil);
+    text-transform: uppercase;
+  }
+
+  .nota h2 {
+    font-family: var(--fuente-titulo);
+    font-size: clamp(22px, 2.4vw, 30px);
+    font-weight: 600;
+    line-height: 1.16;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+
+  .nota h2 a {
+    color: var(--texto);
+  }
+
+  .nota h2 a:hover {
+    color: var(--acento);
+  }
+
+  .nota p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--texto-apagado);
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .seguir {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 700px) {
+    .nota.con-imagen {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
