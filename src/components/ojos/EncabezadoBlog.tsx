@@ -3,15 +3,18 @@ import { RUTA_HOME } from '../../data/home';
 import { Cursor, useAncho, useAnimacion, useTema } from './comun';
 import { Encabezado } from './secciones';
 
-// Header del landing para las páginas del blog, que no son React: el idioma
+// Header del landing para las páginas Astro (blog, 404), que no son React: el idioma
 // lo fija la URL, así que cambiarlo lleva a la misma nota en el otro idioma.
 
 export default function EncabezadoBlog({
   idioma,
   alternos,
+  blog,
 }: {
   idioma: Idioma;
   alternos: Partial<Record<Idioma, string>>;
+  /** Fuera del blog (p. ej. la 404), adónde lleva el enlace "Blog". */
+  blog?: string;
 }) {
   const [tema] = useTema();
   const { wide, narrow } = useAncho((w) => ({ wide: w > 900, narrow: w < 640 }), { wide: true, narrow: false });
@@ -20,7 +23,7 @@ export default function EncabezadoBlog({
 
   const home = RUTA_HOME[idioma];
   const ancla = (h: string) => (home.includes('?') ? `${home}${h}` : `/${h}`);
-  const nav = [...HOME_OJOS[idioma].nav.map((n) => ({ ...n, h: ancla(n.h) })), { l: 'Blog', h: '#top', actual: true }];
+  const nav = [...HOME_OJOS[idioma].nav.map((n) => ({ ...n, h: ancla(n.h) })), blog ? { l: 'Blog', h: blog } : { l: 'Blog', h: '#top', actual: true }];
 
   const elegir = (nuevo: Idioma) => {
     if (nuevo === idioma) return;
