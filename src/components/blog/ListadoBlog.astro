@@ -1,9 +1,9 @@
 ---
 // Portada del blog de un idioma: /blog/ o /en/blog/.
 import { Image } from 'astro:assets';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../Header.astro';
-import Footer from '../Footer.astro';
+import OjosLayout from '../../layouts/OjosLayout.astro';
+import EncabezadoBlog from '../ojos/EncabezadoBlog';
+import { Pie } from '../ojos/secciones';
 import { fechaISO, fechaLarga, minutosDeLectura } from '../../lib/fechas';
 import { migasJsonLd } from '../../lib/jsonld';
 import { MARCA } from '../../lib/config';
@@ -40,7 +40,7 @@ const listado = {
 };
 ---
 
-<BaseLayout
+<OjosLayout
   title={t.listado.titulo}
   description={t.listado.descripcion}
   path={RUTA_BLOG[idioma]}
@@ -50,8 +50,8 @@ const listado = {
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(migas)} />
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(listado)} />
 
-  <Header idioma={idioma} alternativas={RUTA_BLOG} />
-  <main>
+  <EncabezadoBlog client:load idioma={idioma} alternos={RUTA_BLOG} />
+  <main id="top">
     <section class="seccion">
       <nav class="migas" aria-label={t.migasEtiqueta}>
         <a href={RUTA_HOME[idioma]}>{t.inicio}</a> <span aria-hidden="true">/</span>
@@ -59,10 +59,10 @@ const listado = {
       </nav>
 
       <div class="rotulo">{t.listado.rotulo}</div>
-      <h1>{t.listado.h1[0]}<br />{t.listado.h1[1]}</h1>
+      <h1>{t.listado.h1[0]}<br /><em>{t.listado.h1[1]}</em></h1>
       <p class="bajada">{t.listado.bajada}</p>
 
-      <div class="lista" data-reveal-grupo="90">
+      <div class="lista">
         {
           notas.map((nota) => (
             <article class:list={['nota', { 'con-imagen': nota.data.imagen }]}>
@@ -95,60 +95,83 @@ const listado = {
       </div>
     </section>
   </main>
-  <Footer idioma={idioma} />
-</BaseLayout>
+  <Pie idioma={idioma} />
+</OjosLayout>
 
 <style>
-  .migas {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--texto-debil);
-    margin-bottom: 28px;
+  /* Mismos tokens y tipografía que el landing (styles/ojos.css). */
+  .seccion {
+    padding: clamp(120px, 18vh, 180px) clamp(16px, 3vw, 44px) clamp(100px, 14vh, 160px);
+  }
+
+  .migas,
+  .rotulo,
+  .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    color: var(--muted);
   }
 
-  .migas a {
-    color: var(--texto-debil);
+  .migas {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    margin-bottom: 40px;
   }
 
-  .migas a:hover {
-    color: var(--acento);
+  .rotulo {
+    margin-bottom: 24px;
   }
 
   h1 {
-    font-family: var(--fuente-titulo);
+    font-size: clamp(44px, 7vw, 120px);
     font-weight: 600;
-    font-size: clamp(32px, 4.2vw, 54px);
-    line-height: 1.06;
-    letter-spacing: -0.02em;
-    margin: 0 0 22px;
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    margin: 0 0 32px;
+    text-wrap: balance;
+  }
+
+  h1 em {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    color: var(--accent);
   }
 
   .bajada {
-    font-size: clamp(16px, 1.3vw, 19px);
-    line-height: 1.6;
-    color: var(--texto-apagado);
-    margin: 0 0 56px;
-    max-width: 56ch;
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.5;
+    color: var(--soft);
+    margin: 0 0 clamp(56px, 9vh, 96px);
+    max-width: 52ch;
     text-wrap: pretty;
   }
 
   .lista {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--linea-media);
+    border-top: 1px solid var(--line);
   }
 
   .nota {
-    padding: 32px 0;
-    border-bottom: 1px solid var(--linea-media);
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line);
     display: grid;
-    gap: 20px 32px;
+    gap: 24px 48px;
   }
 
   .nota.con-imagen {
-    grid-template-columns: 280px minmax(0, 78ch);
+    grid-template-columns: minmax(240px, 380px) minmax(0, 1fr);
+  }
+
+  .miniatura {
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--card);
   }
 
   .miniatura img {
@@ -157,58 +180,54 @@ const listado = {
     height: auto;
     aspect-ratio: 3 / 2;
     object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .nota:hover .miniatura img {
+    transform: scale(1.04);
   }
 
   .texto {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    max-width: 78ch;
+    gap: 14px;
+    max-width: 62ch;
   }
 
   .meta {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    font-family: var(--fuente-mono);
     font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--texto-debil);
-    text-transform: uppercase;
   }
 
   .nota h2 {
-    font-family: var(--fuente-titulo);
-    font-size: clamp(22px, 2.4vw, 30px);
+    font-size: clamp(26px, 2.8vw, 42px);
     font-weight: 600;
-    line-height: 1.16;
-    letter-spacing: -0.015em;
+    line-height: 1;
+    letter-spacing: -0.03em;
     margin: 0;
-  }
-
-  .nota h2 a {
-    color: var(--texto);
-  }
-
-  .nota h2 a:hover {
-    color: var(--acento);
+    text-wrap: balance;
   }
 
   .nota p {
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--texto-apagado);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--soft);
     margin: 0;
     text-wrap: pretty;
   }
 
   .seguir {
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 6px;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 760px) {
     .nota.con-imagen {
       grid-template-columns: 1fr;
     }

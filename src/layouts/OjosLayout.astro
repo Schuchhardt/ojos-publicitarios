@@ -2,15 +2,11 @@
 import Seo from '../components/Seo.astro';
 import JsonLdNegocio from '../components/JsonLdNegocio.astro';
 import '../styles/ojos.css';
+import type { ComponentProps } from 'astro/types';
 
-interface Props {
-  title: string;
-  description: string;
-  path: string;
-  image?: string;
-}
+type Props = ComponentProps<typeof Seo>;
 
-const { title, description, path, image } = Astro.props;
+const { lang = 'es', ...seo } = Astro.props;
 
 // La paleta elegida se aplica antes del primer pintado: sin parpadeo al pasar
 // del home a un caso con otra paleta. Sin elección guardada, parte en la azul.
@@ -18,7 +14,7 @@ const scriptTema = `try{var t=localStorage.getItem('ojos_theme');if(t==='dark'||
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-theme="blue">
+<html lang={lang} data-theme="blue">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,7 +23,7 @@ const scriptTema = `try{var t=localStorage.getItem('ojos_theme');if(t==='dark'||
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <Seo title={title} description={description} path={path} image={image} />
+    <Seo lang={lang} {...seo} />
     <JsonLdNegocio />
     <slot name="head" />
 

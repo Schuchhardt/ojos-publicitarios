@@ -3,10 +3,9 @@
 // /blog/[...slug] (español) y /en/blog/[slug] (inglés).
 import { render } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../Header.astro';
-import Footer from '../Footer.astro';
-import Faq from '../Faq.astro';
+import OjosLayout from '../../layouts/OjosLayout.astro';
+import EncabezadoBlog from '../ojos/EncabezadoBlog';
+import { Pie } from '../ojos/secciones';
 import { fechaISO, fechaLarga, minutosDeLectura } from '../../lib/fechas';
 import { articuloJsonLd, faqJsonLd, migasJsonLd } from '../../lib/jsonld';
 import { CONTACTO_EMAIL, MARCA, TIENE_EMAIL, TIENE_WHATSAPP, whatsappUrl } from '../../lib/config';
@@ -62,7 +61,7 @@ const contacto =
       : null;
 ---
 
-<BaseLayout
+<OjosLayout
   title={tituloSeo}
   description={nota.data.descripcion}
   path={ruta}
@@ -86,8 +85,8 @@ const contacto =
     )
   }
 
-  <Header idioma={idioma} alternativas={alternos} />
-  <main>
+  <EncabezadoBlog client:load idioma={idioma} alternos={alternos} />
+  <main id="top">
     <article class="seccion">
       <nav class="migas" aria-label={t.migasEtiqueta}>
         <a href={RUTA_HOME[idioma]}>{t.inicio}</a> <span aria-hidden="true">/</span>
@@ -137,9 +136,18 @@ const contacto =
 
       {
         nota.data.faq.length > 0 && (
-          <div class="faq-nota">
-            <Faq preguntas={nota.data.faq} titulo={t.faq} />
-          </div>
+          <section class="faq-nota">
+            <h2>{t.faq}</h2>
+            {nota.data.faq.map((item, i) => (
+              <details name="faq" open={i === 0}>
+                <summary data-cursor="">
+                  <h3>{item.pregunta}</h3>
+                  <span class="mas" aria-hidden="true">add</span>
+                </summary>
+                <p>{item.respuesta}</p>
+              </details>
+            ))}
+          </section>
         )
       }
 
@@ -149,7 +157,7 @@ const contacto =
         <div class="acciones">
           <a
             href={`${RUTA_HOME[idioma]}#contacto`}
-            class="boton boton-primario"
+            class="boton boton-primario" data-cursor=""
             data-track="cta_blog_cotizar"
           >
             {t.cierre.cotizar} <span aria-hidden="true">↗</span>
@@ -160,7 +168,7 @@ const contacto =
                 href={contacto.href}
                 target={contacto.externo ? '_blank' : undefined}
                 rel={contacto.externo ? 'noopener' : undefined}
-                class="boton boton-secundario"
+                class="boton boton-secundario" data-cursor=""
                 data-track="cta_blog_contacto"
               >
                 {t.cierre.contactar}
@@ -173,52 +181,55 @@ const contacto =
       <a class="volver" href={RUTA_BLOG[idioma]}>{t.volver}</a>
     </article>
   </main>
-  <Footer idioma={idioma} />
-</BaseLayout>
+  <Pie idioma={idioma} />
+</OjosLayout>
 
 <style>
+  /* Mismos tokens y tipografía que el landing (styles/ojos.css). */
   .seccion {
-    max-width: 820px;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(120px, 18vh, 170px) clamp(16px, 3vw, 44px) clamp(100px, 14vh, 160px);
+    box-sizing: content-box;
+  }
+
+  .migas,
+  .meta,
+  .corto-rotulo,
+  .volver {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 
   .migas {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--texto-debil);
-    margin-bottom: 28px;
-    text-transform: uppercase;
-    line-height: 2;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    line-height: 1.8;
+    margin-bottom: 36px;
   }
 
-  .migas a {
-    color: var(--texto-debil);
-  }
-
-  .migas a:hover {
-    color: var(--acento);
+  .migas span:last-child {
+    color: var(--accent);
   }
 
   .meta {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--texto-debil);
-    text-transform: uppercase;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 
   h1 {
-    font-family: var(--fuente-titulo);
+    font-size: clamp(38px, 5.4vw, 76px);
     font-weight: 600;
-    font-size: clamp(30px, 3.8vw, 46px);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin: 0 0 32px;
-    text-wrap: pretty;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0 0 40px;
+    text-wrap: balance;
   }
 
   .portada {
@@ -227,122 +238,189 @@ const contacto =
     height: auto;
     aspect-ratio: 3 / 2;
     object-fit: cover;
-    margin: 0 0 36px;
-  }
-
-  .corto {
-    border-left: 2px solid var(--acento);
-    background: var(--panel);
-    padding: 24px 28px;
+    border-radius: 10px;
+    background: var(--card);
     margin: 0 0 44px;
   }
 
+  .corto {
+    border-left: 2px solid var(--accent);
+    background: var(--card);
+    border-radius: 0 10px 10px 0;
+    padding: 24px 28px;
+    margin: 0 0 48px;
+  }
+
   .corto-rotulo {
-    font-family: var(--fuente-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--acento);
+    color: var(--accent);
     margin-bottom: 12px;
   }
 
   .corto p {
     margin: 0;
-    font-size: clamp(16px, 1.4vw, 18px);
-    line-height: 1.65;
-    color: var(--texto-suave);
+    font-size: clamp(18px, 1.5vw, 21px);
+    line-height: 1.5;
+    color: var(--ink);
     text-wrap: pretty;
   }
 
   /* Contenido en markdown: los estilos tienen que cruzar el scope. */
   .prosa :global(h2) {
-    font-family: var(--fuente-titulo);
-    font-size: clamp(22px, 2.4vw, 28px);
+    font-size: clamp(28px, 3vw, 42px);
     font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.015em;
-    margin: 48px 0 16px;
-    text-wrap: pretty;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 64px 0 20px;
+    text-wrap: balance;
   }
 
   .prosa :global(h3) {
-    font-family: var(--fuente-titulo);
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 600;
-    margin: 32px 0 12px;
+    letter-spacing: -0.015em;
+    margin: 36px 0 12px;
+  }
+
+  .prosa :global(p),
+  .prosa :global(li) {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--soft);
+    text-wrap: pretty;
   }
 
   .prosa :global(p) {
-    font-size: 17px;
-    line-height: 1.75;
-    color: var(--texto-apagado);
-    margin: 0 0 20px;
-    text-wrap: pretty;
+    margin: 0 0 22px;
   }
 
   .prosa :global(img) {
     display: block;
     width: 100%;
     height: auto;
-    margin: 12px 0 8px;
+    border-radius: 10px;
+    margin: 16px 0 8px;
   }
 
   /* El crédito de la foto va en cursiva justo debajo de la imagen. */
   .prosa :global(p:has(> img) + p > em:only-child) {
-    font-size: 13px;
-    color: var(--texto-debil);
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 
   .prosa :global(ul),
   .prosa :global(ol) {
-    margin: 0 0 24px;
+    margin: 0 0 26px;
     padding-left: 22px;
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .prosa :global(li) {
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--texto-apagado);
-  }
-
   .prosa :global(li)::marker {
-    color: var(--acento);
+    color: var(--accent);
   }
 
   .prosa :global(strong) {
-    color: var(--texto);
+    color: var(--ink);
     font-weight: 600;
   }
 
   .prosa :global(a) {
-    border-bottom: 1px solid var(--acento-borde);
+    color: var(--accent);
+    border-bottom: 1px solid currentColor;
   }
 
   .faq-nota {
-    margin-top: 56px;
+    margin-top: 80px;
+    border-bottom: 1px solid var(--line);
   }
 
+  .faq-nota h2 {
+    font-size: clamp(32px, 3.6vw, 56px);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0 0 32px;
+  }
+
+  details {
+    border-top: 1px solid var(--line);
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 0;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary h3 {
+    margin: 0;
+    font-size: clamp(19px, 1.7vw, 24px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  summary:hover h3 {
+    color: var(--accent);
+  }
+
+  .mas {
+    flex: none;
+    font-family: 'Material Symbols Outlined';
+    font-weight: 300;
+    font-size: 30px;
+    line-height: 1;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  details[open] .mas {
+    transform: rotate(45deg);
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 0 28px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--soft);
+    max-width: 62ch;
+  }
+
+  /* Cierre con los colores invertidos, como el bloque de contacto del landing. */
   .cierre {
-    margin-top: 56px;
-    background: var(--panel-destacado);
-    border: 1px solid var(--acento-borde-suave);
-    padding: clamp(24px, 3vw, 40px);
+    margin-top: 80px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 18px;
+    padding: clamp(28px, 4vw, 56px);
   }
 
   .cierre h2 {
-    font-family: var(--fuente-titulo);
-    font-size: clamp(21px, 2.2vw, 26px);
+    font-size: clamp(30px, 3.4vw, 52px);
     font-weight: 600;
-    margin: 0 0 12px;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0 0 18px;
+    text-wrap: balance;
   }
 
   .cierre p {
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--texto-apagado);
-    margin: 0 0 24px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--isoft);
+    margin: 0 0 32px;
+    max-width: 52ch;
   }
 
   .acciones {
@@ -351,16 +429,40 @@ const contacto =
     gap: 12px;
   }
 
-  .volver {
-    display: inline-block;
-    margin-top: 40px;
-    font-family: var(--fuente-mono);
+  .boton {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    letter-spacing: 0.1em;
-    color: var(--texto-debil);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 16px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--bg);
+    transition: background 0.25s, color 0.25s;
   }
 
-  .volver:hover {
-    color: var(--acento);
+  .boton-primario {
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .boton-primario:hover {
+    background: var(--iaccent);
+    border-color: var(--iaccent);
+    color: var(--ink);
+  }
+
+  .boton-secundario {
+    color: var(--bg);
+  }
+
+  .boton-secundario:hover {
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .volver {
+    display: inline-block;
+    margin-top: 48px;
+    font-size: 12px;
   }
 </style>

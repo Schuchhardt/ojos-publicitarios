@@ -24,7 +24,7 @@ export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xnpndzjw';
  * Correo de contacto. Vacío = no se publica ninguna casilla. Las consultas
  * entran por el formulario de Formspree; esto es solo una vía más.
  */
-export const CONTACTO_EMAIL: string = 'ojospublicitarios@gmail.com';
+export const CONTACTO_EMAIL: string = 'email@ojospublicitarios.com';
 
 /** Promesa de respuesta, en español (la de cada idioma vive en data/home.ts). */
 export const RESPUESTA_PROMESA = 'Te respondemos en menos de 12 horas, cualquier día.';
